@@ -19,7 +19,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="Tomcat 8.5.46" level="application_server_libraries" />
+    <orderEntry type="library" scope="PROVIDED" name="M.A.Github" level="application_server_libraries" />
     <orderEntry type="module" module-name="Engine" />
     <orderEntry type="library" name="gson-2.1" level="project" />
   </component>

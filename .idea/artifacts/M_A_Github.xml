@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" build-on-make="true" name="M.A.GithubWeb:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/M_A_GithubWeb_war_exploded</output-path>
+  <artifact type="exploded-war" build-on-make="true" name="M.A.Github">
+    <output-path>$PROJECT_DIR$/out/artifacts/M_A_Github</output-path>
     <root id="root">
       <element id="javaee-facet-resources" facet="M.A.GithubWeb/web/Web" />
       <element id="directory" name="WEB-INF">
@@ -9,10 +9,6 @@
         </element>
         <element id="directory" name="lib">
           <element id="artifact" artifact-name="Engine:jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/commons-io-2.6.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/commons-codec-1.12.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../AncestorFinder.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/AncestorFinder.jar" />
           <element id="library" level="project" name="gson-2.1" />
         </element>
       </element>
