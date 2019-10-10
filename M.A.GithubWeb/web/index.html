@@ -1,12 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>My Calculator</title>
+
+    <!-- Link the Bootstrap (from twitter) CSS framework in order to use its classes-->
+    <link rel="stylesheet" href="../../common/bootstrap.min.css">
+    <link rel="stylesheet" href="login/login.css">
+    <script src="/login/countdown.js"></script>
+
+    <!-- Link jQuery JavaScript library in order to use the $ (jQuery) method-->
+    <!-- <script src="common/jquery-2.0.3.min.js"></script>-->
+    <!-- and\or any other scripts you might need to operate the JSP file behind the scene once it arrives to the client-->
 </head>
 <body>
+<div class="all">
+    <div class="container">
+        <h1>Welcome to the Calculator Online</h1>
+        <br/>
+    </div>
+    <div id="head">
+        <h2>Please enter a math excercise:</h2>
+        <form method="GET" action="calc">
+            <input type="text" name="left" class=""/>
+            <input type="text" name="right" class=""/>
+            <input type="submit" value="Calc"/>
+        </form>
+    </div>
 
-<h1>"This is the headLine of the login"</h1>
-
+    <h1 id="#counter"></h1>
+</div>
 </body>
 </html>
