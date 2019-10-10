@@ -19,9 +19,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="M.A.Github" level="application_server_libraries" />
-    <orderEntry type="module" module-name="Engine" />
     <orderEntry type="library" name="gson-2.1" level="project" />
-    <orderEntry type="library" name="@types/jquery" level="application" />
+    <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
+    <orderEntry type="module" module-name="Engine" exported="" />
   </component>
 </module>
