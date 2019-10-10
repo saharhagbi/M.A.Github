@@ -18,7 +18,7 @@ public class ServletUtils {
 	private static final Object userManagerLock = new Object();
 
 	public static UserManager getUserManager(ServletContext servletContext) {
-
+		//todo: double if
 		synchronized (userManagerLock) {
 			if (servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME) == null) {
 				servletContext.setAttribute(USER_MANAGER_ATTRIBUTE_NAME, new UserManager());
