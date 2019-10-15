@@ -20,9 +20,9 @@ public class LoginServlet extends HttpServlet {
     // you can use absolute paths, but then you need to build them from scratch, starting from the context path
     // ( can be fetched from request.getContextPath() ) and then the 'absolute' path from it.
     // Each method with it's pros and cons...
-    private final String REPOSITORY_HUB_URL = "repositoryHub.html";
+    private final String REPOSITORY_HUB_URL = "../repository/repositoryHub.html";
     private final String SIGN_UP_URL = "signup.html";
-    private final String LOGIN_ERROR_URL = "/pages/loginerror/login_attempt_after_error.jsp";  // must start with '/' since will be used in request dispatcher...
+    private final String LOGIN_ERROR_URL = "logout_msg.jsp";  // must start with '/' since will be used in request dispatcher...
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
