@@ -8,9 +8,19 @@
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>MAGit.Servlets.LoginServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>MAGit.Servlets.LogoutServlet</servlet-class>
+    </servlet>
+
+
 
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/loginServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logoutServlet</url-pattern>
     </servlet-mapping>
 </web-app>
