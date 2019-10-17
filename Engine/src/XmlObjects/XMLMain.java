@@ -8,6 +8,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import static common.MagitFileUtils.IsMagitFolder;
 

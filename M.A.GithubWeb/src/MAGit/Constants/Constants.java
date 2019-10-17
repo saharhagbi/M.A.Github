@@ -9,5 +9,5 @@ public class Constants {
     public static final String CHAT_VERSION_PARAMETER = "chatversion";
 
     public static final int INT_PARAMETER_ERROR = Integer.MIN_VALUE;
-    public static final String LOGIN_ERROR_URL = "/pages/loginerror/login_attempt_after_error.jsp";  // must start with '/' since will be used in request dispatcher...
+    public static final String LOGIN_ERROR_URL = "/pages/loginerror/logout_msg.jsp";  // must start with '/' since will be used in request dispatcher...
 }

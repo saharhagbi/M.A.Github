@@ -2,6 +2,8 @@
 <!--https://www.codexpedia.com/javascript/javascript-add-on-click-event-on-table-rows/--><!--how to add on click on a row of a table using js-->
 <html lang="en">
 <link rel='stylesheet' type='text/css' href='pages/repository/repositoryHub.css'/>
+<script src="repositoryHub.js"></script>
+
 <head>
     <meta charset="UTF-8">
     <title>Repository Lounge</title>
@@ -23,17 +25,13 @@
             <h1>Repository Lounge</h1>
         </div>
         <div class="logOutContainer">
-            <span>click here to logOut</span>
-            <br/>
-            <form method="GET" action="logoutServlet">
-                <input type="submit" value="Logout from this user"/>
-            </form>
+            <a href="/logoutServlet">click here to logOut</a>
         </div>
     </div>
 
 </header>
 <div class="bottomGrid">
-    <div class="loggedInUserList">
+    <div class="userslist">
         <h1>Logged in users:</h1>
     </div>
 
