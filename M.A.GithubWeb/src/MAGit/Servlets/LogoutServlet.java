@@ -13,22 +13,26 @@ import java.io.IOException;
 
 import static MAGit.Constants.Constants.LOGIN_ERROR_URL;
 
-public class LogoutServlet extends HttpServlet {
+public class LogoutServlet extends HttpServlet
+{
 
 
     private static final String LOGOUT_URL = "/pages/logout/logout_msg.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+            throws IOException, ServletException
+    {
         String usernameFromSession = SessionUtils.getUsername(request);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
 
         response.sendRedirect("index.html");
 
-        if (usernameFromSession == null) {
+        if (usernameFromSession == null)
+        {
             request.setAttribute(Constants.USER_NAME_ERROR, "You must sign in first!");
             getServletContext().getRequestDispatcher(LOGIN_ERROR_URL).forward(request, response);
-        } else {
+        } else
+        {
             System.out.println("Clearing session for " + usernameFromSession);
             request.setAttribute(Constants.LOGGED_OUT_USER_NAME, usernameFromSession);
             userManager.removeUser(usernameFromSession);
@@ -47,7 +51,8 @@ public class LogoutServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException, ServletException
+    {
         processRequest(request, response);
     }
 
@@ -61,12 +66,14 @@ public class LogoutServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }
 }

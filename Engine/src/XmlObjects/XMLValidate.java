@@ -29,25 +29,14 @@ public class XMLValidate
         this.m_MagitFolders = i_MagitRepository.magitFolders;
         this.m_MagitCommits = i_MagitRepository.magitCommits;
     }
-/*
 
-    public XMLValidate(MagitRepository i_MagitRepository)
-    {
-        this.m_MagitRepository = i_MagitRepository;
-        this.m_MagitBlos = i_MagitRepository.magitBlobs;
-        this.m_MagitFolders = i_MagitRepository.magitFolders;
-        this.m_MagitCommits = i_MagitRepository.magitCommits;
-    }
-*/
 
-    public boolean validateXmlRepositoryAndAssign(Path i_PathToXmlRepositoryFile, XMLMain xmlMain) throws Exception
+    public boolean validateXmlRepositoryAndAssign(XMLMain xmlMain) throws Exception
     {
         // 1) check its extension and existence
         //checkExistencesAndXMLExtension(i_PathToXmlRepositoryFile);
 
-        // XMLMain xmlMain = new XMLMain();
-        m_MagitRepository = xmlMain.parseFromXmlFileToXmlMagitRepository(i_PathToXmlRepositoryFile);
-        xmlMain.setXmlRepositoryInXMLParser(m_MagitRepository);
+        m_MagitRepository = xmlMain.getXmlRepository();
 
         // 2) check that no MagitBlob in MagitBlobs has same ID as other - same check for MagitCommits,MagitFolder
         doesMagitObjectsHaveSameId();
@@ -82,6 +71,7 @@ public class XMLValidate
 
         //if XmlRepositoryToValidate has passed all validations than we assign to m_XmlRepository
         //then return true
+        xmlMain.setXmlRepositoryInXMLParser(m_MagitRepository);
 
         return true;
     }

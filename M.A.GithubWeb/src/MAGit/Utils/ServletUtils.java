@@ -1,6 +1,8 @@
 package MAGit.Utils;
 
+import System.Engine;
 import Users.UserManager;
+import common.MagitFileUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +37,7 @@ public class ServletUtils
         return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
     }
 
-    public static UserManager getEngine(ServletContext servletContext)
+    public static Engine getEngine(ServletContext servletContext)
     {
         if (servletContext.getAttribute(ENGINE_ATTRIBUTE_NAME) == null)
         {
@@ -43,13 +45,12 @@ public class ServletUtils
             {
                 if (servletContext.getAttribute(ENGINE_ATTRIBUTE_NAME) == null)
                 {
-                    servletContext.setAttribute(ENGINE_ATTRIBUTE_NAME, new UserManager());
+                    servletContext.setAttribute(ENGINE_ATTRIBUTE_NAME, new Engine());
                 }
             }
         }
-        return (UserManager) servletContext.getAttribute(ENGINE_ATTRIBUTE_NAME);
+        return (Engine) servletContext.getAttribute(ENGINE_ATTRIBUTE_NAME);
     }
-
 
     public static int getIntParameter(HttpServletRequest request, String name)
     {
