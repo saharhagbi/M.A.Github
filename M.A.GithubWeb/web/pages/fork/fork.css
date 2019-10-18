@@ -1,0 +1,11 @@
+.bottomGrid{
+    display: grid;
+    grid-template-columns: 33.3% 33.3% 33.3%;
+}
+table, th, td {
+    border: 1px solid black;
+}
+.header-container{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}

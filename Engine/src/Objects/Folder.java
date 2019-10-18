@@ -1,7 +1,7 @@
 package Objects;
 
 import System.FolderDifferences;
-import System.User;
+import System.Users.User;
 import common.CompareItems;
 import common.MagitFileUtils;
 import org.apache.commons.codec.digest.DigestUtils;

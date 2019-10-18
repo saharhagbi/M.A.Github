@@ -1,5 +1,6 @@
 package MAGit.Utils;
 
+import System.Engine;
 import Users.UserManager;
 
 import javax.servlet.ServletContext;
@@ -7,8 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import static MAGit.Constants.Constants.INT_PARAMETER_ERROR;
 
-public class ServletUtils
-{
+public class ServletUtils {
 
     private static final String USER_MANAGER_ATTRIBUTE_NAME = "userManager";
     private static final String ENGINE_ATTRIBUTE_NAME = "engine";
@@ -20,14 +20,10 @@ public class ServletUtils
     private static final Object userManagerLock = new Object();
     private static final Object engineLock = new Object();
 
-    public static UserManager getUserManager(ServletContext servletContext)
-    {
-        if (servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME) == null)
-        {
-            synchronized (userManagerLock)
-            {
-                if (servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME) == null)
-                {
+    public static UserManager getUserManager(ServletContext servletContext) {
+        if (servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME) == null) {
+            synchronized (userManagerLock) {
+                if (servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME) == null) {
                     servletContext.setAttribute(USER_MANAGER_ATTRIBUTE_NAME, new UserManager());
                 }
             }
@@ -35,32 +31,24 @@ public class ServletUtils
         return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
     }
 
-    public static UserManager getEngine(ServletContext servletContext)
-    {
-        if (servletContext.getAttribute(ENGINE_ATTRIBUTE_NAME) == null)
-        {
-            synchronized (engineLock)
-            {
-                if (servletContext.getAttribute(ENGINE_ATTRIBUTE_NAME) == null)
-                {
-                    servletContext.setAttribute(ENGINE_ATTRIBUTE_NAME, new UserManager());
+    public static Engine getEngine(ServletContext servletContext) {
+        if (servletContext.getAttribute(ENGINE_ATTRIBUTE_NAME) == null) {
+            synchronized (engineLock) {
+                if (servletContext.getAttribute(ENGINE_ATTRIBUTE_NAME) == null) {
+                    servletContext.setAttribute(ENGINE_ATTRIBUTE_NAME, new Engine());
                 }
             }
         }
-        return (UserManager) servletContext.getAttribute(ENGINE_ATTRIBUTE_NAME);
+        return (Engine) servletContext.getAttribute(ENGINE_ATTRIBUTE_NAME);
     }
 
 
-    public static int getIntParameter(HttpServletRequest request, String name)
-    {
+    public static int getIntParameter(HttpServletRequest request, String name) {
         String value = request.getParameter(name);
-        if (value != null)
-        {
-            try
-            {
+        if (value != null) {
+            try {
                 return Integer.parseInt(value);
-            } catch (NumberFormatException numberFormatException)
-            {
+            } catch (NumberFormatException numberFormatException) {
             }
         }
         return INT_PARAMETER_ERROR;

@@ -1,6 +1,6 @@
 package Objects;
 
-import System.User;
+import System.Users.User;
 
 import java.io.File;
 import java.io.FileInputStream;

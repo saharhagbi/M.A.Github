@@ -1,6 +1,6 @@
 package Objects;
 
-import System.User;
+import System.Users.User;
 import common.MagitFileUtils;
 
 import java.io.File;
