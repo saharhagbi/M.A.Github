@@ -15,6 +15,7 @@ import collaboration.RemoteBranch;
 import collaboration.RemoteRepositoryRef;
 import collaboration.RemoteTrackingBranch;
 import common.Enums;
+import common.constants.ResourceUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.nio.file.Path;
@@ -56,7 +57,7 @@ public class XMLParser
         m_PathToObjectsDir = Paths.get(i_MagitRepository.location + Repository.sf_PathForObjects);
     }
 
-    public Repository ParseLocalRepositoryFromXmlFile() throws Exception
+    public Repository ParseLocalRepositoryFromXmlFile(String currentUserName) throws Exception
     {
         LocalRepository repoToCreate;
         List<MagitSingleBranch> listOfMSB = m_MagitBranches.getMagitSingleBranch();
@@ -76,14 +77,11 @@ public class XMLParser
         }
         Map<String, Commit> sha1ToCommitMap = createMapSha1ForCommit();
 
-        repoToCreate = new LocalRepository(m_ActiveBranch, Paths.get(m_MagitRepository.location),
+        repoToCreate = new LocalRepository(m_ActiveBranch, Paths.get(ResourceUtils.MainRepositoriesPath + ResourceUtils.Slash + currentUserName),
                 m_MagitRepository.name,
                 branches, sha1ToCommitMap, remoteTrackingBranches, remoteBranches,
                 new RemoteRepositoryRef(m_MagitRepository.magitRemoteReference.name,
                         Paths.get(m_MagitRepository.magitRemoteReference.location)));
-
-        LocalRepositoryWriter writer = new LocalRepositoryWriter(repoToCreate);
-        writer.WriteRepositoryToFileSystem(m_ActiveBranch.getBranchName());
 
         return repoToCreate;
     }
@@ -98,7 +96,7 @@ public class XMLParser
                 Enums.BranchType.BRANCH;
     }
 
-    public Repository ParseRepositoryFromXmlFile() throws Exception
+    public Repository ParseRepositoryFromXmlFile(String currentUserName) throws Exception
     {
         Repository repoToCreate;
 
@@ -118,11 +116,9 @@ public class XMLParser
 
         Map<String, Commit> sha1ToCommitMap = createMapSha1ForCommit();
 
-        repoToCreate = new Repository(m_ActiveBranch, Paths.get(m_MagitRepository.location),
+        repoToCreate = new Repository(m_ActiveBranch, Paths.get(ResourceUtils.MainRepositoriesPath + ResourceUtils.Slash + currentUserName),
                 m_MagitRepository.name, listRepositoryBranches, sha1ToCommitMap);
 
-        RepositoryWriter writer = new RepositoryWriter(repoToCreate);
-        writer.WriteRepositoryToFileSystem(m_ActiveBranch.getBranchName());
 
         return repoToCreate;
     }
@@ -136,6 +132,7 @@ public class XMLParser
             currentCommit = createCurrentCommitAndItsAllPrevCommits(currentPointedMSC);
         else
             currentCommit = m_AllCommitsIDToCommit.get(currentPointedMSC.id);
+
         return currentCommit;
     }
 

@@ -4,8 +4,6 @@ import MAGit.Constants.Constants;
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
 import Users.UserManager;
-import common.MagitFileUtils;
-import common.constants.ResourceUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -90,11 +88,19 @@ public class LoginServlet extends HttpServlet
                         //the true parameter means that if a session object does not exists yet
                         //create a new one
                         request.getSession(true).setAttribute(Constants.USERNAME, usernameFromParameter);
-                        MagitFileUtils.CreateWholePathDirecories(ResourceUtils.ROOT_FOLDER_PATH + ResourceUtils.Slash
-                                + request.getParameter(USERNAME));
+                        try
+                        {
+                            ServletUtils.getEngineAdapter(getServletContext()).createUserFolder(usernameFromParameter);
+                        } catch (Exception e)
+                        {
+                            //todo-
+                            // print proper ui message if crating first directory for repositories not working
+                            e.printStackTrace();
+                        }
 
                         //redirect the request to the chat room - in order to actually change the URL
                         System.out.println("On login, request URI is: " + request.getRequestURI());
+                        userManager.setCurrentUserName(usernameFromParameter);
                         response.sendRedirect(REPOSITORY_HUB_URL);
                     }
                 }
@@ -102,6 +108,7 @@ public class LoginServlet extends HttpServlet
         } else
         {
             //user is already logged in
+            userManager.setCurrentUserName(usernameFromSession);
             response.sendRedirect(REPOSITORY_HUB_URL);
         }
     }

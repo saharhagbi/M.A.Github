@@ -1,7 +1,11 @@
 package XmlObjects;
 
 import Objects.Folder;
+import System.Engine;
 import System.Repository;
+import XmlObjects.repositoryWriters.LocalRepositoryWriter;
+import XmlObjects.repositoryWriters.RepositoryWriter;
+import collaboration.LocalRepository;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -57,17 +61,30 @@ public class XMLMain
         return m_XmlRepository;
     }
 
-    public Repository ParseAndWriteXML(MagitRepository i_MagitRepository) throws Exception
+    public Repository ParseAndWriteXML(MagitRepository i_MagitRepository, String currentUserName) throws Exception
     {
         m_XmlParser.setAllObjects(i_MagitRepository);
 
         boolean isLocalRepository = IsLocalRepository(i_MagitRepository);
 
         if (isLocalRepository)
-            // only if it is valid we continue to create an Repository Object
-            m_ParsedRepository = m_XmlParser.ParseLocalRepositoryFromXmlFile();
-        else
-            m_ParsedRepository = m_XmlParser.ParseRepositoryFromXmlFile();
+        // only if it is valid we continue to create an Repository Object
+        {
+            m_ParsedRepository = m_XmlParser.ParseLocalRepositoryFromXmlFile(currentUserName);
+
+            Engine.initNewPaths(m_ParsedRepository.getRepositoryPath(), m_ParsedRepository.getAllCommitsSHA1ToCommit().values());
+
+            LocalRepositoryWriter writer = new LocalRepositoryWriter((LocalRepository) m_ParsedRepository);
+            writer.WriteRepositoryToFileSystem(m_ParsedRepository.getActiveBranch().getBranchName());
+        } else
+        {
+            m_ParsedRepository = m_XmlParser.ParseRepositoryFromXmlFile(currentUserName);
+
+            Engine.initNewPaths(m_ParsedRepository.getRepositoryPath(), m_ParsedRepository.getAllCommitsSHA1ToCommit().values());
+
+            RepositoryWriter writer = new RepositoryWriter(m_ParsedRepository);
+            writer.WriteRepositoryToFileSystem(m_ParsedRepository.getActiveBranch().getBranchName());
+        }
 
         return m_ParsedRepository;
     }

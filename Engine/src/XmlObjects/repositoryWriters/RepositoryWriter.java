@@ -67,7 +67,7 @@ public class RepositoryWriter
     public void MakeDirectoriesForRepositories()
     {
         MagitFileUtils.CreateDirectory(m_RepositoryToWrite.getRepositoryPath().toString());
-        Engine.CreateRepositoryDirectories(Paths.get(m_RepositoryToWrite.getRepositoryPath().toString()));
+        Engine.CreateRepositoryDirectories(m_RepositoryToWrite.getRepositoryPath());
     }
 
     public void WriteCommitInFileSystem(Commit currentCommit) throws ParseException, IOException

@@ -1,7 +1,7 @@
 package MAGit.Servlets;
 
-import XmlObjects.XMLMain;
-import System.*;
+import MAGit.Utils.ServletUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +20,7 @@ public class RepositoryUpload extends HttpServlet
 {
     //private final String REPO_FILE = "repoFile";
     private final String REPOSITORY_HUB_URL = "repositoryHub.html";
-    private XMLMain m_XMLMain = new XMLMain();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -46,28 +46,30 @@ public class RepositoryUpload extends HttpServlet
         if (fileContent == null || fileContent.isEmpty())
             response.sendRedirect(REPOSITORY_HUB_URL);
 
+        String currentUserName = ServletUtils.getUserManager(getServletContext()).getCurrentUserName();
+
         try
         {
-            /*getEngineAdapter.*/readRepositoryFromXMLFile(fileContent);
+            ServletUtils.getEngineAdapter(getServletContext()).readRepositoryFromXMLFile(fileContent, currentUserName);
         } catch (Exception e)
         {
             //todo -
-            // xmlFile is not valid, show proper message
+            //  xmlFile is not valid, show proper message
             e.printStackTrace();
         }
+
+        response.sendRedirect(REPOSITORY_HUB_URL);
     }
 
-    //all of it in EngineAdapter
+   /* //all of it in EngineAdapter
     private void readRepositoryFromXMLFile(String xmlFileContent) throws Exception
     {
         m_XMLMain.CheckXMLFile(xmlFileContent);
 
-       m_XMLMain.ParseAndWriteXML(m_XMLMain.getXmlRepository());
+        m_XMLMain.ParseAndWriteXML(m_XMLMain.getXmlRepository());
 
 
-    }
-
-
+    }*/
     private String readFromInputStream(InputStream inputStream)
     {
         return new Scanner(inputStream).useDelimiter("\\Z").next();
