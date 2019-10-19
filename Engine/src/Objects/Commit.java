@@ -3,7 +3,7 @@ package Objects;
 import System.ConflictingItems;
 import System.FolderDifferences;
 import System.MergeConflictsAndMergedItems;
-import System.User;
+import System.Users.User;
 import common.constants.NumConstants;
 import org.apache.commons.codec.digest.DigestUtils;
 import puk.team.course.magit.ancestor.finder.AncestorFinder;

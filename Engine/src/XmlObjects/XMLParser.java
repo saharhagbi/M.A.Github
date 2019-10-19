@@ -7,7 +7,7 @@ import Objects.Item;
 import Objects.branch.Branch;
 import Objects.branch.BranchFactory;
 import System.Repository;
-import System.User;
+import System.Users.User;
 import XmlObjects.repositoryWriters.LocalRepositoryWriter;
 import XmlObjects.repositoryWriters.RepositoryWriter;
 import collaboration.LocalRepository;

@@ -2,11 +2,14 @@
 <!--https://www.codexpedia.com/javascript/javascript-add-on-click-event-on-table-rows/--><!--how to add on click on a row of a table using js-->
 <html lang="en">
 <link rel='stylesheet' type='text/css' href='repositoryHub.css'/>
-<script src="repositoryHub.js"></script>
+
 
 <head>
     <meta charset="UTF-8">
     <title>Repository Lounge</title>
+    <script src="../../common/bootstrap.min.css"></script>
+    <script src="../../common/context-path-helper.js"></script>
+    <script src="repositoryHub.js"></script>
 </head>
 <body>
 
@@ -25,7 +28,12 @@
             <h1>Repository Lounge</h1>
         </div>
         <div class="logOutContainer">
-            <a href="logoutServlet">click here to logOut</a>
+            <a href="/logoutServlet">click here to logOut</a>
+        </div>
+        <div class="fork">
+            <form target="_blank" action="../fork/fork.html" enctype="multipart/form-data" method="get">
+                <input type="Submit" value="Fork"><br>
+            </form>
         </div>
     </div>
 
@@ -39,22 +47,22 @@
         <h1>Details</h1>
         <table style="width:100%">
             <tr>
-                <th>User Name</th>
-                <th>Latest Commit</th>
+                <th>Repository Name</th>
+                <th>Latest Commit Time</th>
                 <th>Message</th>
                 <th>Active Branch</th>
                 <th>Commit Amount</th>
             </tr>
             <tr>
                 <td>Jill - example</td>
-                <td>123981239812309asdhkasdhkj1238u1209 - example</td>
+                <td>15.2.19 15:19:0033 - example</td>
                 <td>first commit - example</td>
                 <td>master - example</td>
                 <td>34 - example</td>
             </tr>
             <tr>
                 <td>itzik - example</td>
-                <td>asldjhalsdjo1u3123lj1lk23jl12l3kjkl - example</td>
+                <td>16.2.19 12:14:0044 - example</td>
                 <td>bug fix - example</td>
                 <td>new branch - example</td>
                 <td>10 - example</td>

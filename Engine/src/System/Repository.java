@@ -5,6 +5,7 @@ import Objects.Commit;
 import Objects.Folder;
 import Objects.Item;
 import Objects.branch.Branch;
+import System.Users.User;
 import common.MagitFileUtils;
 import common.constants.StringConstants;
 import javafx.collections.ObservableList;
