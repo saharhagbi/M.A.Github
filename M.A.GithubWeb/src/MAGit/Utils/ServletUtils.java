@@ -1,7 +1,7 @@
 package MAGit.Utils;
 
 import MAGit.EngineAdapter;
-import Users.UserManager;
+import github.users.UserManager;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;

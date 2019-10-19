@@ -61,15 +61,6 @@ public class RepositoryUpload extends HttpServlet
         response.sendRedirect(REPOSITORY_HUB_URL);
     }
 
-   /* //all of it in EngineAdapter
-    private void readRepositoryFromXMLFile(String xmlFileContent) throws Exception
-    {
-        m_XMLMain.CheckXMLFile(xmlFileContent);
-
-        m_XMLMain.ParseAndWriteXML(m_XMLMain.getXmlRepository());
-
-
-    }*/
     private String readFromInputStream(InputStream inputStream)
     {
         return new Scanner(inputStream).useDelimiter("\\Z").next();

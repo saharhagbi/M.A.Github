@@ -1,7 +1,7 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
-import Users.UserManager;
+import github.users.UserManager;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;

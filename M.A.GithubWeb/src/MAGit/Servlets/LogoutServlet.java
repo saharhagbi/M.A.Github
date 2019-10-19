@@ -3,7 +3,7 @@ package MAGit.Servlets;
 import MAGit.Constants.Constants;
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
-import Users.UserManager;
+import github.users.UserManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
