@@ -1,4 +1,6 @@
 var USER_LIST_URL = buildUrlWithContextPath("userslist");
+var REPOSITORY_DATA_URL = "../../repositorydata";
+var refreshRate = 2000;
 
 function ajaxUsersList() {
     $.ajax({
@@ -26,4 +28,24 @@ $(function () {
 
     //The users list is refreshed automatically every second
     setInterval(ajaxUsersList, refreshRate);
+});
+
+/*-----------------------------------refreshRepositoryTable-------------------------------------*/
+
+function uploadRepositoryData() {
+    $("#repositoryDetails").empty();
+
+
+}
+
+
+$(function () {
+
+    $.ajax({
+        url: REPOSITORY_DATA_URL,
+        success: function (repositories) {
+            console.log("Hey its working!!")
+            uploadRepositoryData(repositories);
+        }
+    });
 });

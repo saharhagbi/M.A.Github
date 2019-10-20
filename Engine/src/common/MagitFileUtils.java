@@ -2,8 +2,6 @@ package common;
 
 import common.constants.NumConstants;
 import common.constants.ResourceUtils;
-import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -135,9 +133,15 @@ public class MagitFileUtils
 
     public static void WritingStringInFileWholePath(String filepath, String contentToWrite) throws IOException
     {
-        File file = new File(filepath);
-        file.getParentFile().mkdirs();
+        File file = CreateWholePathDirecories(filepath);
 
         WritingFileByPath(file.getAbsolutePath(), contentToWrite);
+    }
+
+    public static File CreateWholePathDirecories(String filepath)
+    {
+        File file = new File(filepath);
+        file.getParentFile().mkdirs();
+        return file;
     }
 }

@@ -1,4 +1,4 @@
-package System.Users;
+package github.users;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,6 +12,17 @@ of the user of this class to handle the synchronization of isUserExists with oth
 public class UserManager {
 
     private final Set<String> usersSet;
+    private String currentUserName;
+
+    public String getCurrentUserName()
+    {
+        return currentUserName;
+    }
+
+    public void setCurrentUserName(String currentUserName)
+    {
+        this.currentUserName = currentUserName;
+    }
 
     public UserManager() {
         usersSet = new HashSet<>();

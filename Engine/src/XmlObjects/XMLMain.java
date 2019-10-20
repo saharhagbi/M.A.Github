@@ -1,14 +1,20 @@
 package XmlObjects;
 
 import Objects.Folder;
+import System.Engine;
 import System.Repository;
+import XmlObjects.repositoryWriters.LocalRepositoryWriter;
+import XmlObjects.repositoryWriters.RepositoryWriter;
+import collaboration.LocalRepository;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 import static common.MagitFileUtils.IsMagitFolder;
 
@@ -19,6 +25,8 @@ import static common.MagitFileUtils.IsMagitFolder;
 // 4) to get a valid Repository - a)CreateRepositoryFromXml(path to file) -> b)getRepository();
 public class XMLMain
 {
+    private static String XML_OBJECTS = "XmlObjects";
+
     private XMLValidate m_XmlValidate = new XMLValidate();
     private XMLParser m_XmlParser = new XMLParser();
     private Repository m_ParsedRepository = null;
@@ -33,37 +41,50 @@ public class XMLMain
         this.m_XmlRepository = i_XmlRepository;
     }
 
-    public boolean CheckXMLFile(Path i_XmlFilePath) throws Exception
+    public boolean CheckXMLFile(String xmlContent) throws Exception
     {
         boolean isXMLRepoAlreadyExist;
 
-        m_XmlValidate.checkExistencesAndXMLExtension(i_XmlFilePath);
+        //m_XmlValidate.checkExistencesAndXMLExtension(i_XmlFilePath);
 
-        m_XmlRepository = parseFromXmlFileToXmlMagitRepository(i_XmlFilePath);
+        m_XmlRepository = parseFromXmlFileToXmlMagitRepository(xmlContent);
         m_XmlValidate.setAllObjects(m_XmlRepository);
 
-        m_XmlValidate.validateXmlRepositoryAndAssign(i_XmlFilePath, this);
+        m_XmlValidate.validateXmlRepositoryAndAssign(this);
         isXMLRepoAlreadyExist = checkIfAnotherRepoInLocation();
 
         return isXMLRepoAlreadyExist;
     }
 
-    public MagitRepository GetXmlRepository()
+    public MagitRepository getXmlRepository()
     {
         return m_XmlRepository;
     }
 
-    public Repository ParseAndWriteXML(MagitRepository i_MagitRepository) throws Exception
+    public Repository ParseAndWriteXML(MagitRepository i_MagitRepository, String currentUserName) throws Exception
     {
         m_XmlParser.setAllObjects(i_MagitRepository);
 
         boolean isLocalRepository = IsLocalRepository(i_MagitRepository);
 
         if (isLocalRepository)
-            // only if it is valid we continue to create an Repository Object
-            m_ParsedRepository = m_XmlParser.ParseLocalRepositoryFromXmlFile();
-        else
-            m_ParsedRepository = m_XmlParser.ParseRepositoryFromXmlFile();
+        // only if it is valid we continue to create an Repository Object
+        {
+            m_ParsedRepository = m_XmlParser.ParseLocalRepositoryFromXmlFile(currentUserName);
+
+            Engine.initNewPaths(m_ParsedRepository.getRepositoryPath(), m_ParsedRepository.getAllCommitsSHA1ToCommit().values());
+
+            LocalRepositoryWriter writer = new LocalRepositoryWriter((LocalRepository) m_ParsedRepository);
+            writer.WriteRepositoryToFileSystem(m_ParsedRepository.getActiveBranch().getBranchName());
+        } else
+        {
+            m_ParsedRepository = m_XmlParser.ParseRepositoryFromXmlFile(currentUserName);
+
+            Engine.initNewPaths(m_ParsedRepository.getRepositoryPath(), m_ParsedRepository.getAllCommitsSHA1ToCommit().values());
+
+            RepositoryWriter writer = new RepositoryWriter(m_ParsedRepository);
+            writer.WriteRepositoryToFileSystem(m_ParsedRepository.getActiveBranch().getBranchName());
+        }
 
         return m_ParsedRepository;
     }
@@ -77,23 +98,27 @@ public class XMLMain
     }
 
 
-    public MagitRepository parseFromXmlFileToXmlMagitRepository(Path i_pathToXmlRepository) throws JAXBException
+    private MagitRepository parseFromXmlFileToXmlMagitRepository(Path i_pathToXmlRepository) throws JAXBException
     {
         MagitRepository XmlRepositoryToValidate = null;
         JAXBContext jaxbContext;
         Unmarshaller unmarshaller;
 
-        try
-        {
-            jaxbContext = JAXBContext.newInstance(MagitRepository.class);
-            unmarshaller = jaxbContext.createUnmarshaller();
-            XmlRepositoryToValidate = (MagitRepository) unmarshaller.unmarshal(i_pathToXmlRepository.toFile());
-        } catch (JAXBException xmlException)
-        {
-            throw xmlException;
-        }
+        jaxbContext = JAXBContext.newInstance(MagitRepository.class);
+        unmarshaller = jaxbContext.createUnmarshaller();
+        XmlRepositoryToValidate = (MagitRepository) unmarshaller.unmarshal(i_pathToXmlRepository.toFile());
+
 
         return XmlRepositoryToValidate;
+    }
+
+    private MagitRepository parseFromXmlFileToXmlMagitRepository(String i_XMLContent) throws JAXBException, FileNotFoundException
+    {
+        InputStream inputStream = new ByteArrayInputStream(i_XMLContent.getBytes());
+        JAXBContext jc = JAXBContext.newInstance(XML_OBJECTS);
+        Unmarshaller u = jc.createUnmarshaller();
+
+        return (MagitRepository) u.unmarshal(inputStream);
     }
 
     //todo:
