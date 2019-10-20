@@ -32,19 +32,25 @@ $(function () {
 
 /*-----------------------------------refreshRepositoryTable-------------------------------------*/
 
-function uploadRepositoryData() {
+function uploadRepositoryData(repositories) {
     $("#repositoryDetails").empty();
+
+    $("#repoName").innerText = repositories[0].repositoryName;
+    $("#latestCommit").innerText = repositories[0].latestCommit;
+    $("#message").innerText = repositories[0].message;
+    $("#activeBranch").innerText = repositories[0].activeBranch;
+    $("#commitAmount").innerText = repositories[0].commitAmount;
 
 
 }
-
 
 $(function () {
 
     $.ajax({
         url: REPOSITORY_DATA_URL,
         success: function (repositories) {
-            console.log("Hey its working!!")
+            console.log(repositories)
+
             uploadRepositoryData(repositories);
         }
     });

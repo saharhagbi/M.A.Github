@@ -65,7 +65,4 @@ public class RepositoryUpload extends HttpServlet
     {
         return new Scanner(inputStream).useDelimiter("\\Z").next();
     }
-
-
 }
-

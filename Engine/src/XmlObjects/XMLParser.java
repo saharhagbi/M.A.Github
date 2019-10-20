@@ -8,8 +8,6 @@ import Objects.branch.Branch;
 import Objects.branch.BranchFactory;
 import System.Repository;
 import System.Users.User;
-import XmlObjects.repositoryWriters.LocalRepositoryWriter;
-import XmlObjects.repositoryWriters.RepositoryWriter;
 import collaboration.LocalRepository;
 import collaboration.RemoteBranch;
 import collaboration.RemoteRepositoryRef;
@@ -77,7 +75,9 @@ public class XMLParser
         }
         Map<String, Commit> sha1ToCommitMap = createMapSha1ForCommit();
 
-        repoToCreate = new LocalRepository(m_ActiveBranch, Paths.get(ResourceUtils.MainRepositoriesPath + ResourceUtils.Slash + currentUserName),
+        repoToCreate = new LocalRepository(m_ActiveBranch, Paths.get(ResourceUtils.MainRepositoriesPath
+                + ResourceUtils.Slash + currentUserName
+                + ResourceUtils.Slash + m_MagitRepository.name),
                 m_MagitRepository.name,
                 branches, sha1ToCommitMap, remoteTrackingBranches, remoteBranches,
                 new RemoteRepositoryRef(m_MagitRepository.magitRemoteReference.name,
@@ -116,7 +116,9 @@ public class XMLParser
 
         Map<String, Commit> sha1ToCommitMap = createMapSha1ForCommit();
 
-        repoToCreate = new Repository(m_ActiveBranch, Paths.get(ResourceUtils.MainRepositoriesPath + ResourceUtils.Slash + currentUserName),
+        repoToCreate = new Repository(m_ActiveBranch, Paths.get(ResourceUtils.MainRepositoriesPath
+                + ResourceUtils.Slash + currentUserName
+                + ResourceUtils.Slash + m_MagitRepository.name),
                 m_MagitRepository.name, listRepositoryBranches, sha1ToCommitMap);
 
 

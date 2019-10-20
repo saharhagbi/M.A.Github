@@ -105,18 +105,14 @@ public class Engine
             createMagitFolderInRootFolder(i_PathToRootFolderOfRepository);
             Branch MasterBranch = new Branch("Master", null);
             m_CurrentRepository = new Repository(i_PathToRootFolderOfRepository, i_RepositoryName, MasterBranch);
-            WriteRepositoryNameFileInMagitRepository();
+
             m_CurrentLocalRepository = null;
         }
 
     }
 
     //todo --> move this function to repository writer
-    public void WriteRepositoryNameFileInMagitRepository() throws IOException
-    {
-        Path repositoryNameFile = Paths.get(this.getCurrentRepository().getRepositoryPath().toString() + "\\.magit\\" + ResourceUtils.RepoName + ResourceUtils.TxtExtension);
-        MagitFileUtils.WritingFileByPath(repositoryNameFile.toString(), this.getCurrentRepository().getName());
-    }
+
 
     private void createMagitFolderInRootFolder(Path i_rootFolderPath) throws IOException
     {

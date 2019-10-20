@@ -13,7 +13,7 @@ public class User
 
     public static String buildUserPath(String userName)
     {
-        return String.format(ResourceUtils.MainRepositoriesPath + userName);
+        return String.format(ResourceUtils.MainRepositoriesPath + ResourceUtils.Slash + userName);
     }
 
     public String getUserName()

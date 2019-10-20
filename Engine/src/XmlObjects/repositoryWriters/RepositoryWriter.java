@@ -6,6 +6,7 @@ import Objects.branch.Branch;
 import System.Engine;
 import System.Repository;
 import common.MagitFileUtils;
+import common.constants.ResourceUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -37,7 +38,15 @@ public class RepositoryWriter
 
         WriteAllBranches(i_NameHeadBranch, m_RepositoryToWrite.getAllBranches());
 
+        WriteRepositoryNameFileInMagitRepository();
+
         Folder.SpanDirectory(m_RepositoryToWrite.getActiveBranch().getPointedCommit().getRootFolder());
+    }
+
+    public void WriteRepositoryNameFileInMagitRepository() throws IOException
+    {
+        Path repositoryNameFile = Paths.get(m_RepositoryToWrite.getRepositoryPath().toString() + "\\.magit\\" + ResourceUtils.RepoName + ResourceUtils.TxtExtension);
+        MagitFileUtils.WritingFileByPath(repositoryNameFile.toString(), m_RepositoryToWrite.getName());
     }
 
     public void WriteAllBranches(String i_NameHeadBranch, List<Branch> allBranches) throws ParseException, IOException

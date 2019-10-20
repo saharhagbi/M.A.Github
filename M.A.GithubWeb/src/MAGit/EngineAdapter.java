@@ -41,7 +41,7 @@ public class EngineAdapter
         {
             engine.PullAnExistingRepository(repositoryFolder.getPath(), null);
             Repository newRepo = engine.getCurrentRepository();
-            RepositoryData repositoryData = new RepositoryData(loggedInUser,
+            RepositoryData repositoryData = new RepositoryData(newRepo.getName(),
                     newRepo.getActiveBranch().getPointedCommit().getSHA1(),
                     newRepo.getActiveBranch().getPointedCommit().getCommitMessage(),
                     newRepo.getActiveBranch().getBranchName(),
