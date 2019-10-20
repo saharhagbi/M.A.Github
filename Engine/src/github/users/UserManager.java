@@ -1,7 +1,10 @@
 package github.users;
 
+import System.Users.User;
+
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /*
@@ -11,15 +14,15 @@ of the user of this class to handle the synchronization of isUserExists with oth
  */
 public class UserManager {
 
-    private final Set<String> usersSet;
-    private String currentUserName;
+    private final Set<User> usersSet;
+    private User currentUserName;
 
-    public String getCurrentUserName()
+    public User getCurrentUserName()
     {
         return currentUserName;
     }
 
-    public void setCurrentUserName(String currentUserName)
+    public void setCurrentUserName(User currentUserName)
     {
         this.currentUserName = currentUserName;
     }
@@ -28,19 +31,36 @@ public class UserManager {
         usersSet = new HashSet<>();
     }
 
-    public synchronized void addUser(String username) {
-        usersSet.add(username);
+    public synchronized void addUser(User user) {
+        usersSet.add(user);
     }
 
-    public synchronized void removeUser(String username) {
-        usersSet.remove(username);
+    public synchronized void removeUser(String i_Username) {
+        usersSet.forEach(user -> {
+            if(user.getUserName().equals(i_Username))
+                usersSet.remove(user);
+        });
+        try {
+            throw new Exception("UserManager.removeUser() - didnt find the requested user name so it wasnt removed");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
     }
 
-    public synchronized Set<String> getUsers() {
+    public synchronized Set<User> getUsers() {
         return Collections.unmodifiableSet(usersSet);
     }
 
     public boolean isUserExists(String username) {
-        return usersSet.contains(username);
+        Boolean exist = false;
+        Iterator<User> iterator = usersSet.iterator();
+        while(iterator.hasNext())
+        {
+            User currUser = (User) iterator.next();
+            if(currUser.getUserName().equals(username))
+                return true;
+        }
+        return false;
     }
 }
