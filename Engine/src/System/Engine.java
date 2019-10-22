@@ -199,12 +199,26 @@ public class Engine
         this.m_CurrentRepository = m_CurrentRepository;
     }
 
-    public void PullAnExistingRepository(String i_repositoryPathAsString, String i_NameOfRepository) throws Exception
+    public void PullAnExistingRepository(String repositoryPathAsString, String repositoryName) throws Exception
     {
-        Repository repository;
-        Optional<Branch> activeBranch;
+        Path repositoryPath = Paths.get(repositoryPathAsString);
+
+        loadExistingRepositoryFromFileSystem(repositoryPathAsString, repositoryPath, repositoryName);
+    }
+
+    public void PullAnExistingRepository(String i_repositoryPathAsString) throws Exception
+    {
         Path repositoryPath = Paths.get(i_repositoryPathAsString);
 
+        String i_NameOfRepository = GetExistingRepositoryName(repositoryPath.toFile());
+
+        loadExistingRepositoryFromFileSystem(i_repositoryPathAsString, repositoryPath, i_NameOfRepository);
+    }
+
+    private void loadExistingRepositoryFromFileSystem(String i_repositoryPathAsString, Path repositoryPath, String i_NameOfRepository) throws Exception
+    {
+        Optional<Branch> activeBranch;
+        Repository repository;
         if (!repositoryPath.toFile().exists())
         {
             throw new FileNotFoundException(repositoryPath.toString() + " does not exist - please make sure you are giving a correct path");
@@ -527,7 +541,7 @@ public class Engine
         List<RemoteBranch> remoteBranches = new ArrayList<>();
         List<RemoteTrackingBranch> remoteTrackingBranches = new ArrayList<>();
 
-        PullAnExistingRepository(i_DirCloneFrom.getPath(), i_RepositoryName);
+        PullAnExistingRepository(i_DirCloneFrom.getPath());
 
         createRemoteBranches(remoteBranches, i_DirCloneFrom.getName());
 
@@ -697,18 +711,17 @@ public class Engine
 
     public String GetExistingRepositoryName(File i_existingRepositoryFolder) throws IOException
     {
-        Path existingRepoPath = Paths.get(i_existingRepositoryFolder.getPath());
-        String repositoryName = "didn't find repository name.txt";
-        Path magitFolderPath = Paths.get(existingRepoPath.toString() + "\\.magit");
-        File[] magitFolderFiles = magitFolderPath.toFile().listFiles();
-        for (int i = 0; i < magitFolderFiles.length; i++)
+        String pathToMagit = i_existingRepositoryFolder.getAbsolutePath() + ResourceUtils.AdditinalPathMagit;
+
+        for (File file :
+                MagitFileUtils.GetFilesInLocation(pathToMagit))
         {
-            if (magitFolderFiles[i].getName().equals(ResourceUtils.RepoName))
-                return FileUtils.readFileToString(magitFolderFiles[i], "UTF-8");
+
+            if (file.getName().equals(ResourceUtils.RepoName + ResourceUtils.TxtExtension))
+                return FileUtils.readFileToString(file, "UTF-8");
         }
 
-
-        return repositoryName;
+        return null;
     }
 
     public void createMainRepositoryFolder() throws Exception

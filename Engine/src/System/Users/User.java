@@ -4,11 +4,11 @@ import common.constants.ResourceUtils;
 
 public class User
 {
-    private String m_UserName = "Administrator";
+    private String userName = "Administrator";
 
     public User(String i_UserName)
     {
-        m_UserName = i_UserName;
+        userName = i_UserName;
     }
 
     public static String buildUserPath(String userName)
@@ -18,11 +18,11 @@ public class User
 
     public String getUserName()
     {
-        return m_UserName;
+        return userName;
     }
 
     public void setUserName(String i_UserName)
     {
-        m_UserName = i_UserName;
+        userName = i_UserName;
     }
 }

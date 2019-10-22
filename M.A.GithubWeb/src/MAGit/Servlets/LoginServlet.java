@@ -84,7 +84,8 @@ public class LoginServlet extends HttpServlet
                     } else
                     {
                         //add the new user to the users list
-                        userManager.addUser(new User(usernameFromParameter));
+                        User currentUser = new User(usernameFromParameter);
+                        userManager.addUser(currentUser);
                         //set the username in a session so it will be available on each request
                         //the true parameter means that if a session object does not exists yet
                         //create a new one
@@ -101,7 +102,7 @@ public class LoginServlet extends HttpServlet
 
                         //redirect the request to the chat room - in order to actually change the URL
                         System.out.println("On login, request URI is: " + request.getRequestURI());
-                        userManager.setCurrentUserName(new User(usernameFromParameter));
+                        userManager.setCurrentUserName(currentUser);
                         response.sendRedirect(REPOSITORY_HUB_URL);
                     }
                 }
@@ -109,7 +110,7 @@ public class LoginServlet extends HttpServlet
         } else
         {
             //user is already logged in
-            userManager.setCurrentUserName(new User(usernameFromSession));
+            userManager.setCurrentUserName(usernameFromSession);
             response.sendRedirect(REPOSITORY_HUB_URL);
         }
     }

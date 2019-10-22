@@ -39,7 +39,7 @@ public class EngineAdapter
 
         for (File repositoryFolder : repositoriesFolders)
         {
-            engine.PullAnExistingRepository(repositoryFolder.getPath(), null);
+            engine.PullAnExistingRepository(repositoryFolder.getPath());
             Repository newRepo = engine.getCurrentRepository();
             RepositoryData repositoryData = new RepositoryData(newRepo.getName(),
                     newRepo.getActiveBranch().getPointedCommit().getSHA1(),
