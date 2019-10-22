@@ -108,7 +108,6 @@ public class XMLMain
         unmarshaller = jaxbContext.createUnmarshaller();
         XmlRepositoryToValidate = (MagitRepository) unmarshaller.unmarshal(i_pathToXmlRepository.toFile());
 
-
         return XmlRepositoryToValidate;
     }
 
