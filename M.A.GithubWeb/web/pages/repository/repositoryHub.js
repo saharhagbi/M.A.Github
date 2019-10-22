@@ -6,7 +6,6 @@ function ajaxUsersList() {
     $.ajax({
         url: USER_LIST_URL,
         success: function (users) {
-            console.log(users);
             refreshUsersList(users);
         }
     });
@@ -34,14 +33,27 @@ $(function () {
 /*-----------------------------------refreshRepositoryTable-------------------------------------*/
 
 function uploadRepositoryData(repositories) {
-    $("#repositoryDetails").empty();
+    //$("#repositoryDetails").empty();
 
 
-    $("#repoName").text(repositories[0].repositoryName);
+    $(repositories).each(function (index, element) {
+        console.log(element);
+        console.log(element.repositoryName);
+
+        $("<tr>" +
+            "<th >" + element.repositoryName + "</th>" +
+            "<th>" + element.latestCommit + "</th>" +
+            "<th>" + element.message + "</th>" +
+            "<th>" + element.activeBranch + "</th>" +
+            "<th >" + element.commitAmount + "</th>" +
+            "</tr>").appendTo($("#repositoriesDetails"));
+    })
+
+    /*$("#repoName").text(repositories[0].repositoryName);
     $("#latestCommit").text(repositories[0].latestCommit);
     $("#message").text(repositories[0].message);
     $("#activeBranch").text(repositories[0].activeBranch);
-    $("#commitAmount").text(repositories[0].commitAmount);
+    $("#commitAmount").text(repositories[0].commitAmount);*/
 }
 
 $(function () {
