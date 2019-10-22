@@ -23,7 +23,7 @@ public class RepositoryDataServlet extends HttpServlet
         response.setContentType("application/json");
         List<RepositoryData> allRepositoriesData = null;
 
-        String loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUserName();
+        String loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUserName().getUserName();
 
         PrintWriter out = response.getWriter();
         try

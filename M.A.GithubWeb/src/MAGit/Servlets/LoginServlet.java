@@ -3,6 +3,7 @@ package MAGit.Servlets;
 import MAGit.Constants.Constants;
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
+import System.Users.User;
 import github.users.UserManager;
 
 import javax.servlet.ServletException;
@@ -83,7 +84,7 @@ public class LoginServlet extends HttpServlet
                     } else
                     {
                         //add the new user to the users list
-                        userManager.addUser(usernameFromParameter);
+                        userManager.addUser(new User(usernameFromParameter));
                         //set the username in a session so it will be available on each request
                         //the true parameter means that if a session object does not exists yet
                         //create a new one
@@ -100,7 +101,7 @@ public class LoginServlet extends HttpServlet
 
                         //redirect the request to the chat room - in order to actually change the URL
                         System.out.println("On login, request URI is: " + request.getRequestURI());
-                        userManager.setCurrentUserName(usernameFromParameter);
+                        userManager.setCurrentUserName(new User(usernameFromParameter));
                         response.sendRedirect(REPOSITORY_HUB_URL);
                     }
                 }
@@ -108,7 +109,7 @@ public class LoginServlet extends HttpServlet
         } else
         {
             //user is already logged in
-            userManager.setCurrentUserName(usernameFromSession);
+            userManager.setCurrentUserName(new User(usernameFromSession));
             response.sendRedirect(REPOSITORY_HUB_URL);
         }
     }

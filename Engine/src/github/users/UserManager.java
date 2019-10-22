@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /*
 Adding and retrieving users is synchronized and in that manner - these actions are thread safe
@@ -24,7 +25,15 @@ public class UserManager {
 
     public void setCurrentUserName(User currentUserName)
     {
-        this.currentUserName = currentUserName;
+        AtomicBoolean isExist = new AtomicBoolean(false);
+        usersSet.forEach(user -> {
+            if(user.getUserName().equals(currentUserName.getUserName())) {
+                this.currentUserName = user;
+                isExist.set(true);
+            }
+        });
+        if(isExist.get() ==false)
+            this.currentUserName = currentUserName;
     }
 
     public UserManager() {
