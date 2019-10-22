@@ -1,6 +1,7 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
+import System.Users.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -46,11 +47,11 @@ public class RepositoryUpload extends HttpServlet
         if (fileContent == null || fileContent.isEmpty())
             response.sendRedirect(REPOSITORY_HUB_URL);
 
-        String currentUserName = ServletUtils.getUserManager(getServletContext()).getCurrentUserName();
+        User currentUserName = ServletUtils.getUserManager(getServletContext()).getCurrentUserName();
 
         try
         {
-            ServletUtils.getEngineAdapter(getServletContext()).readRepositoryFromXMLFile(fileContent, currentUserName);
+            ServletUtils.getEngineAdapter(getServletContext()).readRepositoryFromXMLFile(fileContent, currentUserName.getUserName());
         } catch (Exception e)
         {
             //todo -

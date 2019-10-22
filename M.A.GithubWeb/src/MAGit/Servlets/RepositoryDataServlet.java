@@ -1,6 +1,7 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
+import System.Users.User;
 import com.google.gson.Gson;
 import github.repository.RepositoryData;
 
@@ -23,12 +24,12 @@ public class RepositoryDataServlet extends HttpServlet
         response.setContentType("application/json");
         List<RepositoryData> allRepositoriesData = null;
 
-        String loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUserName();
+        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUserName();
 
         PrintWriter out = response.getWriter();
         try
         {
-            allRepositoriesData = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(loggedInUser);
+            allRepositoriesData = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(loggedInUser.getUserName());
         } catch (Exception e)
         {
             //todo -
@@ -41,6 +42,7 @@ public class RepositoryDataServlet extends HttpServlet
         String json = gson.toJson(allRepositoriesData);
         out.println(json);
         out.flush();
+        out.close();
     }
 
     @Override

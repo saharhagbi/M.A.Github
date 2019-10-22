@@ -1,10 +1,12 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
+import System.Users.User;
 import github.users.UserManager;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Set;
 
+@WebServlet(urlPatterns = {"/userslist"})
 public class UsersListServlet extends HttpServlet
 {
 
@@ -24,7 +27,7 @@ public class UsersListServlet extends HttpServlet
         {
             Gson gson = new Gson();
             UserManager userManager = ServletUtils.getUserManager(getServletContext());
-            Set<String> usersList = userManager.getUsers();
+            Set<User> usersList = userManager.getUsers();
             String json = gson.toJson(usersList);
             out.println(json);
             out.flush();
