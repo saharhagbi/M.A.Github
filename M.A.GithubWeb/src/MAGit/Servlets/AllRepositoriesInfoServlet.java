@@ -1,10 +1,12 @@
 package MAGit.Servlets;
 
+import System.Users.User;
 import com.google.gson.Gson;
 import github.repository.RepositoryData;
 import github.users.UserManager;
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
+import org.apache.commons.collections4.ListUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AllRepositoriesInfoServlet extends HttpServlet {
@@ -36,13 +39,17 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
-        List<RepositoryData> allRepositoriesData = null;
+        List<RepositoryData> allRepositoriesData = new ArrayList<>();
         // todo: go through all users and appened all repositories - except current user
         UserManager manager = ServletUtils.getUserManager(getServletContext());
 
+        //for debugging
+        manager.addUser(new User("tom"));
+        //for debuggin
+        User activeUser = manager.getCurrentUserName();
         PrintWriter out = response.getWriter();
             manager.getUsers().forEach(user -> {
-                        if (!user.getUserName().equals(user)) {
+                        if (!user.getUserName().equals(activeUser.getUserName())) {
                             try {
                                 List<RepositoryData> currUserRepositories = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(user.getUserName());
                                 currUserRepositories.forEach(repositoryData -> {
@@ -60,6 +67,7 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
         String json = gson.toJson(allRepositoriesData);
         out.println(json);
         out.flush();
+        out.close();
     }
 
 
