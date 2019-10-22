@@ -12,6 +12,11 @@
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>MAGit.Servlets.LogoutServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AllRepositoriesInfoServlet</servlet-name>
+        <servlet-class>MAGit.Servlets.AllRepositoriesInfoServlet</servlet-class>
+    </servlet>
+
 
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -20,5 +25,9 @@
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/logoutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AllRepositoriesInfoServlet</servlet-name>
+        <url-pattern>/allRepositoriesDetails</url-pattern>
     </servlet-mapping>
 </web-app>
