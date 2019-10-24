@@ -1,6 +1,7 @@
 package MAGit.Servlets;
 
-
+import MAGit.Utils.ServletUtils;
+import System.Repository;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,14 +13,25 @@ import java.io.IOException;
 public class RepositoryPage extends HttpServlet
 {
     public static final String repoName = "repoName";
+    public static final String REPOSITORY_PAGE_URL = "repositoryPage/repositoryPage.html";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         response.setContentType("text/html");
 
-        System.out.println("its working");
-        System.out.printf(request.getParameter(repoName));
+        String repositoryNameClicked = request.getParameter(repoName);
+        try
+        {
+            ServletUtils.getEngineAdapter(getServletContext()).initRepositoryInSystemByName(repositoryNameClicked);
+        } catch (Exception e)
+        {
+            //todo
+            // handle proper message in page -  there is problem in repository name clicked loading to system
+            e.printStackTrace();
+        }
+
+        response.sendRedirect(REPOSITORY_PAGE_URL);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
