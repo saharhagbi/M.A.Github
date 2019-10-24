@@ -24,7 +24,7 @@ public class UserManager
         usersSet = new HashSet<>();
     }
 
-    public User getCurrentUserName()
+    public User getCurrentUser()
     {
         return currentUserName;
     }
@@ -32,13 +32,15 @@ public class UserManager
     public void setCurrentUserName(User currentUserName)
     {
         AtomicBoolean isExist = new AtomicBoolean(false);
-        usersSet.forEach(user -> {
-            if(user.getUserName().equals(currentUserName.getUserName())) {
+        usersSet.forEach(user ->
+        {
+            if (user.getUserName().equals(currentUserName.getUserName()))
+            {
                 this.currentUserName = user;
                 isExist.set(true);
             }
         });
-        if(isExist.get() ==false)
+        if (isExist.get() == false)
             this.currentUserName = currentUserName;
     }
 
@@ -54,9 +56,9 @@ public class UserManager
         usersSet.add(user);
     }
 
-    public synchronized void removeUser(String i_Username)
+    public synchronized void removeUser(User user)
     {
-        usersSet.removeIf(user -> user.getUserName().equals(i_Username));
+        usersSet.remove(user);
     }
 
     public synchronized Set<User> getUsers()

@@ -1,33 +1,28 @@
 package MAGit.Servlets;
 
-import MAGit.Utils.ServletUtils;
-import MAGit.Utils.SessionUtils;
-import System.Users.User;
-import github.users.UserManager;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class LogoutServlet extends HttpServlet
+@WebServlet(urlPatterns = {"/pages/repositoryPage"})
+public class RepositoryPage extends HttpServlet
 {
-    private static final String REPOHUB_URL = "../login/signup.html";
+    public static final String repoName = "repoName";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws ServletException, IOException
     {
-        //String usernameFromSession = SessionUtils.getUsername(request);
-        //UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        response.setContentType("text/html");
 
-        //User currentUser = userManager.getCurrentUser();
-
-       // userManager.removeUser(currentUser);
-        SessionUtils.clearSession(request);
-
-        response.sendRedirect(REPOHUB_URL);
+        System.out.println("its working");
+        System.out.printf(request.getParameter(repoName));
     }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -39,7 +34,7 @@ public class LogoutServlet extends HttpServlet
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws ServletException, IOException
     {
         processRequest(request, response);
     }
@@ -59,9 +54,14 @@ public class LogoutServlet extends HttpServlet
         processRequest(request, response);
     }
 
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo()
     {
         return "Short description";
-    }
+    }// </editor-fold>
 }

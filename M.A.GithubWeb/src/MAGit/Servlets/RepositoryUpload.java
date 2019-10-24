@@ -47,7 +47,7 @@ public class RepositoryUpload extends HttpServlet
         if (fileContent == null || fileContent.isEmpty())
             response.sendRedirect(REPOSITORY_HUB_URL);
 
-        User currentUserName = ServletUtils.getUserManager(getServletContext()).getCurrentUserName();
+        User currentUserName = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
 
         try
         {

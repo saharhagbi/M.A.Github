@@ -24,7 +24,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
-        <url-pattern>/logoutServlet</url-pattern>
+        <url-pattern>/pages/repository/logoutServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AllRepositoriesInfoServlet</servlet-name>
