@@ -47,12 +47,12 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
         //for debugging
         manager.addUser(new User("tom"));
         //for debuggin
-        User activeUser = manager.getCurrentUserName();
+        User activeUser = manager.getCurrentUser();
         PrintWriter out = response.getWriter();
             manager.getUsers().forEach(user -> {
                         if (!user.getUserName().equals(activeUser.getUserName())) {
                             try {
-                                List<RepositoryData> currUserRepositories = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(user.getUserName());
+                                List<RepositoryData> currUserRepositories = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(user);
                                 currUserRepositories.forEach(repositoryData -> {
                                     allRepositoriesData.add(repositoryData);
                                 });

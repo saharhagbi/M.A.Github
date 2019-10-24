@@ -29,7 +29,7 @@ public class RepositoryDataServlet extends HttpServlet
         PrintWriter out = response.getWriter();
         try
         {
-            allRepositoriesData = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(loggedInUser.getUserName());
+            allRepositoriesData = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(loggedInUser);
         } catch (Exception e)
         {
             //todo -

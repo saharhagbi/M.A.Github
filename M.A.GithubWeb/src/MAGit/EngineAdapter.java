@@ -32,10 +32,10 @@ public class EngineAdapter
         engine.createMainRepositoryFolder();
     }
 
-    public List<RepositoryData> buildAllUsersRepositoriesData(String loggedInUser) throws Exception
+    public List<RepositoryData> buildAllUsersRepositoriesData(User loggedInUser) throws Exception
     {
         List<RepositoryData> allRepositoriesData = new ArrayList<>();
-        File[] repositoriesFolders = MagitFileUtils.GetFilesInLocation(User.buildUserPath(loggedInUser));
+        File[] repositoriesFolders = MagitFileUtils.GetFilesInLocation(loggedInUser.buildUserPath());
 
         for (File repositoryFolder : repositoriesFolders)
         {
@@ -53,8 +53,17 @@ public class EngineAdapter
         return allRepositoriesData;
     }
 
-    public void initRepositoryInSystemByName(String repositoryNameClicked)
+    public void initRepositoryInSystemByName(String repositoryNameClicked, User loggedInUser) throws Exception
     {
 
+        String pathToUserFolderRepositories = loggedInUser.buildUserPath();
+
+        File[] usersRepositories = MagitFileUtils.GetFilesInLocation(pathToUserFolderRepositories);
+
+        for (File file : usersRepositories)
+        {
+            if (file.getName().equals(repositoryNameClicked))
+                engine.PullAnExistingRepository(file.getAbsolutePath());
+        }
     }
 }

@@ -11,7 +11,7 @@ public class User
         userName = i_UserName;
     }
 
-    public static String buildUserPath(String userName)
+    public String buildUserPath()
     {
         return String.format(ResourceUtils.MainRepositoriesPath + ResourceUtils.Slash + userName);
     }

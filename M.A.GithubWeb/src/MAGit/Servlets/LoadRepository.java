@@ -1,7 +1,8 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
-import System.Repository;
+import System.Users.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,31 +10,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/pages/repositoryPage"})
-public class RepositoryPage extends HttpServlet
+@WebServlet(urlPatterns = {"/pages/loadRepository"})
+public class LoadRepository extends HttpServlet
 {
-    public static final String repoName = "repoName";
-    public static final String REPOSITORY_PAGE_URL = "repositoryPage/repositoryPage.html";
+    private final String repoName = "repoName";
+    private final String REPOSITORY_PAGE_URL = "repositoryPage/repositoryPage.html";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        response.setContentType("text/html");
+        response.setContentType("text/html;charset=UTF-8");
 
+        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
         String repositoryNameClicked = request.getParameter(repoName);
         try
         {
-            ServletUtils.getEngineAdapter(getServletContext()).initRepositoryInSystemByName(repositoryNameClicked);
+            ServletUtils.getEngineAdapter(getServletContext())
+                    .initRepositoryInSystemByName(repositoryNameClicked, loggedInUser);
         } catch (Exception e)
         {
             //todo
-            // handle proper message in page -  there is problem in repository name clicked loading to system
+            // handle proper message in page - there is problem in repository name clicked loading to system
             e.printStackTrace();
         }
 
         response.sendRedirect(REPOSITORY_PAGE_URL);
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
     /**

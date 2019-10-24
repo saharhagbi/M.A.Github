@@ -1,6 +1,6 @@
 var USER_LIST_URL = "../../userslist";
 var REPOSITORY_DATA_URL = "../../repositorydata";
-var REPOSITORY_PAGE_URL = "../repositoryPage";
+var LOAD_REPOSITORY_URL = "../loadRepository";
 var refreshRate = 2000;
 
 function ajaxUsersList() {
@@ -48,20 +48,26 @@ function uploadRepositoryData(repositories) {
         $("#" + index).click(function (event) {
             console.log(index);
             var repoName = $(this).text();
-
             console.log(repoName);
+
             $.ajax({
-                url: REPOSITORY_PAGE_URL,
+                url: LOAD_REPOSITORY_URL,
                 dataType: "json",
                 data: {"repoName": repoName},
                 success: function () {
-                    console.log("Hey! It's working!!");
 
-                    uploadRepositoryData(repositories);
-                }
+                    console.log("in success");
+                    //load repository in system and do nothing!
+                },
+
+                error: function () {
+                    console.log("in error");
+                },
+
+                return:  true
             });
-        })
-    })
+        });
+    });
 }
 
 $(function () {
