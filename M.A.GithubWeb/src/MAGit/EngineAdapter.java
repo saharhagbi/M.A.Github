@@ -45,7 +45,8 @@ public class EngineAdapter
                     newRepo.getActiveBranch().getPointedCommit().getSHA1(),
                     newRepo.getActiveBranch().getPointedCommit().getCommitMessage(),
                     newRepo.getActiveBranch().getBranchName(),
-                    Integer.toString(newRepo.getAllCommitsSHA1ToCommit().size()));
+                    Integer.toString(newRepo.getAllCommitsSHA1ToCommit().size()),
+                    loggedInUser.getUserName());
 
             allRepositoriesData.add(repositoryData);
         }

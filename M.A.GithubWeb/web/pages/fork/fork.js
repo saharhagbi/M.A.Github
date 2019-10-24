@@ -1,32 +1,42 @@
-var USER_LIST_URL = "../../userslist";
+var CLONE_SERVLET_URL = "/CloneServlet";
 var All_REPOSITORIES_DETAILS_URL = "allRepositoriesDetails";
-var refreshRate = 2000;
-
 
 /*-----------------------------------refreshRepositoryTable-------------------------------------*/
 
+
 function uploadRepositoryData(repositories) {
-    //$("#repositoryDetails").empty();
-
-
     $(repositories).each(function (index, element) {
-        console.log(element);
-        console.log(element.repositoryName);
+        var buttonNumber = 0;
+        var button = "<input type=\"button\" id =" + buttonNumber + " value=\"click here\">";
 
-        $("<tr>" +
-            "<th >" + element.repositoryName + "</th>" +
-            "<th>" + element.latestCommit + "</th>" +
-            "<th>" + element.message + "</th>" +
-            "<th>" + element.activeBranch + "</th>" +
-            "<th >" + element.commitAmount + "</th>" +
+        $("<tr id = counter>" +
+            "<td>" + button + "</td>" +
+            "<td >" + element.repositoryName + "</td>" +
+            "<td>" + element.latestCommit + "</td>" +
+            "<td>" + element.message + "</td>" +
+            "<td>" + element.activeBranch + "</td>" +
+            "<td>" + element.commitAmount + "</td>" +
             "</tr>").appendTo($("#repositoriesDetails"));
+
+        $("#" + buttonNumber).click(function (event) {
+            console.log(buttonNumber);
+            $.ajax({
+                url: CLONE_SERVLET_URL,
+                /*todo:sendredirect to correct page*/
+                data: {"repositoryName": element.repositoryName, "userName": element.userName},
+                success: function () {
+                    console.log("in success");
+                },
+                error: function () {
+                    console.log("in error");
+                },
+
+                return: true
+            });
+        });
+
     })
 
-    /*$("#repoName").text(repositories[0].repositoryName);
-    $("#latestCommit").text(repositories[0].latestCommit);
-    $("#message").text(repositories[0].message);
-    $("#activeBranch").text(repositories[0].activeBranch);
-    $("#commitAmount").text(repositories[0].commitAmount);*/
 }
 
 $(function () {
