@@ -1,9 +1,6 @@
 package MAGit.Servlets;
 
-import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
-import System.Users.User;
-import github.users.UserManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,12 +15,7 @@ public class LogoutServlet extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException
     {
-        //String usernameFromSession = SessionUtils.getUsername(request);
-        //UserManager userManager = ServletUtils.getUserManager(getServletContext());
-
-        //User currentUser = userManager.getCurrentUser();
-
-       // userManager.removeUser(currentUser);
+        response.setContentType("text/html;charset=UTF-8");
         SessionUtils.clearSession(request);
 
         response.sendRedirect(REPOHUB_URL);
