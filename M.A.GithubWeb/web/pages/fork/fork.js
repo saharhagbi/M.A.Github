@@ -1,4 +1,4 @@
-var CLONE_SERVLET_URL = "/CloneServlet";
+var CLONE_SERVLET_URL = "CloneServlet";
 var All_REPOSITORIES_DETAILS_URL = "allRepositoriesDetails";
 
 /*-----------------------------------refreshRepositoryTable-------------------------------------*/
@@ -23,7 +23,7 @@ function uploadRepositoryData(repositories) {
             $.ajax({
                 url: CLONE_SERVLET_URL,
                 /*todo:sendredirect to correct page*/
-                data: {"repositoryName": element.repositoryName, "userName": element.userName},
+                data: {"repositoryName": element.repositoryName, "username": element.userName},
                 success: function () {
                     console.log("in success");
                 },

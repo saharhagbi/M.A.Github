@@ -1,5 +1,6 @@
 package MAGit.Servlets;
 
+import MAGit.Constants.Constants;
 import System.Users.User;
 import com.google.gson.Gson;
 import github.repository.RepositoryData;
@@ -9,6 +10,7 @@ import MAGit.Utils.SessionUtils;
 import org.apache.commons.collections4.ListUtils;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,9 +19,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-
-@SuppressWarnings("ALL")
-public class AllRepositoriesInfoServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/pages/fork/CloneServlet"})
+public class CloneRepositoryServlet extends HttpServlet {
 
     private final String FORK_URL = "../fork/fork.html";
 
@@ -38,38 +39,16 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException      if an I/O error occurs
      */
+    @SuppressWarnings("Duplicates")
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
-        List<RepositoryData> allRepositoriesData = new ArrayList<>();
-        // todo: go through all users and appened all repositories - except current user
-        UserManager manager = ServletUtils.getUserManager(getServletContext());
-
-        //for debugging
-        manager.addUser(new User("tom"));
-        //for debuggin
-        User activeUser = manager.getCurrentUser();
-        PrintWriter out = response.getWriter();
-            manager.getUsers().forEach(user -> {
-                        if (!user.getUserName().equals(activeUser.getUserName())) {
-                            try {
-                                List<RepositoryData> currUserRepositories = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(user);
-                                currUserRepositories.forEach(repositoryData -> {
-                                    allRepositoriesData.add(repositoryData);
-                                });
-                            } catch (Exception e) {
-                                //todo -
-                                // handle proper message in UI
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-        Gson gson = new Gson();
-
-        String json = gson.toJson(allRepositoriesData);
-        out.println(json);
-        out.flush();
-        out.close();
+        String userNameToCopyFrom = request.getParameter(Constants.USERNAME);
+        String repositoryName = request.getParameter(Constants.REPOSITORY_NAME);
+        try {
+            ServletUtils.getEngineAdapter(getServletContext()).Clone(userNameToCopyFrom ,repositoryName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -113,3 +92,4 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 }
+

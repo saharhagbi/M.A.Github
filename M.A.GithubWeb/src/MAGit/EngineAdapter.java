@@ -8,6 +8,7 @@ import common.MagitFileUtils;
 import github.repository.RepositoryData;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,5 +67,14 @@ public class EngineAdapter
             if (file.getName().equals(repositoryNameClicked))
                 engine.PullAnExistingRepository(file.getAbsolutePath());
         }
+    }
+
+    public void Clone(String i_UserNameToCopyFrom, String i_RepositoryName) throws Exception {
+        File dirToCloneTo = Paths.get(engine.getCurrentRepository().getRepositoryPath().getParent().getParent().toString()+"\\"+i_UserNameToCopyFrom+"\\"+i_RepositoryName).toFile();
+        File dirToCloneFrom = engine.getCurrentRepository().getRepositoryPath().toFile();
+
+        this.engine.Clone(dirToCloneTo,i_RepositoryName,dirToCloneFrom);
+
+
     }
 }
