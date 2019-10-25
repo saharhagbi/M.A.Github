@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -420,6 +421,14 @@ public class Repository
     public ObservableList<String> GetAllConflictsNames()
     {
         return m_ConflictsAndItems.GetConflictItemsNames();
+    }
+
+    public List<Branch> getBranchPointed(Commit commit)
+    {
+        return getActiveBranches()
+                .stream()
+                .filter(branch -> branch.getPointedCommit().getSHA1().equals(commit.getSHA1()))
+                .collect(Collectors.toList());
     }
 }
 

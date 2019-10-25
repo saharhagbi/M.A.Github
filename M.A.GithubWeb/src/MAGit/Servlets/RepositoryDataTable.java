@@ -15,7 +15,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet(urlPatterns = {"/repositorydata"})
-public class RepositoryDataServlet extends HttpServlet
+public class RepositoryDataTable extends HttpServlet
 {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

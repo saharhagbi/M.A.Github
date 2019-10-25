@@ -1,15 +1,18 @@
 package MAGit;
 
+import Objects.branch.Branch;
 import System.Engine;
 import System.Repository;
 import System.Users.User;
 import XmlObjects.XMLMain;
 import common.MagitFileUtils;
+import github.commit.CommitData;
 import github.repository.RepositoryData;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EngineAdapter
 {
@@ -55,7 +58,6 @@ public class EngineAdapter
 
     public void initRepositoryInSystemByName(String repositoryNameClicked, User loggedInUser) throws Exception
     {
-
         String pathToUserFolderRepositories = loggedInUser.buildUserPath();
 
         File[] usersRepositories = MagitFileUtils.GetFilesInLocation(pathToUserFolderRepositories);
@@ -65,5 +67,29 @@ public class EngineAdapter
             if (file.getName().equals(repositoryNameClicked))
                 engine.PullAnExistingRepository(file.getAbsolutePath());
         }
+    }
+
+    public List<Object> getBranchesList()
+    {
+        return engine.getCurrentRepository().getActiveBranches()
+                .stream()
+                .map(branch -> (Object) branch)
+                .collect(Collectors.toList());
+    }
+
+    public List<Object> getCommitsData()
+    {
+        return engine.getCurrentRepository().getAllCommitsSHA1ToCommit().values()
+                .stream()
+                .map(commit ->
+                {
+                    StringBuilder branchesPointedNames = new StringBuilder();
+                    List<Branch> branchesPointed = engine.getCurrentRepository().getBranchPointed(commit);
+                    branchesPointed.forEach(branch -> branchesPointedNames.append(branch.getBranchName() + " "));
+
+                    return (Object) new CommitData(commit.getSHA1(), commit.getCommitMessage(),
+                            commit.getUserCreated().getUserName(), branchesPointedNames.toString());
+                })
+                .collect(Collectors.toList());
     }
 }
