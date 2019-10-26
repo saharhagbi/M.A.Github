@@ -1,5 +1,6 @@
 package MAGit;
 
+import Objects.Commit;
 import Objects.branch.Branch;
 import System.Engine;
 import System.Repository;
@@ -79,6 +80,9 @@ public class EngineAdapter
 
     public List<Object> getBranchesList()
     {
+     /*   List<Object> lstToReturn = new ArrayList<>();
+
+        lstToReturn.add()*/
         return engine.getCurrentRepository().getActiveBranches()
                 .stream()
                 .map(branch -> (Object) branch)
@@ -87,17 +91,28 @@ public class EngineAdapter
 
     public List<Object> getCommitsData()
     {
-        return engine.getCurrentRepository().getAllCommitsSHA1ToCommit().values()
-                .stream()
-                .map(commit ->
-                {
-                    StringBuilder branchesPointedNames = new StringBuilder();
-                    List<Branch> branchesPointed = engine.getCurrentRepository().getBranchPointed(commit);
-                    branchesPointed.forEach(branch -> branchesPointedNames.append(branch.getBranchName() + " "));
+        List<Commit> commitList = new ArrayList<>();
 
-                    return (Object) new CommitData(commit.getSHA1(), commit.getCommitMessage(),
-                            commit.getUserCreated().getUserName(), branchesPointedNames.toString());
-                })
-                .collect(Collectors.toList());
+        engine.getCurrentRepository().getActiveBranch().getAllCommitsPointed(commitList);
+
+        return commitList.stream().map(commit ->
+        {
+            StringBuilder branchesPointedNames = new StringBuilder();
+            List<Branch> branchesPointed = engine.getCurrentRepository().getBranchPointed(commit);
+            branchesPointed.forEach(branch -> branchesPointedNames.append(branch.getBranchName() + " "));
+
+            return (Object) new CommitData(commit.getSHA1(), commit.getCommitMessage(),
+                    commit.getUserCreated().getUserName(), branchesPointedNames.toString());
+
+        }).collect(Collectors.toList());
+    }
+
+    public List<Object> getRepositoryName(String userName)
+    {
+        List<Object> lstToReturn = new ArrayList<>();
+        lstToReturn.add(engine.getCurrentRepository().getName());
+        lstToReturn.add(userName);
+
+        return lstToReturn;
     }
 }

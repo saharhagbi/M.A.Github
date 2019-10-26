@@ -2,7 +2,6 @@ package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
 import System.Users.User;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;

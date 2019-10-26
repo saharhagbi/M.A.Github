@@ -56,7 +56,7 @@ function uploadRepositoryData(repositories) {
                 success: function () {
 
                     console.log("in success");
-                    location.replace("../repositoryPage/repositoryPage.html");
+                        location.replace("../repositoryPage/repositoryPage.html");
                 },
             });
         });
