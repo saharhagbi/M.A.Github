@@ -8,3 +8,8 @@ th, td {
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
+
+h3 {
+    font-family: Verdana;
+    color: #123fff;
+}

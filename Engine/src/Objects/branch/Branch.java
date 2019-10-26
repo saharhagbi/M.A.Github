@@ -4,6 +4,7 @@ import Objects.Commit;
 import Objects.Item;
 import System.MergeConflictsAndMergedItems;
 import common.MagitFileUtils;
+import common.constants.NumConstants;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -155,6 +156,24 @@ public class Branch
     {
         return m_PointedCommit.AreTheCommitsTheSame(branch.getPointedCommit()) &&
                 branch.getBranchName().equals(m_BranchName);
+    }
+
+    public void getAllCommitsPointed(List<Commit> lst)
+    {
+        if (m_PointedCommit == null)
+            return;
+
+        if (m_PointedCommit.ThereIsPrevCommit(NumConstants.ONE))
+        {
+            m_PointedCommit.GetPrevCommit().addAlllHisPrevCommits(lst);
+            lst.add(m_PointedCommit);
+        }
+
+        if (m_PointedCommit.ThereIsPrevCommit(NumConstants.TWO))
+        {
+            m_PointedCommit.GetSecondPrevCommit().addAlllHisPrevCommits(lst);
+            lst.add(m_PointedCommit);
+        }
     }
 }
 

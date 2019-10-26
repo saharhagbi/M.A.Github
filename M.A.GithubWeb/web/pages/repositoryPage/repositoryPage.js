@@ -1,4 +1,6 @@
 var REPOSITORY_INFO_URL = "repositoryInfo";
+var repositoryName = 0;
+var userName = 1;
 
 console.log("worked till here");
 
@@ -55,6 +57,32 @@ $(function () {
                         "<td>" + element.branchPointed + "</td>" +
                         "</tr>").appendTo($("#commitsTable"));
                 });
+            }
+        },
+
+        error: function (e) {
+            console.log(e.toString());
+        }
+    });
+});
+
+/*---------------------------request RepositoryName And userName-------------------------------------------*/
+
+$(function () {
+    $.ajax({
+
+        url: REPOSITORY_INFO_URL,
+        dataType: "json",
+        data: {"requestType": "3"},
+
+        success: function (names) {
+            console.log(names);
+
+            updateNames(names);
+
+            function updateNames(names) {
+                $("#repositoryName").text(names[repositoryName]);
+                $("#userName").text(names[userName]);
             }
         },
 

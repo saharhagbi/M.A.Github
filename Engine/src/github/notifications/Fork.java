@@ -1,6 +1,7 @@
 package github.notifications;
 
-public class ForkNotfication extends Notification
+public class Fork
 {
     private String userName;
+    private Notification notification;
 }

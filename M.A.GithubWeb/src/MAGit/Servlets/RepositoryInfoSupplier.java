@@ -1,6 +1,7 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
+import System.Users.User;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
@@ -18,6 +19,7 @@ public class RepositoryInfoSupplier extends HttpServlet
     private final String REQUEST_TYPE = "requestType";
     private final String Branches = "1";
     private final String Commits = "2";
+    private final String Names = "3";
 
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -28,11 +30,13 @@ public class RepositoryInfoSupplier extends HttpServlet
         response.setCharacterEncoding("UTF-8");
         List<Object> dataRequested = null;
         String dataType = request.getParameter(REQUEST_TYPE);
+        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
 
         try
         {
             switch (dataType)
             {
+                //randomly i decided that userName and repositoryName will return with branches
                 case Branches:
                     dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getBranchesList();
                     break;
@@ -40,6 +44,10 @@ public class RepositoryInfoSupplier extends HttpServlet
                 case Commits:
                     dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getCommitsData();
                     break;
+                case Names:
+                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getRepositoryName(loggedInUser.getUserName());
+                    break;
+
             }
         } catch (Exception e)
         {
@@ -51,8 +59,8 @@ public class RepositoryInfoSupplier extends HttpServlet
         try (PrintWriter out = response.getWriter())
         {
             Gson gson = new Gson();
-
             String json = gson.toJson(dataRequested);
+
             out.println(json);
             out.flush();
         }
