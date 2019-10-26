@@ -38,11 +38,11 @@ function uploadRepositoryData(repositories) {
     $(repositories).each(function (index, element) {
 
         $("<tr>" +
-            "<th id=" + index + ">" + element.repositoryName + "</th>" +
-            "<th>" + element.latestCommit + "</th>" +
-            "<th>" + element.message + "</th>" +
-            "<th>" + element.activeBranch + "</th>" +
-            "<th >" + element.commitAmount + "</th>" +
+            "<td id=" + index + ">" + element.repositoryName + "</td>" +
+            "<td>" + element.latestCommit + "</td>" +
+            "<td>" + element.message + "</td>" +
+            "<td>" + element.activeBranch + "</td>" +
+            "<td >" + element.commitAmount + "</td>" +
             "</tr>").appendTo($("#repositoriesDetails"));
 
         $("#" + index).click(function (event) {
@@ -52,19 +52,12 @@ function uploadRepositoryData(repositories) {
 
             $.ajax({
                 url: LOAD_REPOSITORY_URL,
-                dataType: "json",
                 data: {"repoName": repoName},
                 success: function () {
 
                     console.log("in success");
-                    //load repository in system and do nothing!
+                    location.replace("../repositoryPage/repositoryPage.html");
                 },
-
-                error: function () {
-                    console.log("in error");
-                },
-
-                return:  true
             });
         });
     });

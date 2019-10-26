@@ -1,5 +1,6 @@
 package Objects;
 
+import Objects.branch.Branch;
 import System.ConflictingItems;
 import System.FolderDifferences;
 import System.MergeConflictsAndMergedItems;

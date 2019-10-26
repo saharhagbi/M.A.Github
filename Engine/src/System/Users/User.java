@@ -4,7 +4,9 @@ import common.constants.ResourceUtils;
 
 public class User
 {
-    private String userName = "Administrator";
+    private String userName;
+
+
 
     public User(String i_UserName)
     {

@@ -3,11 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Repository Page</title>
+
+    <!--links:-->
+    <link rel='stylesheet' type='text/css' href='repositoryPage.css'/>
+    <link rel="shortcut icon" href="">
+
+    <!--scripts:-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="repositoryPage.js"></script>
+
+
 </head>
 <body>
-<h1> Branches: </h1>
-<!--<ul id="branches"></ul>-->
+<h1> Repository Details:</h1>
 
+<div id="repositoryName">
+
+</div>
+<div id="branchesSection">
+    <h3> Branches: </h3>
+
+    <ul id="branches"></ul>
+</div>
+
+
+<div id="commitsSection">
+    <h3> Commits: </h3>
+
+    <table id="commitsTable">
+        <tr>
+            <th>SHA-1</th>
+            <th>Message</th>
+            <th>Creator</th>
+            <th>BranchesPointed</th>
+        </tr>
+    </table>
+</div>
 
 </body>
 </html>

@@ -15,7 +15,7 @@ import java.util.*;
 public class Branch
 {
     private String m_BranchName;
-    private Commit m_PointedCommit;
+    private transient Commit m_PointedCommit;
 
     public Branch(String i_BranchName, Commit i_CurrentCommit)
     {
@@ -130,9 +130,9 @@ public class Branch
         return headBranch;
     }
 
-    public MergeConflictsAndMergedItems GetConflictsForMerge(Branch i_PushingBranch, Path i_RepositoryPath, Map<String,Commit> i_allCommitsMap) throws Exception
+    public MergeConflictsAndMergedItems GetConflictsForMerge(Branch i_PushingBranch, Path i_RepositoryPath, Map<String, Commit> i_allCommitsMap) throws Exception
     {
-        MergeConflictsAndMergedItems mergeConflicts = Commit.GetConflictsForMerge(this.getPointedCommit(), i_PushingBranch.getPointedCommit(), i_RepositoryPath,i_allCommitsMap);
+        MergeConflictsAndMergedItems mergeConflicts = Commit.GetConflictsForMerge(this.getPointedCommit(), i_PushingBranch.getPointedCommit(), i_RepositoryPath, i_allCommitsMap);
         return mergeConflicts;
     }
 

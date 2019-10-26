@@ -1,7 +1,7 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
-import System.Users.User;
+import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,30 +9,61 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
-@WebServlet(urlPatterns = {"/pages/loadRepository"})
-public class LoadRepository extends HttpServlet
+@WebServlet(urlPatterns = {"/pages/repositoryPage/repositoryInfo"})
+public class RepositoryInfoSupplier extends HttpServlet
 {
-    private final String repoName = "repoName";
+    private final String REQUEST_TYPE = "requestType";
+    private final String Branches = "1";
+    private final String Commits = "2";
+
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        response.setContentType("text/html;charset=UTF-8");
+        //returning JSON objects, not HTML
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        List<Object> dataRequested = null;
+        String dataType = request.getParameter(REQUEST_TYPE);
 
-        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
-        String repositoryNameClicked = request.getParameter(repoName);
         try
         {
-            ServletUtils.getEngineAdapter(getServletContext())
-                    .initRepositoryInSystemByName(repositoryNameClicked, loggedInUser);
+            switch (dataType)
+            {
+                case Branches:
+                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getBranchesList();
+                    break;
+
+                case Commits:
+                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getCommitsData();
+                    break;
+            }
         } catch (Exception e)
         {
-            //todo
-            // handle proper message in page - there is problem in repository name clicked loading to system
+            //todo:
+            // handle proper message in UI
             e.printStackTrace();
         }
+
+        try (PrintWriter out = response.getWriter())
+        {
+            Gson gson = new Gson();
+
+            String json = gson.toJson(dataRequested);
+            out.println(json);
+            out.flush();
+        }
+        //todo:
+        // for debugging, remove on finish
+        catch (Exception e)
+        {
+            System.out.println("Problem requested:" + e.getMessage());
+        }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
     /**

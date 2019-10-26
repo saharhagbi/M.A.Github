@@ -35,8 +35,8 @@ function uploadRepositoryData(repositories) {
             });
         });
 
+        buttonNumber++;
     })
-
 }
 
 $(function () {
