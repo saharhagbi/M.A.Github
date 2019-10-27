@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /*
 Adding and retrieving users is synchronized and in that manner - these actions are thread safe
@@ -77,5 +78,18 @@ public class UserManager
                 return true;
         }
         return false;
+    }
+
+    public User GetUserByName(String i_UserNameToFind) throws Exception {
+        if (!isUserExists(i_UserNameToFind))
+            throw new Exception("in function UserManager.GetUserByName - couldnt find the requested name");
+
+        Iterator<User> userIterator = usersSet.iterator();
+        while (userIterator.hasNext()) {
+            User currUser = userIterator.next();
+            if (currUser.getUserName().equals(i_UserNameToFind))
+                return currUser;
+        }
+        return null;
     }
 }

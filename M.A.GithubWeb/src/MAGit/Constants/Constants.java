@@ -10,4 +10,5 @@ public class Constants {
 
     public static final int INT_PARAMETER_ERROR = Integer.MIN_VALUE;
     public static final String LOGIN_ERROR_URL = "/pages/loginerror/logout_msg.jsp";  // must start with '/' since will be used in request dispatcher...
+    public static final String REPOSITORY_NAME = "repositoryName";
 }

@@ -7,12 +7,14 @@ import System.Repository;
 import System.Users.User;
 import XmlObjects.XMLMain;
 import common.MagitFileUtils;
+import common.constants.ResourceUtils;
 import common.constants.StringConstants;
 import github.commit.CommitData;
 import github.notifications.PullRequestNotification;
 import github.repository.RepositoryData;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -70,6 +72,13 @@ public class EngineAdapter
             if (file.getName().equals(repositoryNameClicked))
                 engine.PullAnExistingRepository(file.getAbsolutePath());
         }
+    }
+
+    public void Clone(String i_UserNamerToCopyTo, String i_UserNameToCopyFrom, String i_RepositoryName) throws Exception
+    {
+        File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNamerToCopyTo + "\\" + i_RepositoryName).toFile();
+        File dirToCloneFrom = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNameToCopyFrom + "\\" + i_RepositoryName).toFile();
+        this.engine.Clone(dirToCloneTo, i_RepositoryName, dirToCloneFrom);
     }
 
     public List<Object> getBranchesList()

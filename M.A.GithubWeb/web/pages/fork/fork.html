@@ -8,28 +8,22 @@
     <script src="fork.js"></script>
 </head>
 <body>
-<!--
-<div class="getRepositorie">
-    <form method="get" action="allRepositoriesDetails">
-        <input type = "submit" value="Get repositories details">
-    </form>
-</div>
--->
-
-<div class="allRepoDetails">
-    <h1>all repositories details</h1>
-    <table style="width:100%" id="repositoriesDetails">
-        <tr>
-            <th></th>
-            <th>User</th>
-            <th>Repository Name</th>
-            <th>Latest Commit</th>
-            <th>Message</th>
-            <th>Active Branch</th>
-            <th>Commit Amount</th>
-        </tr>
-
-    </table>
-</div>
+    <div class="allRepoDetails">
+        <h1>all repositories details</h1>
+        <table style="width:100%" id="repositoriesDetails">
+            <tr>
+                <th>Choose to clone</th>
+                <th>Repository Name</th>
+                <th>Latest Commit</th>
+                <th>Message</th>
+                <th>Active Branch</th>
+                <th>Commit Amount</th>
+            </tr>
+        </table>
+    </div>
+    <div class="userListForRepositories">
+        <h1>click on the user to show it's repositories</h1>
+        <ul id="userList"></ul>
+    </div>
 </body>
 </html>
