@@ -2,6 +2,7 @@ package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
 import System.Users.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -14,13 +15,12 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Scanner;
 
-@WebServlet(name = "RepositoryUpload", urlPatterns = {"/pages/repository/upload"})
+@WebServlet(name = "RepositoryUpload", urlPatterns = {"/pages/repositoryHub/upload"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 public class RepositoryUpload extends HttpServlet
 {
     //private final String REPO_FILE = "repoFile";
     private final String REPOSITORY_HUB_URL = "repositoryHub.html";
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

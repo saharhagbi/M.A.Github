@@ -7,12 +7,13 @@ import System.Repository;
 import System.Users.User;
 import XmlObjects.XMLMain;
 import common.MagitFileUtils;
+import common.constants.StringConstants;
 import github.commit.CommitData;
+import github.notifications.PullRequestNotification;
 import github.repository.RepositoryData;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EngineAdapter
@@ -73,13 +74,15 @@ public class EngineAdapter
 
     public List<Object> getBranchesList()
     {
-     /*   List<Object> lstToReturn = new ArrayList<>();
+        Set<Branch> branches = new HashSet<>();
+        branches.add(engine.getCurrentRepository().getActiveBranch());
+        branches.addAll(engine.getCurrentRepository().getActiveBranches());
 
-        lstToReturn.add()*/
-        return engine.getCurrentRepository().getActiveBranches()
-                .stream()
-                .map(branch -> (Object) branch)
-                .collect(Collectors.toList());
+        List<Object> branchesList = new ArrayList<>(branches);
+
+        Collections.reverse(branchesList);
+
+        return branchesList;
     }
 
     public List<Object> getCommitsData()
@@ -108,4 +111,28 @@ public class EngineAdapter
 
         return lstToReturn;
     }
+
+    public List<Object> getPullRequests()
+    {
+        List<Object> lstToReturn = new ArrayList<>();
+        lstToReturn.add(new PullRequestNotification());
+        return lstToReturn;
+    }
+
+    public List<Object> isLocalRepository()
+    {
+        List<Object> isLocalList = new ArrayList<>();
+        String isLocalRepository = engine.IsLocalRepository() ? StringConstants.YES : StringConstants.NO;
+
+        isLocalList.add((Object) isLocalRepository);
+
+        return isLocalList;
+    }
+
+    public void checkout(String branchName) throws Exception
+    {
+        engine.CheckOut(branchName);
+    }
+
+
 }

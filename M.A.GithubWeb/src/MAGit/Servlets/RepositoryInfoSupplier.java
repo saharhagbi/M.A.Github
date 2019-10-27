@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.List;
 
 @WebServlet(urlPatterns = {"/pages/repositoryPage/repositoryInfo"})
@@ -20,6 +21,8 @@ public class RepositoryInfoSupplier extends HttpServlet
     private final String Branches = "1";
     private final String Commits = "2";
     private final String Names = "3";
+    private final String PullRequest = "4";
+    private final String IsLocalRepository = "5";
 
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -40,14 +43,19 @@ public class RepositoryInfoSupplier extends HttpServlet
                 case Branches:
                     dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getBranchesList();
                     break;
-
                 case Commits:
                     dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getCommitsData();
+                    Collections.reverse(dataRequested);
                     break;
                 case Names:
                     dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getRepositoryName(loggedInUser.getUserName());
                     break;
-
+                case PullRequest:
+                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getPullRequests();
+                    break;
+                case IsLocalRepository:
+                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).isLocalRepository();
+                    break;
             }
         } catch (Exception e)
         {

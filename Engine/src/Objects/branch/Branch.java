@@ -166,14 +166,14 @@ public class Branch
         if (m_PointedCommit.ThereIsPrevCommit(NumConstants.ONE))
         {
             m_PointedCommit.GetPrevCommit().addAlllHisPrevCommits(lst);
-            lst.add(m_PointedCommit);
         }
 
         if (m_PointedCommit.ThereIsPrevCommit(NumConstants.TWO))
         {
             m_PointedCommit.GetSecondPrevCommit().addAlllHisPrevCommits(lst);
-            lst.add(m_PointedCommit);
         }
+
+        lst.add(m_PointedCommit);
     }
 }
 

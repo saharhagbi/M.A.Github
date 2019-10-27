@@ -13,3 +13,17 @@ h3 {
     font-family: Verdana;
     color: #123fff;
 }
+
+.BranchesNote {
+    font-weight: bold;
+    color: #2b542c;
+}
+
+.back {
+    font-style: italic;
+    color: #000000;
+    background-color: #dec339;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
