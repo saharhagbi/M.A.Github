@@ -11,6 +11,7 @@ import github.commit.CommitData;
 import github.repository.RepositoryData;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class EngineAdapter
 {
     private Engine engine = new Engine();
     private XMLMain xmlMain = new XMLMain();
+    private static final Path m_ServerRepositoryPath = Paths.get("C:\\magit-ex3");
 
     public void createUserFolder(String usernameFromParameter)
     {
@@ -72,15 +74,15 @@ public class EngineAdapter
         }
     }
 
-    public void Clone(String i_UserNameToCopyFrom, String i_RepositoryName) throws Exception {
-        File dirToCloneTo = Paths.get(engine.getCurrentRepository().getRepositoryPath().getParent().getParent().toString()+"\\"+i_UserNameToCopyFrom+"\\"+i_RepositoryName).toFile();
-        File dirToCloneFrom = engine.getCurrentRepository().getRepositoryPath().toFile();
+    public void Clone(String i_UserNamerToCopyTo,String i_UserNameToCopyFrom, String i_RepositoryName) throws Exception {
+        File dirToCloneTo = Paths.get(m_ServerRepositoryPath.toString()+"\\"+i_UserNamerToCopyTo+"\\"+i_RepositoryName).toFile();
+        File dirToCloneFrom =Paths.get(m_ServerRepositoryPath.toString()+"\\"+i_UserNameToCopyFrom+"\\"+i_RepositoryName).toFile();
         this.engine.Clone(dirToCloneTo,i_RepositoryName,dirToCloneFrom);
     }
 
     public List<Object> getBranchesList()
     {
-     /*   List<Object> lstToReturn = new ArrayList<>();
+     /*   List<Object> lstToReturn = new ArrayList<>();f
 
         lstToReturn.add()*/
         return engine.getCurrentRepository().getActiveBranches()

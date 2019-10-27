@@ -1,5 +1,6 @@
 package MAGit.Servlets;
 
+import MAGit.Constants.Constants;
 import System.Users.User;
 import com.google.gson.Gson;
 import github.repository.RepositoryData;
@@ -41,32 +42,33 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
-        List<RepositoryData> allRepositoriesData = new ArrayList<>();
+        List<RepositoryData> currUserRepositories = new ArrayList<>();
         // todo: go through all users and appened all repositories - except current user
         UserManager manager = ServletUtils.getUserManager(getServletContext());
 
         //for debugging
         manager.addUser(new User("tom"));
         //for debuggin
-        User activeUser = manager.getCurrentUser();
-        PrintWriter out = response.getWriter();
-            manager.getUsers().forEach(user -> {
-                        if (!user.getUserName().equals(activeUser.getUserName())) {
-                            try {
-                                List<RepositoryData> currUserRepositories = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(user);
-                                currUserRepositories.forEach(repositoryData -> {
-                                    allRepositoriesData.add(repositoryData);
-                                });
-                            } catch (Exception e) {
-                                //todo -
-                                // handle proper message in UI
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-        Gson gson = new Gson();
 
-        String json = gson.toJson(allRepositoriesData);
+        String requestedUserName = request.getParameter(Constants.USERNAME);
+        User requestedUserToShowRepositoryFor = null;
+        try {
+            //requestedUserToShowRepositoryFor = manager.GetUserByName(requestedUserName);
+            //for debugging
+            requestedUserToShowRepositoryFor = manager.GetUserByName("tom");
+            //for debugging
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            currUserRepositories = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(requestedUserToShowRepositoryFor);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        PrintWriter out = response.getWriter();
+        Gson gson = new Gson();
+        String json = gson.toJson(currUserRepositories);
         out.println(json);
         out.flush();
         out.close();
