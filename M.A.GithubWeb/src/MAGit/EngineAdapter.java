@@ -6,8 +6,9 @@ import System.Engine;
 import System.Repository;
 import System.Users.User;
 import XmlObjects.XMLMain;
+import collaboration.LocalRepository;
+import collaboration.RemoteBranch;
 import common.MagitFileUtils;
-import common.constants.ResourceUtils;
 import common.constants.ResourceUtils;
 import common.constants.StringConstants;
 import github.commit.CommitData;
@@ -15,11 +16,8 @@ import github.notifications.PullRequestNotification;
 import github.repository.RepositoryData;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -79,7 +77,8 @@ public class EngineAdapter
         }
     }
 
-    public void Clone(String i_UserNamerToCopyTo, String i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception {
+    public void Clone(String i_UserNamerToCopyTo, String i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception
+    {
         File dirToCloneFrom = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNameToCopyFrom + "\\" + i_RepositoryName).toFile();
         File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNamerToCopyTo + "\\" + i_RepositoryNewName).toFile();
         this.engine.Clone(dirToCloneTo, i_RepositoryNewName, dirToCloneFrom);
@@ -125,10 +124,12 @@ public class EngineAdapter
         return lstToReturn;
     }
 
-    public Set<String> GetBeenConnectedUserNameSet() {
+    public Set<String> GetBeenConnectedUserNameSet()
+    {
         Set<String> userNamesSet = new HashSet<>();
         File[] allDirectories = Paths.get(ResourceUtils.MainRepositoriesPath).toFile().listFiles();
-        for(int i=0;i<allDirectories.length;i++){
+        for (int i = 0; i < allDirectories.length; i++)
+        {
             userNamesSet.add(allDirectories[i].getName());
         }
         return userNamesSet;
@@ -153,15 +154,25 @@ public class EngineAdapter
 
     public void checkout(String branchName) throws Exception
     {
-        if(engine.IsLocalRepository())
-        {
-            Branch branchSelected = engine.getCurrentRepository().getBranchByName(branchName);
-
-//            if()
-        }
-
         engine.CheckOut(branchName);
     }
 
 
+    public void createNewLocalBranch(String branchName, String sha1Commit) throws Exception
+    {
+        engine.CreateNewBranchToSystem(branchName, sha1Commit);
+    }
+
+    public String createNewRTB(String remoteBranchName) throws IOException
+    {
+        LocalRepository localRepository = (LocalRepository) engine.getCurrentRepository();
+
+        RemoteBranch remoteBranch = localRepository.findRemoteBranchByPredicate(remoteBranch1 -> remoteBranch1.getBranchName().equals(remoteBranchName));
+        Commit pointedCommit = remoteBranch.getPointedCommit();
+
+        String rtbName = remoteBranchName.split(ResourceUtils.Slash)[0];
+        engine.CreateRTB(pointedCommit, rtbName);
+
+        return rtbName;
+    }
 }

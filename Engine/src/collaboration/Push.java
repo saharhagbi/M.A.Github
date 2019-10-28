@@ -42,7 +42,7 @@ public class Push
         String remoteBranchNameExpected = m_LocalRepository.getRemoteRepoRef().getName() + ResourceUtils.Slash +
                 remoteTrackingBranchInLocal.getBranchName();
 
-        m_RemoteBranchOfRTB = m_LocalRepository.findRemoteBranchBranchByPredicate(
+        m_RemoteBranchOfRTB = m_LocalRepository.findRemoteBranchByPredicate(
                 remoteBranch ->
                         remoteBranch.getBranchName().equals(remoteBranchNameExpected)
         );

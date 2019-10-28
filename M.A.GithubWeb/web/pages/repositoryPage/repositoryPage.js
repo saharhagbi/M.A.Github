@@ -1,12 +1,12 @@
 var repositoryName = 0;
 var userName = 1;
-var BRANCH_TYPE = "1";
+var BRANCHES = "1";
 var COMMIT_TYPE = "2";
 var NAME_TYPE = "3";
 var REPOSITORY_TYPE = "5";
 var YES = "Yes";
 var CHECKOUT_URL = "checkout";
-var BRANCH_NAME = "branchName";
+var refreshBranches = 1000;
 
 // export let isLocalRepository;
 
@@ -48,11 +48,13 @@ $(function () {
 });
 
 $(function () {
+    $("#branches").empty();
+
     $.ajax({
 
         url: REPOSITORY_INFO_URL,
         dataType: "json",
-        data: {"requestType": BRANCH_TYPE},
+        data: {"requestType": BRANCHES},
 
         success: function (branches) {
 
@@ -63,9 +65,16 @@ $(function () {
                 //create a new <option> tag with a value in it and
                 //appeand it to the #userslist (div with id=userslist) element
 
-                $("#branches").append("<li><button type=\"button\" id=" + "\"" + branch.m_BranchName + "\"" + ">" + branch.m_BranchName + "</button></li>");
+                var brancNameTrimmed = branch.m_BranchName;
 
-                $("#" + branch.m_BranchName).click(function () {
+                if (brancNameTrimmed.includes(" "))
+                {
+                    brancNameTrimmed = brancNameTrimmed.replace(" ", "_");
+                }
+
+                $("#branches").append("<li><button type=\"button\" id=" + "\"" + brancNameTrimmed + "\"" + ">" + branch.m_BranchName + "</button></li>");
+
+                $("#" + brancNameTrimmed).click(function () {
                     checkout(branch.m_BranchName)
                 })
             });

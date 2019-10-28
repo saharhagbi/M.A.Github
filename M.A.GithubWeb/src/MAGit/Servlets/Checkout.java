@@ -9,14 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "PullRequest", urlPatterns = {"/pages/repositoryPage/checkout"})
+@WebServlet(name = "Checkout", urlPatterns = {"/pages/repositoryPage/checkout"})
 public class Checkout extends HttpServlet
 {
     private static final String BRANCH_NAME = "branchName";
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
-            ServletException, IOException
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         proccessRequest(request, response);
     }
@@ -30,9 +29,6 @@ public class Checkout extends HttpServlet
     private void proccessRequest(HttpServletRequest request, HttpServletResponse response)
     {
         String branchName = request.getParameter(BRANCH_NAME);
-
-
-
 
         try
         {

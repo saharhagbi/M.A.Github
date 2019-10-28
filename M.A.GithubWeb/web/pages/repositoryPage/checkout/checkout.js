@@ -1,35 +1,23 @@
 function checkout(branchName) {
 
-    if (branchName.contains('\\')) {
+    //check if the currentBranch is rtb
+    if (branchName.includes('\\')) {
         createRTB(branchName);
     } else {
-        executeCheckout();
+        executeCheckout(branchName);
     }
 }
 
-function executeCheckout() {
+
+function executeCheckout(branchName) {
     $.ajax({
 
         url: CHECKOUT_URL,
-        data: {BRANCH_NAME: branchName},
+        data: {"branchName": branchName},
 
         success: function () {
+            location.replace("repositoryPage.html");
             alert("checkout done!");
         }
     });
-}
-
-function createRTB(branchName) {
-    var newRTBName = branchName.split("\\");
-
-    $.ajax({
-
-        url: NEW_BRANCH_URL,
-        data: {BRANCH_NAME: branchName},
-
-        success: function () {
-            alert("checkout done!");
-        }
-    });
-
 }

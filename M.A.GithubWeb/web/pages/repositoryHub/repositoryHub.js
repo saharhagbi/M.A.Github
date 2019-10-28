@@ -37,8 +37,8 @@ function uploadRepositoryData(repositories) {
 
     $(repositories).each(function (index, element) {
 
-        $("<tr>" +
-            "<td id=" + index + ">" + element.repositoryName + "</td>" +
+        $("<tr id=" + index + ">" +
+            "<td>" + element.repositoryName + "</td>" +
             "<td>" + element.latestCommit + "</td>" +
             "<td>" + element.message + "</td>" +
             "<td>" + element.activeBranch + "</td>" +
@@ -56,7 +56,7 @@ function uploadRepositoryData(repositories) {
                 success: function () {
 
                     console.log("in success");
-                        location.replace("../repositoryPage/repositoryPage.html");
+                    location.replace("../repositoryPage/repositoryPage.html");
                 },
             });
         });

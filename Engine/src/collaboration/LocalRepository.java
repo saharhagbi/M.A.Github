@@ -93,7 +93,7 @@ public class LocalRepository extends Repository
         return branchToReturn;
     }
 
-    public RemoteBranch findRemoteBranchBranchByPredicate(Predicate<RemoteBranch> predicate)
+    public RemoteBranch findRemoteBranchByPredicate(Predicate<RemoteBranch> predicate)
     {
         return m_RemoteBranches.stream().filter(branch ->
                 predicate.test(branch)).findAny().orElse(null);
