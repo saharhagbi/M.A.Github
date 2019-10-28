@@ -40,6 +40,7 @@ function refreshUsersList(users) {
 }
 
 function uploadRepositoryData(repositories) {
+    $("#tb").after().empty();
     $(repositories).each(function (index, element) {
         var buttonNumber = 0;
         var button = "<input type=\"button\" id =" + buttonNumber + " value=\"clone this\">";
@@ -51,7 +52,7 @@ function uploadRepositoryData(repositories) {
             "<td>" + element.message + "</td>" +
             "<td>" + element.activeBranch + "</td>" +
             "<td>" + element.commitAmount + "</td>" +
-            "</tr>").appendTo($("#repositoriesDetails"));
+            "</tr>").appendTo($("#tb"));
 
         $("#" + buttonNumber).click(function (event) {
             console.log(buttonNumber);

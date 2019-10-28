@@ -8,7 +8,6 @@ import System.Users.User;
 import XmlObjects.XMLMain;
 import common.MagitFileUtils;
 import common.constants.ResourceUtils;
-import common.constants.ResourceUtils;
 import common.constants.StringConstants;
 import github.commit.CommitData;
 import github.notifications.PullRequestNotification;
@@ -16,41 +15,31 @@ import github.repository.RepositoryData;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class EngineAdapter
-{
+public class EngineAdapter {
     private Engine engine = new Engine();
     private XMLMain xmlMain = new XMLMain();
 
-    public void createUserFolder(String usernameFromParameter)
-    {
+    public void createUserFolder(String usernameFromParameter) {
         engine.createUserFolder(usernameFromParameter);
     }
 
-    public void readRepositoryFromXMLFile(String xmlFileContent, String currentUserName) throws Exception
-    {
+    public void readRepositoryFromXMLFile(String xmlFileContent, String currentUserName) throws Exception {
         xmlMain.CheckXMLFile(xmlFileContent);
         xmlMain.ParseAndWriteXML(xmlMain.getXmlRepository(), currentUserName);
     }
 
-    public void createMainFolder() throws Exception
-    {
+    public void createMainFolder() throws Exception {
         engine.createMainRepositoryFolder();
     }
 
-    public List<RepositoryData> buildAllUsersRepositoriesData(User i_UserToBuildRepositoryFor) throws Exception
-    {
+    public List<RepositoryData> buildAllUsersRepositoriesData(User i_UserToBuildRepositoryFor) throws Exception {
         List<RepositoryData> allRepositoriesData = new ArrayList<>();
         File[] repositoriesFolders = MagitFileUtils.GetFilesInLocation(i_UserToBuildRepositoryFor.buildUserPath());
 
-        for (File repositoryFolder : repositoriesFolders)
-        {
+        for (File repositoryFolder : repositoriesFolders) {
             engine.PullAnExistingRepository(repositoryFolder.getPath());
             Repository newRepo = engine.getCurrentRepository();
             RepositoryData repositoryData = new RepositoryData(newRepo.getName(),
@@ -66,27 +55,24 @@ public class EngineAdapter
         return allRepositoriesData;
     }
 
-    public void initRepositoryInSystemByName(String repositoryNameClicked, User loggedInUser) throws Exception
-    {
+    public void initRepositoryInSystemByName(String repositoryNameClicked, User loggedInUser) throws Exception {
         String pathToUserFolderRepositories = loggedInUser.buildUserPath();
 
         File[] usersRepositories = MagitFileUtils.GetFilesInLocation(pathToUserFolderRepositories);
 
-        for (File file : usersRepositories)
-        {
+        for (File file : usersRepositories) {
             if (file.getName().equals(repositoryNameClicked))
                 engine.PullAnExistingRepository(file.getAbsolutePath());
         }
     }
 
-    public void Clone(String i_UserNamerToCopyTo,String i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception {
-        File dirToCloneFrom =Paths.get(ResourceUtils.MainRepositoriesPath+"\\"+i_UserNameToCopyFrom+"\\"+i_RepositoryName).toFile();
-        File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath+"\\"+i_UserNamerToCopyTo+"\\"+i_RepositoryNewName).toFile();
-        this.engine.Clone(dirToCloneTo,i_RepositoryNewName,dirToCloneFrom);
+    public void Clone(String i_UserNamerToCopyTo, String i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception {
+        File dirToCloneFrom = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNameToCopyFrom + "\\" + i_RepositoryName).toFile();
+        File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNamerToCopyTo + "\\" + i_RepositoryNewName).toFile();
+        this.engine.Clone(dirToCloneTo, i_RepositoryNewName, dirToCloneFrom);
     }
 
-    public List<Object> getBranchesList()
-    {
+    public List<Object> getBranchesList() {
         Set<Branch> branches = new HashSet<>();
         branches.add(engine.getCurrentRepository().getActiveBranch());
         branches.addAll(engine.getCurrentRepository().getActiveBranches());
@@ -98,8 +84,7 @@ public class EngineAdapter
         return branchesList;
     }
 
-    public List<Object> getCommitsData()
-    {
+    public List<Object> getCommitsData() {
         List<Commit> commitList = new ArrayList<>();
 
         engine.getCurrentRepository().getActiveBranch().getAllCommitsPointed(commitList);
@@ -116,8 +101,7 @@ public class EngineAdapter
         }).collect(Collectors.toList());
     }
 
-    public List<Object> getRepositoryName(String userName)
-    {
+    public List<Object> getRepositoryName(String userName) {
         List<Object> lstToReturn = new ArrayList<>();
         lstToReturn.add(engine.getCurrentRepository().getName());
         lstToReturn.add(userName);
@@ -128,21 +112,19 @@ public class EngineAdapter
     public Set<String> GetBeenConnectedUserNameSet() {
         Set<String> userNamesSet = new HashSet<>();
         File[] allDirectories = Paths.get(ResourceUtils.MainRepositoriesPath).toFile().listFiles();
-        for(int i=0;i<allDirectories.length;i++){
+        for (int i = 0; i < allDirectories.length; i++) {
             userNamesSet.add(allDirectories[i].getName());
         }
         return userNamesSet;
     }
 
-    public List<Object> getPullRequests()
-    {
+    public List<Object> getPullRequests() {
         List<Object> lstToReturn = new ArrayList<>();
         lstToReturn.add(new PullRequestNotification());
         return lstToReturn;
     }
 
-    public List<Object> isLocalRepository()
-    {
+    public List<Object> isLocalRepository() {
         List<Object> isLocalList = new ArrayList<>();
         String isLocalRepository = engine.IsLocalRepository() ? StringConstants.YES : StringConstants.NO;
 
@@ -151,8 +133,7 @@ public class EngineAdapter
         return isLocalList;
     }
 
-    public void checkout(String branchName) throws Exception
-    {
+    public void checkout(String branchName) throws Exception {
         engine.CheckOut(branchName);
     }
 
