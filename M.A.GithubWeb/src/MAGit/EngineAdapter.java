@@ -50,15 +50,17 @@ public class EngineAdapter
         for (File repositoryFolder : repositoriesFolders)
         {
             engine.PullAnExistingRepository(repositoryFolder.getPath());
-            Repository newRepo = engine.getCurrentRepository();
-            RepositoryData repositoryData = new RepositoryData(newRepo.getName(),
-                    newRepo.getActiveBranch().getPointedCommit().getSHA1(),
-                    newRepo.getActiveBranch().getPointedCommit().getCommitMessage(),
-                    newRepo.getActiveBranch().getBranchName(),
-                    Integer.toString(newRepo.getAllCommitsSHA1ToCommit().size()),
-                    i_UserToBuildRepositoryFor.getUserName());
+            if (!engine.IsLocalRepository()) {
+                Repository newRepo = engine.getCurrentRepository();
+                RepositoryData repositoryData = new RepositoryData(newRepo.getName(),
+                        newRepo.getActiveBranch().getPointedCommit().getSHA1(),
+                        newRepo.getActiveBranch().getPointedCommit().getCommitMessage(),
+                        newRepo.getActiveBranch().getBranchName(),
+                        Integer.toString(newRepo.getAllCommitsSHA1ToCommit().size()),
+                        i_UserToBuildRepositoryFor.getUserName());
 
-            allRepositoriesData.add(repositoryData);
+                allRepositoriesData.add(repositoryData);
+            }
         }
 
         return allRepositoriesData;
