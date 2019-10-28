@@ -92,4 +92,26 @@ public class UserManager
         }
         return null;
     }
+
+    public Set<User> CreateUsersSetByNames(Set<String> i_NameList) {
+        Set<User> userList = new HashSet<>();
+        i_NameList.forEach(name -> {
+            if(isUserExists(name)){
+                try {
+                    userList.add(GetUserByName(name));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+                userList.add(new User(name));
+        });
+        return userList;
+    }
+
+    public Set<User> CreateUsersSetByNamesWithoutCurrentUser(Set<String> i_NameList) {
+        Set<User> userList = CreateUsersSetByNames(i_NameList);
+        userList.remove(getCurrentUser());
+        return userList;
+    }
 }

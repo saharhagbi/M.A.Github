@@ -44,11 +44,12 @@ public class CloneRepositoryServlet extends HttpServlet {
             throws ServletException, IOException {
         String userNameToCopyFrom = request.getParameter(Constants.USERNAME);
         String repositoryName = request.getParameter(Constants.REPOSITORY_NAME);
+        String repositoryNewName = request.getParameter(Constants.REPOSITORY_NEW_MAME);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         String currentUser = userManager.getCurrentUser().getUserName();
 
         try {
-            ServletUtils.getEngineAdapter(getServletContext()).Clone(currentUser,userNameToCopyFrom ,repositoryName);
+            ServletUtils.getEngineAdapter(getServletContext()).Clone(currentUser,userNameToCopyFrom ,repositoryName,repositoryNewName);
         } catch (Exception e) {
             e.printStackTrace();
         }

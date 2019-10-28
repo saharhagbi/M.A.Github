@@ -9,6 +9,7 @@ import XmlObjects.XMLMain;
 import collaboration.RemoteBranch;
 import common.MagitFileUtils;
 import common.constants.ResourceUtils;
+import common.constants.ResourceUtils;
 import common.constants.StringConstants;
 import github.commit.CommitData;
 import github.notifications.PullRequestNotification;
@@ -16,6 +17,10 @@ import github.repository.RepositoryData;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,10 +45,10 @@ public class EngineAdapter
         engine.createMainRepositoryFolder();
     }
 
-    public List<RepositoryData> buildAllUsersRepositoriesData(User loggedInUser) throws Exception
+    public List<RepositoryData> buildAllUsersRepositoriesData(User i_UserToBuildRepositoryFor) throws Exception
     {
         List<RepositoryData> allRepositoriesData = new ArrayList<>();
-        File[] repositoriesFolders = MagitFileUtils.GetFilesInLocation(loggedInUser.buildUserPath());
+        File[] repositoriesFolders = MagitFileUtils.GetFilesInLocation(i_UserToBuildRepositoryFor.buildUserPath());
 
         for (File repositoryFolder : repositoriesFolders)
         {
@@ -54,7 +59,7 @@ public class EngineAdapter
                     newRepo.getActiveBranch().getPointedCommit().getCommitMessage(),
                     newRepo.getActiveBranch().getBranchName(),
                     Integer.toString(newRepo.getAllCommitsSHA1ToCommit().size()),
-                    loggedInUser.getUserName());
+                    i_UserToBuildRepositoryFor.getUserName());
 
             allRepositoriesData.add(repositoryData);
         }
@@ -75,11 +80,10 @@ public class EngineAdapter
         }
     }
 
-    public void Clone(String i_UserNamerToCopyTo, String i_UserNameToCopyFrom, String i_RepositoryName) throws Exception
-    {
-        File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNamerToCopyTo + "\\" + i_RepositoryName).toFile();
-        File dirToCloneFrom = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNameToCopyFrom + "\\" + i_RepositoryName).toFile();
-        this.engine.Clone(dirToCloneTo, i_RepositoryName, dirToCloneFrom);
+    public void Clone(String i_UserNamerToCopyTo,String i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception {
+        File dirToCloneFrom =Paths.get(ResourceUtils.MainRepositoriesPath+"\\"+i_UserNameToCopyFrom+"\\"+i_RepositoryName).toFile();
+        File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath+"\\"+i_UserNamerToCopyTo+"\\"+i_RepositoryNewName).toFile();
+        this.engine.Clone(dirToCloneTo,i_RepositoryNewName,dirToCloneFrom);
     }
 
     public List<Object> getBranchesList()
@@ -120,6 +124,15 @@ public class EngineAdapter
         lstToReturn.add(userName);
 
         return lstToReturn;
+    }
+
+    public Set<String> GetBeenConnectedUserNameSet() {
+        Set<String> userNamesSet = new HashSet<>();
+        File[] allDirectories = Paths.get(ResourceUtils.MainRepositoriesPath).toFile().listFiles();
+        for(int i=0;i<allDirectories.length;i++){
+            userNamesSet.add(allDirectories[i].getName());
+        }
+        return userNamesSet;
     }
 
     public List<Object> getPullRequests()
