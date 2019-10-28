@@ -7,7 +7,9 @@ var REPOSITORY_TYPE = "5";
 var YES = "Yes";
 var CHECKOUT_URL = "checkout";
 var BRANCH_NAME = "branchName";
-export let isLocalRepository;
+
+// export let isLocalRepository;
+
 /*---------------------------request RepositoryName And userName-------------------------------------------*/
 
 $(function () {
@@ -125,18 +127,3 @@ $(function () {
         }
     });
 });
-
-/*--------------------------------------------checkout--------------------------------------------------*/
-function checkout(branchName) {
-
-    $.ajax({
-
-        url: CHECKOUT_URL,
-        data: {BRANCH_NAME: branchName},
-
-        success: function () {
-            alert("checkout done!");
-        }
-    });
-}
-
