@@ -6,7 +6,6 @@ import System.Engine;
 import System.Repository;
 import System.Users.User;
 import XmlObjects.XMLMain;
-import collaboration.RemoteBranch;
 import common.MagitFileUtils;
 import common.constants.ResourceUtils;
 import common.constants.ResourceUtils;
@@ -80,17 +79,17 @@ public class EngineAdapter
         }
     }
 
-    public void Clone(String i_UserNamerToCopyTo,String i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception {
-        File dirToCloneFrom =Paths.get(ResourceUtils.MainRepositoriesPath+"\\"+i_UserNameToCopyFrom+"\\"+i_RepositoryName).toFile();
-        File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath+"\\"+i_UserNamerToCopyTo+"\\"+i_RepositoryNewName).toFile();
-        this.engine.Clone(dirToCloneTo,i_RepositoryNewName,dirToCloneFrom);
+    public void Clone(String i_UserNamerToCopyTo, String i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception {
+        File dirToCloneFrom = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNameToCopyFrom + "\\" + i_RepositoryName).toFile();
+        File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNamerToCopyTo + "\\" + i_RepositoryNewName).toFile();
+        this.engine.Clone(dirToCloneTo, i_RepositoryNewName, dirToCloneFrom);
     }
 
     public List<Object> getBranchesList()
     {
         Set<Branch> branches = new HashSet<>();
         branches.add(engine.getCurrentRepository().getActiveBranch());
-        branches.addAll(engine.getCurrentRepository().getAllBranches());
+        branches.addAll(engine.getCurrentRepository().getActiveBranches());
 
         List<Object> branchesList = new ArrayList<>(branches);
 
@@ -163,4 +162,6 @@ public class EngineAdapter
 
         engine.CheckOut(branchName);
     }
+
+
 }
