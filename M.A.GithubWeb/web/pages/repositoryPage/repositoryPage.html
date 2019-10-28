@@ -10,9 +10,10 @@
 
     <!--scripts:-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script type="module" src="repositoryPage.js"></script>
+    <script src="repositoryPage.js"></script>
     <script src="pull/pullRequest.js"></script>
     <script src="pushBranch/pushBranch.js"></script>
+    <script src="newBranch/newBranch.js"></script>
 
 
 </head>
@@ -29,10 +30,13 @@
 
 <div id="branchesSection">
     <h3> Branches: </h3>
-    <span class="BranchesNote"> Note: The head Branch is first.<br/>
+
+    <span class="BranchesNote"> <br/>Note: The head Branch is first.<br/>
                                 Also, click on branch for checkout</span>
 
     <ul id="branches"></ul>
+
+    <button name="newBranchBtn" onclick="newBranch()">New Branch</button>
 </div>
 
 

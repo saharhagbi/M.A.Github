@@ -3,10 +3,11 @@ var userName = 1;
 var BRANCH_TYPE = "1";
 var COMMIT_TYPE = "2";
 var NAME_TYPE = "3";
-var IS_LOCAL_REPOSITORY = "5";
+var REPOSITORY_TYPE = "5";
 var YES = "Yes";
 var CHECKOUT_URL = "checkout";
-
+var BRANCH_NAME = "branchName";
+export let isLocalRepository;
 /*---------------------------request RepositoryName And userName-------------------------------------------*/
 
 $(function () {
@@ -14,12 +15,13 @@ $(function () {
 
         url: REPOSITORY_INFO_URL,
         dataType: "json",
-        data: {"requestType": IS_LOCAL_REPOSITORY},
+        data: {"requestType": REPOSITORY_TYPE},
 
-        success: function (isLocalRepository) {
-            console.log(isLocalRepository);
+        success: function (isLocalRepositoryInString) {
 
-            handleUseCaseOfLocalRepository(isLocalRepository);
+            isLocalRepository = isLocalRepositoryInString[0].localeCompare(YES) == 0 ? true : false;
+
+            handleUseCaseOfLocalRepository(isLocalRepositoryInString);
 
             function addCollaborationButtons() {
                 $("#pushBranchSection").append("<button type=\"button\" onclick=\"pushBranch()\">Push Branch</button>")
@@ -35,7 +37,7 @@ $(function () {
             }
 
             function handleUseCaseOfLocalRepository(isLocalRepository) {
-                if (isLocalRepository[0].localeCompare(YES) == 0) {
+                if (isLocalRepositoryInString[0].localeCompare(YES) == 0) {
                     addCollaborationButtons();
                 }
             }
@@ -130,13 +132,11 @@ function checkout(branchName) {
     $.ajax({
 
         url: CHECKOUT_URL,
-        data: {"branchName": branchName},
+        data: {BRANCH_NAME: branchName},
 
         success: function () {
             alert("checkout done!");
         }
     });
 }
-
-
 

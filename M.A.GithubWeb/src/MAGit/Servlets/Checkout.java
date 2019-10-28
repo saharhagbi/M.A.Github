@@ -21,7 +21,6 @@ public class Checkout extends HttpServlet
         proccessRequest(request, response);
     }
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -31,6 +30,9 @@ public class Checkout extends HttpServlet
     private void proccessRequest(HttpServletRequest request, HttpServletResponse response)
     {
         String branchName = request.getParameter(BRANCH_NAME);
+
+
+
 
         try
         {
@@ -42,6 +44,4 @@ public class Checkout extends HttpServlet
             e.printStackTrace();
         }
     }
-
 }
-

@@ -6,6 +6,7 @@ import System.Engine;
 import System.Repository;
 import System.Users.User;
 import XmlObjects.XMLMain;
+import collaboration.RemoteBranch;
 import common.MagitFileUtils;
 import common.constants.ResourceUtils;
 import common.constants.StringConstants;
@@ -85,7 +86,7 @@ public class EngineAdapter
     {
         Set<Branch> branches = new HashSet<>();
         branches.add(engine.getCurrentRepository().getActiveBranch());
-        branches.addAll(engine.getCurrentRepository().getActiveBranches());
+        branches.addAll(engine.getCurrentRepository().getAllBranches());
 
         List<Object> branchesList = new ArrayList<>(branches);
 
@@ -140,8 +141,13 @@ public class EngineAdapter
 
     public void checkout(String branchName) throws Exception
     {
+        if(engine.IsLocalRepository())
+        {
+            Branch branchSelected = engine.getCurrentRepository().getBranchByName(branchName);
+
+//            if()
+        }
+
         engine.CheckOut(branchName);
     }
-
-
 }

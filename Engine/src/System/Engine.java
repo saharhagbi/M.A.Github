@@ -376,7 +376,6 @@ public class Engine
             getCurrentRepository().AddingNewBranchInRepository(i_NameOfNewBranch, i_SHA1OfCommit);
         } else
             throw new Exception("Error!" + System.lineSeparator() + "There are no commits yet" + System.lineSeparator());
-
     }
 
     private boolean isaCommitExistBySHA1(String i_SHA1OfCommit)
