@@ -1,6 +1,5 @@
 package MAGit;
 
-import MAGit.Constants.Constants;
 import Objects.Commit;
 import Objects.branch.Branch;
 import System.Engine;
@@ -9,23 +8,25 @@ import System.Users.User;
 import XmlObjects.XMLMain;
 import common.MagitFileUtils;
 import common.constants.ResourceUtils;
+import common.constants.ResourceUtils;
+import common.constants.StringConstants;
 import github.commit.CommitData;
+import github.notifications.PullRequestNotification;
 import github.repository.RepositoryData;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EngineAdapter
 {
     private Engine engine = new Engine();
     private XMLMain xmlMain = new XMLMain();
-    private static final Path m_ServerRepositoryPath = Paths.get("C:\\magit-ex3");
 
     public void createUserFolder(String usernameFromParameter)
     {
@@ -79,20 +80,22 @@ public class EngineAdapter
     }
 
     public void Clone(String i_UserNamerToCopyTo,String i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception {
-        File dirToCloneFrom =Paths.get(m_ServerRepositoryPath.toString()+"\\"+i_UserNameToCopyFrom+"\\"+i_RepositoryName).toFile();
-        File dirToCloneTo = Paths.get(m_ServerRepositoryPath.toString()+"\\"+i_UserNamerToCopyTo+"\\"+i_RepositoryNewName).toFile();
+        File dirToCloneFrom =Paths.get(ResourceUtils.MainRepositoriesPath+"\\"+i_UserNameToCopyFrom+"\\"+i_RepositoryName).toFile();
+        File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath+"\\"+i_UserNamerToCopyTo+"\\"+i_RepositoryNewName).toFile();
         this.engine.Clone(dirToCloneTo,i_RepositoryNewName,dirToCloneFrom);
     }
 
     public List<Object> getBranchesList()
     {
-     /*   List<Object> lstToReturn = new ArrayList<>();f
+        Set<Branch> branches = new HashSet<>();
+        branches.add(engine.getCurrentRepository().getActiveBranch());
+        branches.addAll(engine.getCurrentRepository().getActiveBranches());
 
-        lstToReturn.add()*/
-        return engine.getCurrentRepository().getActiveBranches()
-                .stream()
-                .map(branch -> (Object) branch)
-                .collect(Collectors.toList());
+        List<Object> branchesList = new ArrayList<>(branches);
+
+        Collections.reverse(branchesList);
+
+        return branchesList;
     }
 
     public List<Object> getCommitsData()
@@ -130,4 +133,28 @@ public class EngineAdapter
         }
         return userNamesSet;
     }
+
+    public List<Object> getPullRequests()
+    {
+        List<Object> lstToReturn = new ArrayList<>();
+        lstToReturn.add(new PullRequestNotification());
+        return lstToReturn;
+    }
+
+    public List<Object> isLocalRepository()
+    {
+        List<Object> isLocalList = new ArrayList<>();
+        String isLocalRepository = engine.IsLocalRepository() ? StringConstants.YES : StringConstants.NO;
+
+        isLocalList.add((Object) isLocalRepository);
+
+        return isLocalList;
+    }
+
+    public void checkout(String branchName) throws Exception
+    {
+        engine.CheckOut(branchName);
+    }
+
+
 }

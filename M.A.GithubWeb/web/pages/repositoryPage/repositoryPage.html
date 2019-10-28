@@ -10,7 +10,9 @@
 
     <!--scripts:-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="repositoryPage.js"></script>
+    <script type="module" src="repositoryPage.js"></script>
+    <script src="pull/pullRequest.js"></script>
+    <script src="pushBranch/pushBranch.js"></script>
 
 
 </head>
@@ -19,16 +21,16 @@
 
 <h3>Repository Name:</h3>
 <div id="repositoryName">
-
 </div>
 
 <h3>User Name:</h3>
-<div id="userName">
+<div id="userName"></div>
 
-</div>
 
 <div id="branchesSection">
     <h3> Branches: </h3>
+    <span class="BranchesNote"> Note: The head Branch is first.<br/>
+                                Also, click on branch for checkout</span>
 
     <ul id="branches"></ul>
 </div>
@@ -47,5 +49,31 @@
     </table>
 </div>
 
+<div id="pushBranchSection">
+    <!--    <button type="button" onclick="pushBranch()">Push Branch</button>-->
+</div>
+
+<div id="pullSection">
+    <!--    <button type="button" onclick="pull()">Pull</button>-->
+</div>
+
+<div id="createPullRequest">
+    <!--    <button type="button" onclick="createPullRequest()">Pull Branch</button>-->
+</div>
+
+<input type="button" class="back" onclick="location.href='../repositoryHub/repositoryHub.html';" value="Back"/>
+
+<div id="pullRequestSection">
+    <h3> Pull Requests: </h3>
+
+    <table id="pullRequestsTable">
+        <!--<tr>
+            <th>Status</th>
+            <th>Message</th>
+            <th>Confirm</th>
+            <th>Denied</th>
+        </tr>-->
+    </table>
+</div>
 </body>
 </html>

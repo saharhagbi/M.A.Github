@@ -563,13 +563,13 @@ public class Commit implements CommitRepresentative
         if (this.ThereIsPrevCommit(NumConstants.ONE))
         {
             this.GetPrevCommit().addAlllHisPrevCommits(lst);
-            lst.add(this);
         }
 
         if (this.ThereIsPrevCommit(NumConstants.TWO))
         {
             this.GetSecondPrevCommit().addAlllHisPrevCommits(lst);
-            lst.add(this);
         }
+
+        lst.add(this);
     }
 }

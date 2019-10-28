@@ -2,6 +2,7 @@ package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
 import System.Users.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +21,6 @@ public class RepositoryUpload extends HttpServlet
 {
     //private final String REPO_FILE = "repoFile";
     private final String REPOSITORY_HUB_URL = "repositoryHub.html";
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
