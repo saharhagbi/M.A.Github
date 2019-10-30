@@ -1,13 +1,11 @@
 package MAGit.Servlets;
 
 import MAGit.Constants.Constants;
+import MAGit.Utils.ServletUtils;
 import System.Users.User;
 import com.google.gson.Gson;
 import github.repository.RepositoryData;
 import github.users.UserManager;
-import MAGit.Utils.ServletUtils;
-import MAGit.Utils.SessionUtils;
-import org.apache.commons.collections4.ListUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +18,8 @@ import java.util.List;
 
 
 @SuppressWarnings("ALL")
-public class AllRepositoriesInfoServlet extends HttpServlet {
+public class AllRepositoriesInfoServlet extends HttpServlet
+{
 
     private final String FORK_URL = "../fork/fork.html";
 
@@ -40,7 +39,8 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
      * @throws IOException      if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         response.setContentType("application/json");
         List<RepositoryData> currUserRepositories = new ArrayList<>();
         // todo: go through all users and appened all repositories - except current user
@@ -48,9 +48,11 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
 
 
         String requestedUserName = request.getParameter(Constants.USERNAME);
-        try {
-            currUserRepositories = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(new User(requestedUserName));
-        } catch (Exception e) {
+        try
+        {
+            currUserRepositories = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(new User(requestedUserName), true);
+        } catch (Exception e)
+        {
             e.printStackTrace();
         }
 
@@ -75,7 +77,8 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -89,7 +92,8 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -99,7 +103,8 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 }

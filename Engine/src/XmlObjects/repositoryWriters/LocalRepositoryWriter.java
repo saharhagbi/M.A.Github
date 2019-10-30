@@ -48,7 +48,7 @@ public class LocalRepositoryWriter
 
         WriteAllRemoteBranches();
 
-        //writing repository details
+        //writing repository details and repository name
 
         String remoteRepositoryDetailsToWrite = m_RepositoryToWrite.getRemoteRepoRef().getName() + System.lineSeparator()
                 + m_RepositoryToWrite.getRemoteRepoRef().getRepoPath();
@@ -56,6 +56,8 @@ public class LocalRepositoryWriter
         MagitFileUtils.WritingFileByPath(m_RepositoryToWrite.getRepositoryPath() +
                         ResourceUtils.AdditinalPathMagit + ResourceUtils.Slash + StringConstants.REPOSITORY_DETAILS + sf_txtExtension,
                 remoteRepositoryDetailsToWrite);
+
+        m_Writer.WriteRepositoryNameFileInMagitRepository();
 
         Folder.SpanDirectory(m_RepositoryToWrite.getActiveBranch().getPointedCommit().getRootFolder());
     }

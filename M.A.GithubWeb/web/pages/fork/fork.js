@@ -22,13 +22,13 @@ function refreshUsersList(users) {
     $.each(users || [], function (index, user) {
         repoNameTrimmed = user.userName;
         console.log("Adding user #" + index + ": " + repoNameTrimmed);
-        if(user.userName.indexOf(' ') >= 0){
+        if (user.userName.indexOf(' ') >= 0) {
             repoNameTrimmed = repoNameTrimmed.replace(" ", "_");
             console.log(repoNameTrimmed);
         }
         $("<li id=" + "\"" + repoNameTrimmed + "\"" + ">" + user.userName + "</li>").appendTo($("#userList"));
         /*todo: fix- when a name is with space in it example: "roy roy" as opposed to "royroy" click does'nt work*/
-        $("#" + repoNameTrimmed).on("click",function (event) {
+        $("#" + repoNameTrimmed).on("click", function (event) {
             console.log("click detected");
             $.ajax({
                 url: All_REPOSITORIES_DETAILS_URL,
@@ -66,9 +66,11 @@ function uploadRepositoryData(repositories) {
             $.ajax({
                 url: CLONE_SERVLET_URL,
                 /*todo:sendredirect to correct page*/
-                data: {"repositoryName": element.repositoryName,
+                data: {
+                    "repositoryName": element.repositoryName,
                     "username": element.userName,
-                     "repoNewName":repoName},
+                    "repoNewName": repoName
+                },
                 success: function () {
                     console.log("in success");
                 },

@@ -45,7 +45,6 @@ public class NewBranch extends HttpServlet
             {
                 case LocalBranch:
                     String sha1Commit = request.getParameter(SHA1_COMMIT);
-
                     ServletUtils.getEngineAdapter(getServletContext()).createNewLocalBranch(branchName, sha1Commit);
                     break;
 

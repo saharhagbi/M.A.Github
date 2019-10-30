@@ -42,7 +42,7 @@ public class EngineAdapter
         engine.createMainRepositoryFolder();
     }
 
-    public List<RepositoryData> buildAllUsersRepositoriesData(User i_UserToBuildRepositoryFor) throws Exception
+    public List<RepositoryData> buildAllUsersRepositoriesData(User i_UserToBuildRepositoryFor, boolean forClone) throws Exception
     {
         List<RepositoryData> allRepositoriesData = new ArrayList<>();
         File[] repositoriesFolders = MagitFileUtils.GetFilesInLocation(i_UserToBuildRepositoryFor.buildUserPath());
@@ -50,21 +50,44 @@ public class EngineAdapter
         for (File repositoryFolder : repositoriesFolders)
         {
             engine.PullAnExistingRepository(repositoryFolder.getPath());
-            if (!engine.IsLocalRepository()) {
-                Repository newRepo = engine.getCurrentRepository();
-                RepositoryData repositoryData = new RepositoryData(newRepo.getName(),
-                        newRepo.getActiveBranch().getPointedCommit().getSHA1(),
-                        newRepo.getActiveBranch().getPointedCommit().getCommitMessage(),
-                        newRepo.getActiveBranch().getBranchName(),
-                        Integer.toString(newRepo.getAllCommitsSHA1ToCommit().size()),
-                        i_UserToBuildRepositoryFor.getUserName());
-
-                allRepositoriesData.add(repositoryData);
-            }
+            if (forClone)
+                initListRepositoryData(i_UserToBuildRepositoryFor, allRepositoriesData, forClone);
+            else
+                initListRepositoryData(i_UserToBuildRepositoryFor, allRepositoriesData);
         }
 
         return allRepositoriesData;
     }
+
+    private void initListRepositoryData(User i_UserToBuildRepositoryFor, List<RepositoryData> allRepositoriesData, boolean forClone)
+    {
+        if (!engine.IsLocalRepository())
+        {
+            Repository newRepo = engine.getCurrentRepository();
+            RepositoryData repositoryData = new RepositoryData(newRepo.getName(),
+                    newRepo.getActiveBranch().getPointedCommit().getSHA1(),
+                    newRepo.getActiveBranch().getPointedCommit().getCommitMessage(),
+                    newRepo.getActiveBranch().getBranchName(),
+                    Integer.toString(newRepo.getAllCommitsSHA1ToCommit().size()),
+                    i_UserToBuildRepositoryFor.getUserName());
+
+            allRepositoriesData.add(repositoryData);
+        }
+    }
+
+    private void initListRepositoryData(User i_UserToBuildRepositoryFor, List<RepositoryData> allRepositoriesData)
+    {
+        Repository newRepo = engine.getCurrentRepository();
+        RepositoryData repositoryData = new RepositoryData(newRepo.getName(),
+                newRepo.getActiveBranch().getPointedCommit().getSHA1(),
+                newRepo.getActiveBranch().getPointedCommit().getCommitMessage(),
+                newRepo.getActiveBranch().getBranchName(),
+                Integer.toString(newRepo.getAllCommitsSHA1ToCommit().size()),
+                i_UserToBuildRepositoryFor.getUserName());
+
+        allRepositoriesData.add(repositoryData);
+    }
+
 
     public void initRepositoryInSystemByName(String repositoryNameClicked, User loggedInUser) throws Exception
     {
@@ -90,7 +113,7 @@ public class EngineAdapter
     {
         Set<Branch> branches = new HashSet<>();
         branches.add(engine.getCurrentRepository().getActiveBranch());
-        branches.addAll(engine.getCurrentRepository().getActiveBranches());
+        branches.addAll(engine.getCurrentRepository().getAllBranches());
 
         List<Object> branchesList = new ArrayList<>(branches);
 

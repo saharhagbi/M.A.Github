@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "PushBranch", urlPatterns = {"/pages/repositoryHub/pushBranch"})
+@WebServlet(name = "PushBranch", urlPatterns = {"/pages/repositoryPage/pushBranch"})
 public class PushBranch extends HttpServlet
 {
     private final String PULL_REQUEST_URL = "repositoryPage.html";
