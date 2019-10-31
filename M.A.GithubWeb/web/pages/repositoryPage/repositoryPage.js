@@ -155,20 +155,34 @@ $(function () {
 });
 
 function showFolderItems(folderInfo) {
-    $("#FileSystem").empty();
+    $("#FileSystemShow").empty();
+    $("<th id=" + folderInfo.m_ItemSha1 + ">" + folderInfo.m_ItemName + "</th>").appendTo("#FileSystemShow");
+    $("#GoBackButton").click(function () {
+        $.ajax({
+            url: FILE_SYSTEM_INFO_URL,
+            dataType: "json",
+            data: {"itemName": folderInfo.m_ItemName, "itemSha1": folderInfo.m_ParentFolderSha1,"isRootFolder":"false"},
 
-    var currRootFolderName = folderInfo.m_Name;
-    $("<th id=" + folderInfo.m_Sha1 + ">" + folderInfo.m_Name + "</th>").appendTo("#FileSystem");
+            success: function (folder) {
+                showFolderItems(folder);
+            },
+            error: function () {
+                console.log("couldnt get the requested folder");
+            }
+        })
+    });
 
-    $.each(folderInfo.itemList || [], function (index, item) {
-        $("<tr id=" + item.m_sha1 + ">" + item.m_Name + "</tr>").appendTo("#"+currRootFolderName);
 
-        if (item.itemType == "FOLDER") {
-            $("#" + item.m_Name).click(function () {
+    $.each(folderInfo.m_ItemInfos || [], function (index, item) {
+        var td = "<td>"+item.m_ItemName+"</td>";
+        $("<tr id=" + item.m_ItemSha1 + ">" + td + "</tr>").appendTo("#"+folderInfo.m_ItemSha1);
+
+        if (item.m_ItemType == "folder") {
+            $("#" + item.m_ItemSha1).click(function () {
                 $.ajax({
                     url: FILE_SYSTEM_INFO_URL,
                     dataType: "json",
-                    data: {"itemName": item.m_Name, "itemSha1": item.m_Sha1,"isRootFolder":"false"},
+                    data: {"itemName": item.m_ItemName, "itemSha1": item.m_ItemSha1,"isRootFolder":"false"},
 
                     success: function (folder) {
                         showFolderItems(folder);
@@ -179,12 +193,12 @@ function showFolderItems(folderInfo) {
                 })
             });
 
-        } else if (item.itemType == "FILE") {
-            $("#" + item.m_Name).click(function () {
+        } else if (item.m_ItemType == "file") {
+            $("#" + item.m_ItemSha1).click(function () {
                 $.ajax({
                     url: FILE_SYSTEM_INFO_URL,
                     dataType: "json",
-                    data: {"itemName": item.m_Name,"itemSha1":item.m_Sha1,"isRootFolder":"false"},
+                    data: {"itemName": item.m_ItemName,"itemSha1":item.m_ItemSha1,"isRootFolder":"false"},
 
                     success: function (file) {
                         showFileContent(file);
@@ -201,7 +215,21 @@ function showFolderItems(folderInfo) {
     });
 }
 
-function showFileContent(file) {
-    $("#FileSystem").empty();
-    $("<textarea placeholder='type new content here'>"+file.fileContent+"</textarea>").appendTo("#FileSystem");
+function showFileContent(fileInfo) {
+    $("#FileSystemShow").empty();
+    $("#GoBackButton").click(function () {
+        $.ajax({
+            url: FILE_SYSTEM_INFO_URL,
+            dataType: "json",
+            data: {"itemName": fileInfo.m_ItemName, "itemSha1": fileInfo.m_ParentFolderSha1,"isRootFolder":"false"},
+
+            success: function (folder) {
+                showFolderItems(folder);
+            },
+            error: function () {
+                console.log("couldnt get the requested folder");
+            }
+        })
+    });
+    $("<textarea placeholder='type new content here'>"+fileInfo.m_FileContent+"</textarea>").appendTo("#FileSystemShow");
 }

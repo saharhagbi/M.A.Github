@@ -1,8 +1,8 @@
 package MAGit;
 
 import MAGit.Constants.Constants;
-import Objects.Commit;
 import Objects.Blob;
+import Objects.Commit;
 import Objects.Folder;
 import Objects.Item;
 import Objects.branch.Branch;
@@ -170,11 +170,11 @@ public class EngineAdapter {
     }
 
     private Item getItemBySha1(String i_sha1) {
-        Map<Path, Item> mapOfItems = engine.getCurrentRepository().getActiveBranch().getPointedCommit().getRootFolder().GetMapOfItems();
+        Map<Path, Item> mapOfItems = engine.getCurrentRepository().getActiveBranch().getPointedCommit().getMapOfAllItemsInThisCommit();
         Iterator<Path> PathIterator = mapOfItems.keySet().iterator();
-        while(PathIterator.hasNext()){
+        while (PathIterator.hasNext()) {
             Path path = PathIterator.next();
-            if(mapOfItems.get(path).getSHA1().equals(i_sha1))
+            if (mapOfItems.get(path).getSHA1().equals(i_sha1))
                 return mapOfItems.get(path);
         }
         return null;
@@ -184,16 +184,18 @@ public class EngineAdapter {
     class ItemInfo {
         String m_ItemName = null;
         String m_ItemType = null;
-        String m_Sha1 = null;
+        String m_ItemSha1 = null;
         ItemInfo[] m_ItemInfos = null;
         String m_FileContent = null;
+        String m_ParentFolderSha1 = null;
 
-        ItemInfo(String i_ItemName, String i_ItemType, String i_Sha1, ItemInfo[] i_ItemInfos,String i_FileContent) {
+        ItemInfo(String i_ItemName, String i_ItemType, String i_Sha1, ItemInfo[] i_ItemInfos, String i_FileContent, String i_ParentSha1) {
             m_ItemName = i_ItemName;
             m_ItemType = i_ItemType;
-            m_Sha1 = i_Sha1;
+            m_ItemSha1 = i_Sha1;
             m_ItemInfos = i_ItemInfos;
             m_FileContent = i_FileContent;
+            m_ParentFolderSha1 = i_ParentSha1;
         }
     }
 
@@ -201,32 +203,50 @@ public class EngineAdapter {
         return getItemInfo(engine.getCurrentRepository().getActiveBranch().getPointedCommit().getRootFolder());
     }
 
-    public ItemInfo getItemInfo(Item i_item){
+    public ItemInfo getItemInfo(Item i_item) {
         ItemInfo itemInfoResult = null;
         String itemName = i_item.getName();
         String itemSha1 = i_item.getSHA1();
+        String parentFolderSha1 = getParentSha1(i_item);
 
         List<ItemInfo> itemInfos = new ArrayList<>();
 
-        if(i_item.getTypeOfFile().equals(Item.TypeOfFile.FOLDER)){
-            Folder folder = (Folder)i_item;
+        if (i_item.getTypeOfFile().equals(Item.TypeOfFile.FOLDER)) {
+            Folder folder = (Folder) i_item;
             List<Item> itemsList = folder.getListOfItems();
             itemsList.forEach(itemInItemList -> {
                 if (itemInItemList.getTypeOfFile().equals(Item.TypeOfFile.BLOB)) {
-                    String fileContent = ((Blob)itemInItemList).getContent();
-                    itemInfos.add(new ItemInfo(itemInItemList.getName(), Constants.FILE_TYPE, itemInItemList.getSHA1(), null,fileContent));
+                    String fileContent = ((Blob) itemInItemList).getContent();
+                    itemInfos.add(new ItemInfo(itemInItemList.getName(), Constants.FILE_TYPE, itemInItemList.getSHA1(), null, fileContent,folder.getSHA1()));
 
-                } else{
-                    itemInfos.add(new ItemInfo(itemInItemList.getName(), Constants.FOLDER_TYPE, itemInItemList.getSHA1(), null,null));
+                } else {
+                    itemInfos.add(new ItemInfo(itemInItemList.getName(), Constants.FOLDER_TYPE, itemInItemList.getSHA1(), null, null,folder.getSHA1()));
                 }
             });
-            itemInfoResult = new ItemInfo(itemName,Constants.FOLDER_TYPE,itemSha1, (ItemInfo[]) itemInfos.toArray(),null);
-        }
-        else{// it is a file
-            itemInfoResult = new ItemInfo(itemName, Constants.FILE_TYPE, itemSha1, null,((Blob)i_item).getContent());
+            ItemInfo[] items = new ItemInfo[itemInfos.size()];
+            itemInfos.toArray(items);
+            itemInfoResult = new ItemInfo(itemName, Constants.FOLDER_TYPE, itemSha1, items, null,parentFolderSha1);
+        } else {// it is a file
+            itemInfoResult = new ItemInfo(itemName, Constants.FILE_TYPE, itemSha1, null, ((Blob) i_item).getContent(),parentFolderSha1);
         }
 
         return itemInfoResult;
+    }
+
+    private String getParentSha1(Item i_item) {
+        if(!isRootFolder(i_item)) {
+            Path parentPath = i_item.GetPath().getParent();
+            Map<Path, Item> allItemsPathToItemMap = engine.getCurrentRepository().getActiveBranch().getPointedCommit().getMapOfAllItemsInThisCommit();
+            return allItemsPathToItemMap.get(parentPath).getSHA1();
+        }
+        else return i_item.getSHA1();
+    }
+
+    private boolean isRootFolder(Item i_item) {
+        if(i_item.getSHA1().equals(engine.getCurrentRepository().getActiveBranch().getPointedCommit().getRootFolder().getSHA1())){
+            return true;
+        }
+        else return false;
     }
 
 }

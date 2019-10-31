@@ -15,6 +15,6 @@ public class Constants {
     public static final String ITEM_NAME = "itemName";
     public static final String ITEM_SHA1 = "itemSha1";
     public static final String IS_ROOT_FOLDER = "isRootFolder";
-    public static final String FOLDER_TYPE = "folde";
+    public static final String FOLDER_TYPE = "folder";
     public static final String FILE_TYPE = "file";
 }

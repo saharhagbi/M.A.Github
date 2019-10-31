@@ -572,4 +572,13 @@ public class Commit implements CommitRepresentative
 
         lst.add(this);
     }
+
+    public Map<Path,Item> getMapOfAllItemsInThisCommit() {
+        Map<Path,Item> mapRes = this.getRootFolder().getAllItemsMap();
+        mapRes.put(this.m_RootFolder.m_Path,this.m_RootFolder);
+        return mapRes;
+    }
+
+
+
 }

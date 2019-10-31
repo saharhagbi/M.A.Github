@@ -382,12 +382,35 @@ public class Folder extends Item {
         });
         return setOfBlobs;
     }
-    public List<Item> GetFirstLayerOfItems(){
+
+    public List<Item> GetFirstLayerOfItems() {
         return m_ListOfItems;
     }
 
-    public Map<Path, Item> GetMapOfItems(){
+    public Map<Path, Item> GetMapOfItems() {
         return m_MapOfItems;
     }
 
+    public Map<Path, Item> getAllItemsMap() {
+        Map<Path, Item> resMap = new HashMap<Path, Item>();
+        Iterator<Item> itemsIterator = this.getListOfItems().iterator();
+        while (itemsIterator.hasNext()) {
+            Item currItem = itemsIterator.next();
+            resMap.put(currItem.GetPath(), currItem);
+            if (currItem.getTypeOfFile().equals(FOLDER)) {
+                Map<Path, Item> folderMap = ((Folder) currItem).getAllItemsMap();
+                addMapItems(resMap, folderMap);
+            }
+        }
+        return resMap;
+    }
+
+    private void addMapItems(Map<Path,Item> i_MapToAddTo, Map<Path,Item> i_MapToAdd) {
+        Set<Path> mapToAddKeySet = i_MapToAdd.keySet();
+        Iterator<Path> keySetIterator = mapToAddKeySet.iterator();
+        while (keySetIterator.hasNext()){
+            Path currKey = keySetIterator.next();
+            i_MapToAddTo.put(currKey,i_MapToAdd.get(currKey));
+        }
+    }
 }
