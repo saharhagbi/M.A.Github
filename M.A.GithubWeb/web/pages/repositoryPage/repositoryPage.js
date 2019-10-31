@@ -7,7 +7,7 @@ var REPOSITORY_TYPE = "5";
 var YES = "Yes";
 var CHECKOUT_URL = "checkout";
 var refreshBranches = 1000;
-
+var FILE_SYSTEM_INFO_URL = "fileSystemServlet"
 // export let isLocalRepository;
 
 /*---------------------------request RepositoryName And userName-------------------------------------------*/
@@ -67,8 +67,7 @@ $(function () {
 
                 var brancNameTrimmed = branch.m_BranchName;
 
-                if (brancNameTrimmed.includes(" "))
-                {
+                if (brancNameTrimmed.includes(" ")) {
                     brancNameTrimmed = brancNameTrimmed.replace(" ", "_");
                 }
 
@@ -136,3 +135,73 @@ $(function () {
         }
     });
 });
+
+/*---------------------------request root foler and show subFlders and files-------------------------------------------*/
+$(function () {
+    $.ajax({
+
+        url: FILE_SYSTEM_INFO_URL,
+        dataType: "json",
+        data: {"isRootFolder": "true"},
+
+        success: function (rootFolderInfo) {
+            console.log("got the list of items from servlet");
+            showFolderItems(rootFolderInfo);
+        },
+        error: function () {
+            console.log("couldnt get root folder");
+        }
+    });
+});
+
+function showFolderItems(folderInfo) {
+    $("#FileSystem").empty();
+
+    var currRootFolderName = folderInfo.m_Name;
+    $("<th id=" + folderInfo.m_Sha1 + ">" + folderInfo.m_Name + "</th>").appendTo("#FileSystem");
+
+    $.each(folderInfo.itemList || [], function (index, item) {
+        $("<tr id=" + item.m_sha1 + ">" + item.m_Name + "</tr>").appendTo("#"+currRootFolderName);
+
+        if (item.itemType == "FOLDER") {
+            $("#" + item.m_Name).click(function () {
+                $.ajax({
+                    url: FILE_SYSTEM_INFO_URL,
+                    dataType: "json",
+                    data: {"itemName": item.m_Name, "itemSha1": item.m_Sha1,"isRootFolder":"false"},
+
+                    success: function (folder) {
+                        showFolderItems(folder);
+                    },
+                    error: function () {
+                        console.log("couldnt get the requested folder");
+                    }
+                })
+            });
+
+        } else if (item.itemType == "FILE") {
+            $("#" + item.m_Name).click(function () {
+                $.ajax({
+                    url: FILE_SYSTEM_INFO_URL,
+                    dataType: "json",
+                    data: {"itemName": item.m_Name,"itemSha1":item.m_Sha1,"isRootFolder":"false"},
+
+                    success: function (file) {
+                        showFileContent(file);
+                    },
+                    error: function () {
+                        console.log("couldnt get the requested file");
+                    }
+                })
+            });
+        } else {
+            console.log("the item is no good - it's type is neither FOLDER nor FILE")
+        }
+
+    });
+}
+
+function showFileContent(file) {
+    $("#FileSystem").empty();
+    $("<textarea placeholder='type new content here'>"+file.fileContent+"</textarea>").appendTo("#FileSystem");
+}

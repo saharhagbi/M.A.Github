@@ -382,10 +382,12 @@ public class Folder extends Item {
         });
         return setOfBlobs;
     }
+    public List<Item> GetFirstLayerOfItems(){
+        return m_ListOfItems;
+    }
 
-/*    public static Folder CreateFolderFromSetOfItems(Set<Item> i_setOfItems){
-        Folder res;
-        //i_setOfItems.forEach()
+    public Map<Path, Item> GetMapOfItems(){
+        return m_MapOfItems;
+    }
 
-    }*/
 }

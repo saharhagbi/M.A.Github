@@ -23,7 +23,6 @@ public class RepositoryDataTable extends HttpServlet
     {
         response.setContentType("application/json");
         List<RepositoryData> allRepositoriesData = null;
-
         User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
 
         PrintWriter out = response.getWriter();
