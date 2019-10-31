@@ -2,6 +2,7 @@ var USER_LIST_URL = "../../userslist";
 var REPOSITORY_DATA_URL = "../../repositorydata";
 var LOAD_REPOSITORY_URL = "../loadRepository";
 var refreshRate = 2000;
+var REPO_NAME = "repoName";
 
 function ajaxUsersList() {
     $.ajax({
@@ -37,8 +38,8 @@ function uploadRepositoryData(repositories) {
 
     $(repositories).each(function (index, element) {
 
-        $("<tr id=" + index + ">" +
-            "<td>" + element.repositoryName + "</td>" +
+        $("<tr id=\"" + index + "\">" +
+            "<td id=\"" + REPO_NAME + index + "\">" + element.repositoryName + "</td>" +
             "<td>" + element.latestCommit + "</td>" +
             "<td>" + element.message + "</td>" +
             "<td>" + element.activeBranch + "</td>" +
@@ -47,7 +48,7 @@ function uploadRepositoryData(repositories) {
 
         $("#" + index).click(function (event) {
             console.log(index);
-            var repoName = $(this).text();
+            var repoName = $("#" + REPO_NAME + index).text();
             console.log(repoName);
 
             $.ajax({

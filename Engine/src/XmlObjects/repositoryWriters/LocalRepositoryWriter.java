@@ -34,9 +34,9 @@ public class LocalRepositoryWriter
     {
         m_Writer.MakeDirectoriesForRepositories();
 
-        if (m_RepositoryToWrite.getRegularBranches() != null)
-            if ((m_RepositoryToWrite.getRegularBranches().size()) != NumConstants.ZERO)
-                m_Writer.WriteAllBranches(i_BranchName, m_RepositoryToWrite.getRegularBranches());
+        if (m_RepositoryToWrite.getLocalBranches() != null)
+            if ((m_RepositoryToWrite.getLocalBranches().size()) != NumConstants.ZERO)
+                m_Writer.WriteAllBranches(i_BranchName, m_RepositoryToWrite.getLocalBranches());
 
         WriteAllRemoteTrackingBranches(i_BranchName);
 
@@ -93,17 +93,17 @@ public class LocalRepositoryWriter
             m_Writer.CheckIfCurrentBranchIsHeadAndUpdateIfItDoes(remoteTrackingBranch.getBranchName(), i_BranchName,
                     m_RepositoryToWrite.getRepositoryPath().toString() + sf_PathForBranches);
 
-            WriteRemoteTrackingBranch(remoteTrackingBranch, currentCommit);
+            WriteRemoteTrackingBranch(remoteTrackingBranch);
         }
     }
 
-    public void WriteRemoteTrackingBranch(RemoteTrackingBranch remoteTrackingBranch, Commit currentCommit) throws IOException
+    public void WriteRemoteTrackingBranch(RemoteTrackingBranch remoteTrackingBranch) throws IOException
     {
         MagitFileUtils.WritingFileByPath(
                 m_RepositoryToWrite.getRepositoryPath().toString() + sf_PathForBranches
                         + sf_Slash + remoteTrackingBranch.getBranchName()
                         + sf_txtExtension,
-                currentCommit.getSHA1() + System.lineSeparator() + StringConstants.TRUE);
+                remoteTrackingBranch.getPointedCommit().getSHA1() + System.lineSeparator() + StringConstants.TRUE);
     }
 
     public void WriteBranch(Branch branchToWrite) throws IOException, ParseException

@@ -1,12 +1,13 @@
 var repositoryName = 0;
 var userName = 1;
-var BRANCHES = "1";
+var ALL_BRANCHES = "1";
 var COMMIT_TYPE = "2";
 var NAME_TYPE = "3";
 var REPOSITORY_TYPE = "5";
 var YES = "Yes";
 var CHECKOUT_URL = "checkout";
 var refreshBranches = 1000;
+var REPOSITORY_INFO_URL = "repositoryInfo";
 
 // export let isLocalRepository;
 
@@ -26,9 +27,9 @@ $(function () {
             handleUseCaseOfLocalRepository(isLocalRepositoryInString);
 
             function addCollaborationButtons() {
-                $("#pushBranchSection").append("<button type=\"button\" onclick=\"pushBranch()\">Push Branch</button>")
+                $("#pushBranchSection").append("<button type=\"button\" onclick=\"showBranchesListForPushing()\">Push Branch</button>")
                 $("#pullSection").append("<button type=\"button\" onclick=\"pull()\">Pull</button>")
-                $("#createPullRequest").append("<button type=\"button\" onclick=\"createPullRequest()\">Pull Branch</button>")
+                $("#createPullRequest").append("<button type=\"button\" onclick=\"createPullRequest()\">Create Pull Request</button>")
 
                 $("#pullRequestsTable").append("<tr>" +
                     "<th>Status</th>" +
@@ -54,7 +55,7 @@ $(function () {
 
         url: REPOSITORY_INFO_URL,
         dataType: "json",
-        data: {"requestType": BRANCHES},
+        data: {"requestType": ALL_BRANCHES},
 
         success: function (branches) {
 
@@ -67,9 +68,8 @@ $(function () {
 
                 var brancNameTrimmed = branch.m_BranchName;
 
-                if (brancNameTrimmed.includes(" "))
-                {
-                    brancNameTrimmed = brancNameTrimmed.replace(" ", "_");
+                if (brancNameTrimmed.includes(" ") || brancNameTrimmed.includes("/")) {
+                    brancNameTrimmed = brancNameTrimmed.replace(/ /g, "_").replace("/", "_");
                 }
 
                 $("#branches").append("<li><button type=\"button\" id=" + "\"" + brancNameTrimmed + "\"" + ">" + branch.m_BranchName + "</button></li>");

@@ -131,11 +131,10 @@ public class EngineAdapter
         return commitList.stream().map(commit ->
         {
             StringBuilder branchesPointedNames = new StringBuilder();
-            List<Branch> branchesPointed = engine.getCurrentRepository().getBranchPointed(commit);
-            branchesPointed.forEach(branch -> branchesPointedNames.append(branch.getBranchName() + " "));
+            List<String> branchesPointed = engine.getCurrentRepository().getBranchPointed(commit);
 
             return (Object) new CommitData(commit.getSHA1(), commit.getCommitMessage(),
-                    commit.getUserCreated().getUserName(), branchesPointedNames.toString());
+                    commit.getUserCreated().getUserName(), String.join(", ", branchesPointed));
 
         }).collect(Collectors.toList());
     }
@@ -199,5 +198,18 @@ public class EngineAdapter
         engine.CreateRTB(pointedCommit, rtbName);
 
         return rtbName;
+    }
+
+    public List<Object> getLocalBrances()
+    {
+        LocalRepository localRepository = (LocalRepository) engine.getCurrentRepository();
+
+        return localRepository.getLocalBranches().stream().
+                map(branch -> (Object) branch).collect(Collectors.toList());
+    }
+
+    public void pushBranch(String branchToPushName) throws Exception
+    {
+        engine.pushBranch(branchToPushName);
     }
 }

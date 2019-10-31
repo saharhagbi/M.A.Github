@@ -423,11 +423,12 @@ public class Repository
         return m_ConflictsAndItems.GetConflictItemsNames();
     }
 
-    public List<Branch> getBranchPointed(Commit commit)
+    public List<String> getBranchPointed(Commit commit)
     {
-        return getActiveBranches()
+        return getAllBranches()
                 .stream()
                 .filter(branch -> branch.getPointedCommit().getSHA1().equals(commit.getSHA1()))
+                .map(branch -> branch.getBranchName())
                 .collect(Collectors.toList());
     }
 }

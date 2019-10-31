@@ -1,5 +1,7 @@
 package MAGit.Servlets;
 
+import MAGit.Utils.ServletUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,12 +13,27 @@ import java.io.IOException;
 public class PushBranch extends HttpServlet
 {
     private final String PULL_REQUEST_URL = "repositoryPage.html";
+    private final String BRANCH_NAME = "branchName";
 
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException
     {
+        String branchToPushName = request.getParameter(BRANCH_NAME);
+
+        try
+        {
+            ServletUtils.getEngineAdapter(getServletContext()).pushBranch(branchToPushName);
+        } catch (Exception e)
+        {
+            //todo -
+            // handle proper message in UI
+            e.printStackTrace();
+        }
+
+        System.out.println(branchToPushName);
+
         response.sendRedirect(PULL_REQUEST_URL);
     }
 

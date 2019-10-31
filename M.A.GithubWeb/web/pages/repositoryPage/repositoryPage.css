@@ -27,3 +27,11 @@ h3 {
     top: 0;
     right: 0;
 }
+
+#commitBtn {
+    vertical-align: middle;
+    -webkit-transition-duration: 0.6s; /* Safari */
+    transition-duration: 0.6s;
+    background-color: #4CAF50; /* Green */
+    color: white;
+}

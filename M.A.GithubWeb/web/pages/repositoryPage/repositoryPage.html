@@ -15,6 +15,7 @@
     <script src="pushBranch/pushBranch.js"></script>
     <script src="newBranch/newBranch.js"></script>
     <script src="checkout/checkout.js"></script>
+    <script src="commit/commit.js"></script>
 
 
 </head>
@@ -52,9 +53,13 @@
             <th>BranchesPointed</th>
         </tr>
     </table>
+
+    <button id="commitBtn" type="button" onclick="commitChanges()">Commit</button>
 </div>
 
+
 <div id="pushBranchSection">
+    <ul id="branchesList"></ul>
     <!--    <button type="button" onclick="pushBranch()">Push Branch</button>-->
 </div>
 

@@ -23,7 +23,7 @@ function refreshUsersList(users) {
         repoNameTrimmed = user.userName;
         console.log("Adding user #" + index + ": " + repoNameTrimmed);
         if (user.userName.indexOf(' ') >= 0) {
-            repoNameTrimmed = repoNameTrimmed.replace(" ", "_");
+            repoNameTrimmed = repoNameTrimmed.replace(/ /g, "_");
             console.log(repoNameTrimmed);
         }
         $("<li id=" + "\"" + repoNameTrimmed + "\"" + ">" + user.userName + "</li>").appendTo($("#userList"));

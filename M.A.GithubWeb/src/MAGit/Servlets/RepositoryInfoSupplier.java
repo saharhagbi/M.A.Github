@@ -23,6 +23,7 @@ public class RepositoryInfoSupplier extends HttpServlet
     private final String Names = "3";
     private final String PullRequest = "4";
     private final String IsLocalRepository = "5";
+    private final String LocalBranches = "6";
 
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -55,6 +56,9 @@ public class RepositoryInfoSupplier extends HttpServlet
                     break;
                 case IsLocalRepository:
                     dataRequested = ServletUtils.getEngineAdapter(getServletContext()).isLocalRepository();
+                    break;
+                case LocalBranches:
+                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getLocalBrances();
                     break;
             }
         } catch (Exception e)

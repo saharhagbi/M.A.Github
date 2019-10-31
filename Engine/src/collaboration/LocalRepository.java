@@ -53,7 +53,7 @@ public class LocalRepository extends Repository
         return allBranches;
     }
 
-    public List<Branch> getRegularBranches()
+    public List<Branch> getLocalBranches()
     {
         return m_Branches;
     }
