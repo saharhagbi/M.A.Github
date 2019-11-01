@@ -733,4 +733,8 @@ public class Engine
         //MagitFileUtils.CreateWholePathDirecories(MainRepositoriesPath + ResourceUtils.Slash + usernameFromParameter);
         MagitFileUtils.CreateDirectory(MainRepositoriesPath + ResourceUtils.Slash + usernameFromParameter);
     }
+
+    public User GetUser() {
+        return m_User;
+    }
 }

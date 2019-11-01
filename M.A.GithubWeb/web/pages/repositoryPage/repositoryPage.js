@@ -7,7 +7,8 @@ var REPOSITORY_TYPE = "5";
 var YES = "Yes";
 var CHECKOUT_URL = "checkout";
 var refreshBranches = 1000;
-var FILE_SYSTEM_INFO_URL = "fileSystemServlet"
+var FILE_SYSTEM_INFO_URL = "fileSystemServlet";
+var DELETE_FILE_SERVLET_URL = "DeleteFileServlet";
 // export let isLocalRepository;
 
 /*---------------------------request RepositoryName And userName-------------------------------------------*/
@@ -217,6 +218,27 @@ function showFolderItems(folderInfo) {
 
 function showFileContent(fileInfo) {
     $("#FileSystemShow").empty();
+    $("#DeleteButton").remove();
+    $("<button type=\"button\" id=\"DeleteButton\">Delete File</button>").appendTo("#FileSystem");
+
+    $("#DeleteButton").click(function () {
+        $.ajax({
+            url: DELETE_FILE_SERVLET_URL,
+            dataType: "json",
+            data: {"itemName": fileInfo.m_ItemName, "itemSha1": fileInfo.m_ItemSha1},
+
+            success: function (folder) {
+                $("#FileSystemShow").empty();
+                $("<p><i>File Deleted</i></p>").appendTo("#FileSystemShow");
+            },
+            error: function () {
+                console.log("couldnt get the requested folder");
+            }
+        })
+    });
+
+
+
     $("#GoBackButton").click(function () {
         $.ajax({
             url: FILE_SYSTEM_INFO_URL,

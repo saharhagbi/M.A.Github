@@ -393,6 +393,7 @@ public class Folder extends Item {
 
     public Map<Path, Item> getAllItemsMap() {
         Map<Path, Item> resMap = new HashMap<Path, Item>();
+        resMap.put(this.m_Path,this);
         Iterator<Item> itemsIterator = this.getListOfItems().iterator();
         while (itemsIterator.hasNext()) {
             Item currItem = itemsIterator.next();

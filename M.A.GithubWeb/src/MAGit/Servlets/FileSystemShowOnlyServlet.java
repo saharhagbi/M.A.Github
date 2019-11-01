@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(urlPatterns = {"/pages/repositoryPage/fileSystemServlet"})
-public class FileSystemServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/pages/repositoryPage/FileSystemShowOnlyServlet"})
+public class FileSystemShowOnlyServlet extends HttpServlet {
 
     // urls that starts with forward slash '/' are considered absolute
     // urls that doesn't start with forward slash '/' are considered relative to the place where this servlet request comes from

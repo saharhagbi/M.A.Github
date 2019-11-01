@@ -29,6 +29,9 @@ import java.util.stream.Collectors;
 public class EngineAdapter {
     private Engine engine = new Engine();
     private XMLMain xmlMain = new XMLMain();
+    private Folder WorkingCopy;
+    private Map<Path,Item> allItemMapOfWorkingCopy;
+
 
     public void createUserFolder(String usernameFromParameter) {
         engine.createUserFolder(usernameFromParameter);
@@ -71,8 +74,11 @@ public class EngineAdapter {
         File[] usersRepositories = MagitFileUtils.GetFilesInLocation(pathToUserFolderRepositories);
 
         for (File file : usersRepositories) {
-            if (file.getName().equals(repositoryNameClicked))
+            if (file.getName().equals(repositoryNameClicked)) {
                 engine.PullAnExistingRepository(file.getAbsolutePath());
+                WorkingCopy = engine.getCurrentRepository().getActiveBranch().getPointedCommit().getRootFolder();
+                allItemMapOfWorkingCopy = WorkingCopy.getAllItemsMap();
+            }
         }
     }
 
@@ -165,19 +171,23 @@ public class EngineAdapter {
     }
 
     public ItemInfo getItemInfoBySha1(String i_Sha1) {
-        Item item = getItemBySha1(i_Sha1);
+        Item item = getItemBySha1FromWorkingCopy(i_Sha1);
         return getItemInfo(item);
     }
 
-    private Item getItemBySha1(String i_sha1) {
-        Map<Path, Item> mapOfItems = engine.getCurrentRepository().getActiveBranch().getPointedCommit().getMapOfAllItemsInThisCommit();
-        Iterator<Path> PathIterator = mapOfItems.keySet().iterator();
+    private Item getItemBySha1FromWorkingCopy(String i_sha1) {
+        Iterator<Path> PathIterator = allItemMapOfWorkingCopy.keySet().iterator();
         while (PathIterator.hasNext()) {
             Path path = PathIterator.next();
-            if (mapOfItems.get(path).getSHA1().equals(i_sha1))
-                return mapOfItems.get(path);
+            if (allItemMapOfWorkingCopy.get(path).getSHA1().equals(i_sha1))
+                return allItemMapOfWorkingCopy.get(path);
         }
         return null;
+    }
+
+    public void DeleteFileAndUpdateRootFolder(String i_FileSha1ToDelete, User i_user) throws Exception {
+        Item fileToDelete = getItemBySha1FromWorkingCopy(i_FileSha1ToDelete);
+        fileToDelete.GetPath().toFile().delete();
     }
 
 
@@ -199,8 +209,8 @@ public class EngineAdapter {
         }
     }
 
-    public ItemInfo GetRootFolderItemInfo() {
-        return getItemInfo(engine.getCurrentRepository().getActiveBranch().getPointedCommit().getRootFolder());
+    public ItemInfo GetWorkingCopyItemInfo() {
+        return getItemInfo(WorkingCopy);
     }
 
     public ItemInfo getItemInfo(Item i_item) {
@@ -236,8 +246,7 @@ public class EngineAdapter {
     private String getParentSha1(Item i_item) {
         if(!isRootFolder(i_item)) {
             Path parentPath = i_item.GetPath().getParent();
-            Map<Path, Item> allItemsPathToItemMap = engine.getCurrentRepository().getActiveBranch().getPointedCommit().getMapOfAllItemsInThisCommit();
-            return allItemsPathToItemMap.get(parentPath).getSHA1();
+            return allItemMapOfWorkingCopy.get(parentPath).getSHA1();
         }
         else return i_item.getSHA1();
     }

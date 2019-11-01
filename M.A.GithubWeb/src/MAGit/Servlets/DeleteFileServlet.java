@@ -1,8 +1,7 @@
 package MAGit.Servlets;
 
-import MAGit.Constants.Constants;
 import MAGit.Utils.ServletUtils;
-import com.google.gson.Gson;
+import System.Users.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,10 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
-@WebServlet(urlPatterns = {"/pages/repositoryPage/fileSystemServlet"})
-public class FileSystemServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/pages/repositoryPage/DeleteFileServlet"})
+public class DeleteFileServlet extends HttpServlet {
 
     // urls that starts with forward slash '/' are considered absolute
     // urls that doesn't start with forward slash '/' are considered relative to the place where this servlet request comes from
@@ -33,37 +31,12 @@ public class FileSystemServlet extends HttpServlet {
     @SuppressWarnings("Duplicates")
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        if (request.getParameter(Constants.IS_ROOT_FOLDER).equals("true")) {
-            response.setContentType("application/json");
-            try (PrintWriter out = response.getWriter()) {
-                Gson gson = new Gson();
-                Object itemInfo = null;
-                try {
-                    itemInfo = ServletUtils.getEngineAdapter(getServletContext()).GetWorkingCopyItemInfo();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                String json = gson.toJson(itemInfo);
-                out.println(json);
-                out.flush();
-            }
-        } else {
-            response.setContentType("application/json");
-            try (PrintWriter out = response.getWriter()) {
-                Gson gson = new Gson();
-                Object itemInfo = null;
-                try {
-                    itemInfo = ServletUtils.getEngineAdapter(getServletContext()).getItemInfoBySha1(request.getParameter(Constants.ITEM_SHA1));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                String json = gson.toJson(itemInfo);
-                out.println(json);
-                out.flush();
-
-
-            }
+        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
+        String fileSha1ToDelete = request.getParameter("itemSha1");
+        try {
+            ServletUtils.getEngineAdapter(getServletContext()).DeleteFileAndUpdateRootFolder(fileSha1ToDelete,loggedInUser);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
