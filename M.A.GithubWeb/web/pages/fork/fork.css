@@ -1,6 +1,5 @@
 .bottomGrid {
     display: grid;
-    grid-template-columns: 33.3% 33.3% 33.3%;
 }
 
 table, th, td {
@@ -9,7 +8,6 @@ table, th, td {
 
 .header-container {
     display: grid;
-    grid-template-columns: 50% 50%;
 }
 
 .back {

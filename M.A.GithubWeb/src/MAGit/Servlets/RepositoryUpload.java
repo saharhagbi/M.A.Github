@@ -33,6 +33,8 @@ public class RepositoryUpload extends HttpServlet
     {
         response.setContentType("text/html");
 
+      //  String xmlFile = request.getParameter("input");
+
         Collection<Part> parts = request.getParts();
 
         StringBuilder contentBuilder = new StringBuilder();
