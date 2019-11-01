@@ -104,7 +104,7 @@ public class LoginServlet extends HttpServlet
 
                         //redirect the request to the chat room - in order to actually change the URL
                         System.out.println("On login, request URI is: " + request.getRequestURI());
-                        userManager.setCurrentUserName(currentUser);
+//                        userManager.setCurrentUserName(currentUser);
                         response.sendRedirect(REPOSITORY_HUB_URL);
                     }
                 }
@@ -112,7 +112,7 @@ public class LoginServlet extends HttpServlet
         } else
         {
             //user is already logged in
-            userManager.setCurrentUserName(usernameFromSession);
+//            userManager.setCurrentUserName(usernameFromSession);
             response.sendRedirect(REPOSITORY_HUB_URL);
         }
     }

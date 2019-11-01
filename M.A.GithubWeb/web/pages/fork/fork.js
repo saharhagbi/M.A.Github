@@ -27,7 +27,7 @@ function refreshUsersList(users) {
             console.log(repoNameTrimmed);
         }
         $("<li id=" + "\"" + repoNameTrimmed + "\"" + ">" + user.userName + "</li>").appendTo($("#userList"));
-        /*todo: fix- when a name is with space in it example: "roy roy" as opposed to "royroy" click does'nt work*/
+
         $("#" + repoNameTrimmed).on("click", function (event) {
             console.log("click detected");
             $.ajax({

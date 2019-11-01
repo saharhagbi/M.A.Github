@@ -7,18 +7,21 @@ import System.Repository;
 import System.Users.User;
 import XmlObjects.XMLMain;
 import collaboration.LocalRepository;
+import collaboration.Push;
 import collaboration.RemoteBranch;
 import common.MagitFileUtils;
 import common.constants.ResourceUtils;
 import common.constants.StringConstants;
 import github.commit.CommitData;
-import github.notifications.PullRequestNotification;
 import github.repository.RepositoryData;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class EngineAdapter
@@ -107,17 +110,21 @@ public class EngineAdapter
         File dirToCloneFrom = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNameToCopyFrom + "\\" + i_RepositoryName).toFile();
         File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNamerToCopyTo + "\\" + i_RepositoryNewName).toFile();
         this.engine.Clone(dirToCloneTo, i_RepositoryNewName, dirToCloneFrom);
+
+
     }
 
     public List<Object> getBranchesList()
     {
-        Set<Branch> branches = new HashSet<>();
-        branches.add(engine.getCurrentRepository().getActiveBranch());
+        List<Branch> branches = new ArrayList<>();
+        //branches.add(engine.getCurrentRepository().getActiveBranch());
         branches.addAll(engine.getCurrentRepository().getAllBranches());
 
-        List<Object> branchesList = new ArrayList<>(branches);
+        int index = branches.indexOf(engine.getCurrentRepository().getActiveBranch());
+        branches.remove(index);
+        branches.add(0, engine.getCurrentRepository().getActiveBranch());
 
-        Collections.reverse(branchesList);
+        List<Object> branchesList = new ArrayList<>(branches);
 
         return branchesList;
     }
@@ -162,7 +169,7 @@ public class EngineAdapter
     public List<Object> getPullRequests()
     {
         List<Object> lstToReturn = new ArrayList<>();
-        lstToReturn.add(new PullRequestNotification());
+        //lstToReturn.add(new PullRequestNotification());
         return lstToReturn;
     }
 
@@ -211,5 +218,23 @@ public class EngineAdapter
     public void pushBranch(String branchToPushName) throws Exception
     {
         engine.pushBranch(branchToPushName);
+    }
+
+    public void commitChanges(String commitMessage) throws Exception
+    {
+        engine.CommitInCurrentRepository(commitMessage, null);
+    }
+
+    public void pull() throws Exception
+    {
+        engine.Pull();
+    }
+
+    public void push() throws Exception
+    {
+        Push pusher = new Push(engine, (LocalRepository) engine.getCurrentRepository());
+
+        if (pusher.isPossibleToPush())
+            pusher.Push();
     }
 }

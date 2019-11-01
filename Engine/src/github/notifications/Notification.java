@@ -7,8 +7,10 @@ public abstract class Notification
     private Date dateCreated;
     private String RepositoryName;
 
-    public Notification()
+    public Notification(Date dateCreated, String repositoryName)
     {
+        this.dateCreated = dateCreated;
+        RepositoryName = repositoryName;
     }
 
     public Date getDateCreated()

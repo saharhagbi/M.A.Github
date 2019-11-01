@@ -102,15 +102,35 @@ $("#file-input").change(function () {
     var formData = new FormData();
 
     formData.append("xml", input);
+    /*
+        $.ajax({
+            method: "POST",
+            url: REPO_URL,
+            data: formData,
+            dataType: "json",
+            processData: false, // Don't process the files
+            contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+            success: function (repo) {
+                console.log(repo)
 
+                addRepoDOMElement(repo);
+
+                alert("Repository added successfully!");
+            },
+            error: function (request, status, error) {
+                alert(request.responseText);
+            }
+        })*/
 
     $.ajax({
         url: REPOSITORY_UPLOAD_URL,
         method: "POST",
-        data: input,
+        data: formData,
         processData: false,
+        contentType: false,
         success: function () {
-            alert("working");
+            alert("Repository Upload Succeeded");
+            location.replace("repositoryHub.html");
         },
 
         error: function (err) {

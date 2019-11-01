@@ -27,7 +27,7 @@ $(function () {
             handleUseCaseOfLocalRepository(isLocalRepositoryInString);
 
             function addCollaborationButtons() {
-                $("#pushBranchSection").append("<button type=\"button\" onclick=\"showBranchesListForPushing()\">Push Branch</button>")
+                $("#pushBranchSection").append("<button type=\"button\" onclick=\"addAllBranchesForPushing()\">Push Branch</button>")
                 $("#pullSection").append("<button type=\"button\" onclick=\"pull()\">Pull</button>")
                 $("#createPullRequest").append("<button type=\"button\" onclick=\"createPullRequest()\">Create Pull Request</button>")
 
@@ -72,11 +72,11 @@ $(function () {
                     brancNameTrimmed = brancNameTrimmed.replace(/ /g, "_").replace("/", "_");
                 }
 
-                $("#branches").append("<li><button type=\"button\" id=" + "\"" + brancNameTrimmed + "\"" + ">" + branch.m_BranchName + "</button></li>");
+                $("#branches").append("<li>" + branch.m_BranchName + "</li>");
 
-                $("#" + brancNameTrimmed).click(function () {
-                    checkout(branch.m_BranchName)
-                })
+                /*$("#" + brancNameTrimmed).click(function () {
+                        checkout(branch.m_BranchName)
+                })*/
             });
         }
     });

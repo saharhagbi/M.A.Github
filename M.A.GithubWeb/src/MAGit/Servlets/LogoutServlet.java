@@ -2,6 +2,7 @@ package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
+import System.Users.User;
 import github.users.UserManager;
 
 import javax.servlet.ServletException;
@@ -21,7 +22,19 @@ public class LogoutServlet extends HttpServlet
         SessionUtils.clearSession(request);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
 
-        userManager.removeUser(userManager.getCurrentUser());
+        User loggedInUser = null;
+        try
+        {
+            loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(SessionUtils.getUsername(request));
+        } catch (Exception e)
+        {
+            //todo-
+            // handle proper message in UI
+
+            e.printStackTrace();
+        }
+
+        userManager.removeUser(loggedInUser);
 
         response.sendRedirect(REPOHUB_URL);
     }

@@ -7,43 +7,94 @@
     <!--links:-->
     <link rel='stylesheet' type='text/css' href='repositoryPage.css'/>
     <link rel="shortcut icon" href="">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
     <!--scripts:-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="repositoryPage.js"></script>
     <script src="pull/pullRequest.js"></script>
-    <script src="pushBranch/pushBranch.js"></script>
+    <script src="pull/pull.js"></script>
+    <script src="push/pushBranch.js"></script>
+    <script src="push/push.js"></script>
     <script src="newBranch/newBranch.js"></script>
     <script src="checkout/checkout.js"></script>
     <script src="commit/commit.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
 </head>
 <body>
-<h1> Repository Details:</h1>
 
-<h3>Repository Name:</h3>
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <a href="/M.A.Github/index.html" class="navbar-brand">Home</a>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <a href="#" class="nav-item active nav-link">Pull Requests</a>
+            <a href="#" id="commitBtn" onclick="commitChanges()" class="nav-item active nav-link">Commit</a>
+            <a href="#" id="pullBtn" onclick="pull()" class="nav item active nav-link">Pull</a>
+            <a href="#" id="pushBtn" onclick="push()" class="nav item active nav-link">Push</a>
+            <a href="#" onclick="newLocalBranch()" class="nav item active nav-link">New Branch</a>
+
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle active" onclick="addAllBranchesForPushing()" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Push Branch</a>
+                <div class="dropdown-menu" id="pushBranch" aria-labelledby="navbarDropdown">
+                </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle active" role="button"
+                   data-toggle="dropdown" onclick="addAllBranchesForCheckout()" aria-haspopup="true"
+                   aria-expanded="false">Checkout</a>
+                <div class="dropdown-menu" id="checkout" aria-labelledby="navbarDropdown">
+                    <!--<a href="#" class="dropdown-item">Aplicações para a área de saúde</a>-->
+                </div>
+            </li>
+        </ul>
+        </form>
+
+        <button class="btn btn-outline-success">WC</button>
+
+        <button class="btn btn-outline-success" onclick="location.href='../repositoryHub/repositoryHub.html';"
+                type="submit">Back
+        </button>
+
+    </div>
+</nav>
+
+
+<!--<h1> Repository Details:</h1>-->
+
+<h4>Repository Name:</h4>
 <div id="repositoryName">
 </div>
+<br/>
 
-<h3>User Name:</h3>
+<h4>User Name:</h4>
 <div id="userName"></div>
+<br/>
 
 
 <div id="branchesSection">
-    <h3> Branches: </h3>
+    <h4> Branches: </h4>
 
-    <span class="BranchesNote"> <br/>Note: The head Branch is first.<br/>
-                                Also, click on branch for checkout</span>
+    <span class="BranchesNote"> <br/>Note: The head Branch is first.<br/></span>
 
     <ul id="branches"></ul>
 
-    <button name="newBranchBtn" onclick="newLocalBranch()">New Branch</button>
+    <!--<button name="newBranchBtn" onclick="newLocalBranch()">New Branch</button>-->
 </div>
-
+<br/>
+<br/>
 
 <div id="commitsSection">
-    <h3> Commits: </h3>
+    <h4> Commits: </h4>
 
     <table id="commitsTable">
         <tr>
@@ -54,7 +105,7 @@
         </tr>
     </table>
 
-    <button id="commitBtn" type="button" onclick="commitChanges()">Commit</button>
+    <!--<button id="commitBtn" type="button" onclick="commitChanges()">Commit</button>-->
 </div>
 
 
@@ -71,19 +122,19 @@
     <!--    <button type="button" onclick="createPullRequest()">Pull Branch</button>-->
 </div>
 
-<input type="button" class="back" onclick="location.href='../repositoryHub/repositoryHub.html';" value="Back"/>
+<!--<input type="button" class="back" onclick="location.href='../repositoryHub/repositoryHub.html';" value="Back"/>-->
 
 <div id="pullRequestSection">
-    <h3> Pull Requests: </h3>
+    <!--<h3> Pull Requests: </h3>
 
-    <table id="pullRequestsTable">
-        <!--<tr>
-            <th>Status</th>
-            <th>Message</th>
-            <th>Confirm</th>
-            <th>Denied</th>
-        </tr>-->
-    </table>
+     <table id="pullRequestsTable">
+         &lt;!&ndash;<tr>
+             <th>Status</th>
+             <th>Message</th>
+             <th>Confirm</th>
+             <th>Denied</th>
+         </tr>&ndash;&gt;
+     </table>-->
 </div>
 </body>
 </html>

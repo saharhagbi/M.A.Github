@@ -1,6 +1,7 @@
 var PULL_REQUEST_TYPE = "4";
 
 
+//need to do setInterval
 $(function () {
     $.ajax({
 

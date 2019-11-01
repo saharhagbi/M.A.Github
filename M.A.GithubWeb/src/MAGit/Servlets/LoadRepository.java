@@ -1,6 +1,7 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
+import MAGit.Utils.SessionUtils;
 import System.Users.User;
 
 import javax.servlet.ServletException;
@@ -20,10 +21,10 @@ public class LoadRepository extends HttpServlet
     {
         response.setContentType("text/html;charset=UTF-8");
 
-        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
         String repositoryNameClicked = request.getParameter(repoName);
         try
         {
+            User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(SessionUtils.getUsername(request));
             ServletUtils.getEngineAdapter(getServletContext())
                     .initRepositoryInSystemByName(repositoryNameClicked, loggedInUser);
         } catch (Exception e)

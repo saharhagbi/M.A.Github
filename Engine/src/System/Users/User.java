@@ -1,12 +1,14 @@
 package System.Users;
 
 import common.constants.ResourceUtils;
+import github.notifications.Notification;
+
+import java.util.List;
 
 public class User
 {
     private String userName;
-
-
+    private List<Notification> notificationList;
 
     public User(String i_UserName)
     {
