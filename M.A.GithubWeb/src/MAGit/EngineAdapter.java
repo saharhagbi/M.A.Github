@@ -185,9 +185,11 @@ public class EngineAdapter {
         return null;
     }
 
-    public void DeleteFileAndUpdateRootFolder(String i_FileSha1ToDelete, User i_user) throws Exception {
+    public void RemoveFileFromWorkingCopy(String i_FileSha1ToDelete) throws Exception {
         Item fileToDelete = getItemBySha1FromWorkingCopy(i_FileSha1ToDelete);
-        fileToDelete.GetPath().toFile().delete();
+        //WorkingCopy.removeItem(fileToDelete);
+        allItemMapOfWorkingCopy.remove(fileToDelete.GetPath());
+
     }
 
 

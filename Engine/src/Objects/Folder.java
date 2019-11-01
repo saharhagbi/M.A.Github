@@ -414,4 +414,9 @@ public class Folder extends Item {
             i_MapToAddTo.put(currKey,i_MapToAdd.get(currKey));
         }
     }
+
+    /*public void removeItem(Item fileToDelete) {
+        this.getListOfItems().forEach(item -> {
+        });
+    }*/
 }

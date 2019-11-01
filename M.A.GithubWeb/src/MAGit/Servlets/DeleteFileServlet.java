@@ -34,7 +34,7 @@ public class DeleteFileServlet extends HttpServlet {
         User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
         String fileSha1ToDelete = request.getParameter("itemSha1");
         try {
-            ServletUtils.getEngineAdapter(getServletContext()).DeleteFileAndUpdateRootFolder(fileSha1ToDelete,loggedInUser);
+            //ServletUtils.getEngineAdapter(getServletContext()).RemoveFileFromWorkingCopy();
         } catch (Exception e) {
             e.printStackTrace();
         }
