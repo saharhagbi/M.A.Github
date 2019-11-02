@@ -2,6 +2,7 @@ package System.Users;
 
 import System.Engine;
 import common.constants.ResourceUtils;
+import github.PullRequestLogic;
 import github.notifications.Notification;
 
 import java.util.ArrayList;
@@ -11,16 +12,23 @@ public class User
 {
     private String userName;
     private List<Notification> notificationList;
+    private List<PullRequestLogic> pullRequestLogicList;
     private boolean loggedIn;
     private transient Engine userEngine = new Engine();
-
-    //need to check if need to reback to hold user in engine
 
     public User(String i_UserName)
     {
         userName = i_UserName;
         notificationList = new ArrayList<>();
+        pullRequestLogicList = new ArrayList<>();
         loggedIn = true;
+    }
+
+    //need to check if need to reback to hold user in engine
+
+    public List<PullRequestLogic> getPullRequestLogicList()
+    {
+        return pullRequestLogicList;
     }
 
     public Engine getUserEngine()

@@ -252,16 +252,15 @@ public class EngineAdapter
             pusher.Push();
     }
 
-    public void sendPullRequest(User loggedInUser, String message, String branchBaseName, String branchTargetName)
+    public void sendPullRequest(User userToNotify, String message, String branchBaseName, String branchTargetName, String remoteRepoName)
     {
         //create object pull request and add pullrequest notification to other user
-        Repository userRepository = loggedInUser.getUserEngine().getCurrentRepository();
 
-        int pullRequestID = userRepository.getAllPullRequests().size() + 1;
+        int pullRequestID = userToNotify.getPullRequestLogicList().size() + 1;
 
-        userRepository.getAllPullRequests().add(
+        userToNotify.getPullRequestLogicList().add(
                 new PullRequestLogic(new PullRequestNotification(
-                        new Date(), userRepository.getName(), Status.WAITING, loggedInUser.getUserName(),
+                        new Date(), remoteRepoName, Status.WAITING, userToNotify.getUserName(),
                         branchTargetName, branchBaseName, message, pullRequestID), pullRequestID));
     }
 }

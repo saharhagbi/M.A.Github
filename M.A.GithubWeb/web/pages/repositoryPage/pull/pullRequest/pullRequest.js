@@ -1,66 +1,123 @@
 var PULL_REQUEST_TYPE = "4";
-var PULL_REQUEST_URL = "pullrequest";
-
+var USER_INFO = "userinfo"
 
 //need to do setInterval
 
-function uploadPullRequestData(pullRequests) {
 
-    $(pullRequests).each(function (index, element) {
+/*----------------------------------------------------bringing the pull requests----------------------------------------------------*/
 
-        console.log(element);
+/*variablesForCardBody:*/
 
-        $("<tr>" +
-            "<td>" + element.message + "</td>" +
-            "<td>" + "<input type='button' value='Confirm' id=ButtonConfirmed" + index + ">" + "</td>" +
-            "<td>" + "<input type='button' value='Denied' id=ButtonDenied" + index + ">" + "</td>" +
-            "</tr>").appendTo($("#pullRequestsTable"));
+var beginTillName = "<div class=\"card\" style=\"width: 18rem;\">\n" +
+    "<div class=\"card-body\">\n" +
+    "<h5 class=\"card-title\">";
 
-        $("#ButtonConfirmed" + index).click(function () {
-            changeStatusConfirmed(element)
-        });
+var middleTillID = " </div>\n" +
+    "<ul class=\"list-group list-group-flush\">\n" +
+    "<li class=\"list-group-item\">";
 
-        $("#ButtonDenied" + index).click(function () {
-            changeStatusDenied(element)
-        });
-    });
-}
+var elementInCard = "<li class=\"list-group-item\">";
 
-function changeStatusConfirmed(pullRequest) {
-    alert("In Change status confirmed" + pullRequest);
-}
+/*variablesForLabels:*/
 
-function changeStatusDenied(pullRequest) {
-    alert("In change status denied" + pullRequest);
-}
+var repositoryNameLabel = "Repository Name: ";
+var idLabel = "ID: ";
+var branchBaseLabel = "Branch Base: ";
+var branchTargetLabel = "Branch Target: ";
 
-$("#check").on('click', function () {
 
-    console.log($("#baseBranchName").val());
-    console.log($("#targetBranchName").val());
-    console.log($("#message").val());
-
-    var branchTargetName = $("#baseBranchName").val();
-    var branchBaseName = $("#targetBranchName").val();
-    var message = $("#message").val();
+/*----------------------*/
+$(function () {
 
     $.ajax({
 
-        url: PULL_REQUEST_URL,
+        url: USER_INFO,
         dataType: "json",
         data: {
-            "branchTargetName": branchTargetName,
-            "branchBaseName": branchBaseName,
-            "message": message
+            "dataType": "pullRequests"
         },
 
-        success: function () {
+        success: function (pullRequests) {
+            console.log(pullRequests);
+
             alert("in success function");
+
+            creatingPullRequestsCards(pullRequests);
         },
 
         error: function (e) {
             alert("in error function");
         }
-    });
+    })
+
 });
 
+
+function creatingPullRequestsCards(pullRequests) {
+
+    var approve = "approve";
+    var denie = "denie";
+    var watch = "watch";
+
+    $(pullRequests).each(function (index, element) {
+
+        console.log(element);
+
+        approve += index;
+        denie += index;
+        watch += index;
+
+        $(beginTillName + repositoryNameLabel + element.repositoryName + '</h5>' +
+            '<p class="card-text">' + element.message + '</p>' +
+            middleTillID + idLabel + element.id + '</li>' +
+            elementInCard + branchBaseLabel + element.baseBranchName + '</li>' +
+            elementInCard + branchTargetLabel + element.targetBranchName + '</li>' + " <div class=\"card-body\">" +
+            `<a href="#" class=\"card-link\" id=\"${approve}\">Approve</a>\n` +
+            `<a href="#" class=\"card-link\" id=\"${denie}\">Denie</a>\n` +
+            `<a href="#" class=\"card-link\" id=\"${watch}\">Watch</a>\n` + '</div></div>'
+        ).appendTo($("#pullRequestsCards"));
+
+        $("#approve").click(function () {
+            ajaxUpdateStatus("approve");
+        });
+
+
+        $("#watch").click(function () {
+            //open watch pull request data
+        });
+
+        $("#denie").click(function () {
+            ajaxUpdateStatus("approve");
+        });
+    });
+
+
+    /*
+   <div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">Repository Name</h5>
+        <p class="card-text">pr of master to test.</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">id: 1</li>
+        <li class="list-group-item">Base branch: master</li>
+        <li class="list-group-item">target branch: fitcher 1</li>
+    </ul>
+    <div class="card-body">
+        <a href="#" class="card-link">Approve</a>
+        <a href="#" class="card-link">Denie</a>
+        <a href="#" class="card-link">Watch</a>
+
+    </div>
+</div>
+    */
+
+    /*private Status status;
+    private String userName;
+    private String targetBranchName; // my branch
+    private String baseBranchName; // merge to branch
+    private String message;
+    private int id;*/
+
+
+}

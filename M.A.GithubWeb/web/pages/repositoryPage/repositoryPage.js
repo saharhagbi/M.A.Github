@@ -8,6 +8,8 @@ var YES = "Yes";
 var CHECKOUT_URL = "checkout";
 var refreshBranches = 1000;
 var REPOSITORY_INFO_URL = "repositoryInfo";
+var PULL_REQUEST_URL = "pullrequest";
+
 
 // export let isLocalRepository;
 
@@ -133,6 +135,37 @@ $(function () {
                 $("#repositoryName").text(names[repositoryName]);
                 $("#userName").text(names[userName]);
             }
+        }
+    });
+});
+
+/*-------------------------------------send Pull Request---------------------------------------*/
+
+$("#check").on('click', function () {
+
+    console.log($("#baseBranchName").val());
+    console.log($("#targetBranchName").val());
+    console.log($("#message").val());
+
+    var branchTargetName = $("#baseBranchName").val();
+    var branchBaseName = $("#targetBranchName").val();
+    var message = $("#message").val();
+
+    $.ajax({
+
+        url: PULL_REQUEST_URL,
+        data: {
+            "branchTargetName": branchTargetName,
+            "branchBaseName": branchBaseName,
+            "message": message
+        },
+
+        success: function () {
+            alert("in success function");
+        },
+
+        error: function (e) {
+            alert("in error function");
         }
     });
 });

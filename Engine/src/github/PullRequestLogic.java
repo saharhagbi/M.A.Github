@@ -12,4 +12,9 @@ public class PullRequestLogic
         this.notification = notification;
         this.id = id;
     }
+
+    public PullRequestNotification getNotification()
+    {
+        return notification;
+    }
 }

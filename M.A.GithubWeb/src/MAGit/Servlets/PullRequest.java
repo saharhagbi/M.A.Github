@@ -3,6 +3,7 @@ package MAGit.Servlets;
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
 import System.Users.User;
+import collaboration.LocalRepository;
 import github.users.UserManager;
 
 import javax.servlet.ServletException;
@@ -47,13 +48,19 @@ public class PullRequest extends HttpServlet
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         User loggedInUser = userManager.getUserByName(SessionUtils.getUsername(request));
 
+        LocalRepository userRepository = (LocalRepository) loggedInUser.getUserEngine().getCurrentRepository();
 
+        String[] pathToNotifiy = userRepository.getRemoteRepoRef().getRepoPath().toString().split("\\\\");
+        String userToNotifyInString = pathToNotifiy[pathToNotifiy.length - 2];
+
+        User userToNotify = userManager.getUserByName(userToNotifyInString);
         //we should have/get all the data for create new pull request to the notify user
 
         //and later the notify user will show the CARD that represent the pr
         try
         {
-            ServletUtils.getEngineAdapter(getServletContext()).sendPullRequest(loggedInUser, message, branchBaseName, branchTargetName);
+            ServletUtils.getEngineAdapter(getServletContext()).sendPullRequest(userToNotify, message, branchBaseName, branchTargetName,
+                    userRepository.getRemoteRepoRef().getName());
         } catch (Exception e)
         {
             //todo-
