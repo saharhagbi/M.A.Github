@@ -18,17 +18,17 @@ public class FolderDifferences
         m_ChangedItemList = new ArrayList<>();
     }
 
-    public List<Item> GetAddedItemList()
+    public List<Item> getAddedItemList()
     {
         return m_AddedItemList;
     }
 
-    public List<Item> GetRemovedItemList()
+    public List<Item> getRemovedItemList()
     {
         return m_RemovedItemList;
     }
 
-    public List<Item> GetChangedItemList()
+    public List<Item> getChangedItemList()
     {
         return m_ChangedItemList;
     }

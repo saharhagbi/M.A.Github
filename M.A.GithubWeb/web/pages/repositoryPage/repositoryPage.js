@@ -89,8 +89,8 @@ $(function () {
 
 function showFileContent_ShowOnly(file, commit) {
     $("#FileSystemShow_ShowOnly").empty();
-
-    $("#GoBackButton").click(function () {
+    $("<button class='btn btn-success btn-sm' type=\"button\" id=\"GoBackButton_ShowOnly\">Go Back</button>").appendTo("#FileSystemShow_ShowOnly");
+    $("#GoBackButton_ShowOnly").click(function () {
         $.ajax({
             url: SHOW_COMMIT_FILE_SYSTEM_SERVLET,
             dataType: "json",
@@ -104,21 +104,22 @@ function showFileContent_ShowOnly(file, commit) {
             }
         })
     });
-    $("<textarea id='contentTextArea_ShowOnly' placeholder='type new content here'>" + file.m_FileContent + "</textarea>").appendTo("#FileSystemShow");
+    $("<textarea id='contentTextArea_ShowOnly' placeholder='type new content here'>" + file.m_FileContent + "</textarea>").appendTo("#FileSystemShow_ShowOnly");
     $("#contentTextArea_ShowOnly").prop("disabled", true);
 }
 
 function showFolderItems_ShowOnly(folderInfo, commitSha1) {
     $("#FileSystemShow_ShowOnly").empty();
+    $("<button class='btn btn-success btn-sm' type=\"button\" id=\"GoBackButton_ShowOnly\">Go Back</button>").appendTo("#FileSystemShow_ShowOnly");
     $("<th id='NameOfFolder_ShowOnly'>" + folderInfo.m_ItemName + "</th>").appendTo("#FileSystemShow_ShowOnly");
     var wc = "workingCopy";
-    $("#GoBackButton").click(function () {
+    $("#GoBackButton_ShowOnly").click(function () {
         $.ajax({
             url: SHOW_COMMIT_FILE_SYSTEM_SERVLET,
             dataType: "json",
             data: {"path": folderInfo.m_ParentFolderPath, "isRootFolder": "false", "commitSha1": commitSha1},
 
-            success: function (folderInfo) {
+            success: function (folderInfo) {FileSystemShow_ShowOnly
                 showFolderItems_ShowOnly(folderInfo, commitSha1);
             },
             error: function () {
@@ -190,8 +191,8 @@ $(function () {
                     console.log(element);
 
                     $("<tr>" +
-                        "<td id=" + index + ">" + element.sha1 + "</td>" +
-                        "<td>" + element.message + "</td>" +
+                        "<td scope=\"row\" id=" + index + ">" + element.sha1 + "</td>" +
+                        "<td >" + element.message + "</td>" +
                         "<td>" + element.creator + "</td>" +
                         "<td>" + element.branchPointed + "</td>" +
                         "</tr>").appendTo($("#commitsTable"));
@@ -264,7 +265,8 @@ $(function () {
 function showFolderItems(folderInfo) {
     $("#FileSystemShow").empty();
     $("#DeleteButton").remove();
-    $("#SaveButton").remove();
+    $("#NewFileButton").remove();
+    $("<button class='btn btn-success btn-sm' type=\"button\" id=\"NewFileButton\">New FIle</button>").appendTo("#FileSystemShow");
     $("<th id='NameOfFolder'>" + folderInfo.m_ItemName + "</th>").appendTo("#FileSystemShow");
     var wc = "workingCopy";
     $("#GoBackButton").click(function () {
@@ -280,6 +282,25 @@ function showFolderItems(folderInfo) {
                 console.log("couldnt get the requested folder");
             }
         })
+    });
+
+    $("#NewFileButton").click(function (){
+        $("<textarea class=\"form-control\" id=\"newFileTextArea\">type here the contenet of the new file</textarea>").appendTo("#FileSystemShow");
+        $("#SaveButton").click(function () {
+            var newContent = $("#newFileTextArea").val();
+            $("#newFileTextArea").remove();
+            var nameOfNewFile = prompt("Please enter the name of the new File", "newFile");
+                $.ajax({
+                    url: CHANGE_FILE_SERVLET_URL,
+                    dataType: "json",
+                    data: {"newContent": newContent, "path": folderInfo.m_ItemPath, "changeOrDelete": "new","newName":nameOfNewFile},
+                    error: function () {
+                        console.log("couldnt create new file");
+                    }
+                })
+
+
+            })
     });
 
 
@@ -329,8 +350,9 @@ function showFileContent(fileInfo) {
     $("#FileSystemShow").empty();
     $("#DeleteButton").remove();
     $("#SaveButton").remove();
-    $("<button type=\"button\" id=\"DeleteButton\">Delete File</button>").appendTo("#FileSystem");
-    $("<button type=\"button\" id=\"SaveButton\">Save Changes</button>").appendTo("#FileSystem");
+    $("#NewFileButton").remove();
+    $("<button class='btn btn-success btn-sm' type=\"button\" id=\"DeleteButton\">Delete File</button>").appendTo("#FileSystem");
+    $("<button class='btn btn-success btn-sm' type=\"button\" id=\"SaveButton\">Save Changes</button>").appendTo("#FileSystem");
     $("#DeleteButton").click(function () {
         $.ajax({
             url: CHANGE_FILE_SERVLET_URL,
@@ -380,5 +402,5 @@ function showFileContent(fileInfo) {
             }
         })
     });
-    $("<textarea id='contentTextArea' placeholder='type new content here'>" + fileInfo.m_FileContent + "</textarea>").appendTo("#FileSystemShow");
+    $("<textarea class=\"form-control\" id='contentTextArea' placeholder='type new content here'>" + fileInfo.m_FileContent + "</textarea>").appendTo("#FileSystemShow");
 }

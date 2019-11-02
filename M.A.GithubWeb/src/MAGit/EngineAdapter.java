@@ -16,8 +16,11 @@ import collaboration.RemoteBranch;
 import common.MagitFileUtils;
 import common.constants.ResourceUtils;
 import common.constants.StringConstants;
+import github.PullRequestLogic;
 import github.commit.CommitData;
 import github.notifications.ForkNotification;
+import github.notifications.PullRequestNotification;
+import github.notifications.Status;
 import github.repository.RepositoryData;
 import org.apache.commons.io.FileUtils;
 
@@ -33,28 +36,31 @@ import static common.constants.ResourceUtils.MainRepositoriesPath;
 public class EngineAdapter {
     //    private Engine engine = new Engine();
     private XMLMain xmlMain = new XMLMain();
-    private Folder WorkingCopy;
-    private Map<Path, Item> allItemMapOfWorkingCopy;
 
-    public void createUserFolder(User usernameFromParameter) {
+    public void createUserFolder(User usernameFromParameter)
+    {
         usernameFromParameter.getUserEngine().createUserFolder(usernameFromParameter.getUserName());
     }
 
-    public void readRepositoryFromXMLFile(String xmlFileContent, String currentUserName) throws Exception {
+    public void readRepositoryFromXMLFile(String xmlFileContent, String currentUserName) throws Exception
+    {
         xmlMain.CheckXMLFile(xmlFileContent);
         xmlMain.ParseAndWriteXML(xmlMain.getXmlRepository(), currentUserName);
     }
 
-    public void createMainFolder() throws Exception {
+    public void createMainFolder() throws Exception
+    {
         MagitFileUtils.CreateDirectory(MainRepositoriesPath);
 
     }
 
-    public List<RepositoryData> buildAllUsersRepositoriesData(User i_UserToBuildRepositoryFor, boolean forClone) throws Exception {
+    public List<RepositoryData> buildAllUsersRepositoriesData(User i_UserToBuildRepositoryFor, boolean forClone) throws Exception
+    {
         List<RepositoryData> allRepositoriesData = new ArrayList<>();
         File[] repositoriesFolders = MagitFileUtils.GetFilesInLocation(i_UserToBuildRepositoryFor.buildUserPath());
 
-        for (File repositoryFolder : repositoriesFolders) {
+        for (File repositoryFolder : repositoriesFolders)
+        {
             i_UserToBuildRepositoryFor.getUserEngine().PullAnExistingRepository(repositoryFolder.getPath());
             if (forClone)
                 initListRepositoryData(i_UserToBuildRepositoryFor, allRepositoriesData, forClone);
@@ -65,8 +71,10 @@ public class EngineAdapter {
         return allRepositoriesData;
     }
 
-    private void initListRepositoryData(User i_UserToBuildRepositoryFor, List<RepositoryData> allRepositoriesData, boolean forClone) {
-        if (!i_UserToBuildRepositoryFor.getUserEngine().IsLocalRepository()) {
+    private void initListRepositoryData(User i_UserToBuildRepositoryFor, List<RepositoryData> allRepositoriesData, boolean forClone)
+    {
+        if (!i_UserToBuildRepositoryFor.getUserEngine().IsLocalRepository())
+        {
             Repository newRepo = i_UserToBuildRepositoryFor.getUserEngine().getCurrentRepository();
             RepositoryData repositoryData = new RepositoryData(newRepo.getName(),
                     newRepo.getActiveBranch().getPointedCommit().getSHA1(),
@@ -79,7 +87,8 @@ public class EngineAdapter {
         }
     }
 
-    private void initListRepositoryData(User i_UserToBuildRepositoryFor, List<RepositoryData> allRepositoriesData) {
+    private void initListRepositoryData(User i_UserToBuildRepositoryFor, List<RepositoryData> allRepositoriesData)
+    {
         Repository newRepo = i_UserToBuildRepositoryFor.getUserEngine().getCurrentRepository();
         RepositoryData repositoryData = new RepositoryData(newRepo.getName(),
                 newRepo.getActiveBranch().getPointedCommit().getSHA1(),
@@ -91,21 +100,21 @@ public class EngineAdapter {
         allRepositoriesData.add(repositoryData);
     }
 
-    public void initRepositoryInSystemByName(String repositoryNameClicked, User loggedInUser) throws Exception {
+    public void initRepositoryInSystemByName(String repositoryNameClicked, User loggedInUser) throws Exception
+    {
         String pathToUserFolderRepositories = loggedInUser.buildUserPath();
 
         File[] usersRepositories = MagitFileUtils.GetFilesInLocation(pathToUserFolderRepositories);
 
-        for (File file : usersRepositories) {
-            if (file.getName().equals(repositoryNameClicked)) {
+        for (File file : usersRepositories)
+        {
+            if (file.getName().equals(repositoryNameClicked))
                 loggedInUser.getUserEngine().PullAnExistingRepository(file.getAbsolutePath());
-                WorkingCopy = loggedInUser.getUserEngine().getCurrentRepository().getActiveBranch().getPointedCommit().getRootFolder();
-                allItemMapOfWorkingCopy = WorkingCopy.getAllItemsMap();
-            }
         }
     }
 
-    public void Clone(User i_UserNamerToCopyTo, String i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception {
+    public void Clone(User i_UserNamerToCopyTo, String i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception
+    {
         File dirToCloneFrom = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNameToCopyFrom + "\\" + i_RepositoryName).toFile();
         File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNamerToCopyTo.getUserName() + "\\" + i_RepositoryNewName).toFile();
         i_UserNamerToCopyTo.getUserEngine().Clone(dirToCloneTo, i_RepositoryNewName, dirToCloneFrom);
@@ -113,7 +122,8 @@ public class EngineAdapter {
         i_UserNamerToCopyTo.addNotification(new ForkNotification(new Date(), i_RepositoryName, i_UserNamerToCopyTo.getUserName()));
     }
 
-    public List<Object> getBranchesList(User loggedInUser) {
+    public List<Object> getBranchesList(User loggedInUser)
+    {
         Engine engine = loggedInUser.getUserEngine();
 
         List<Branch> branches = new ArrayList<>();
@@ -129,7 +139,8 @@ public class EngineAdapter {
         return branchesList;
     }
 
-    public List<Object> getCommitsData(User loggedInUser) {
+    public List<Object> getCommitsData(User loggedInUser)
+    {
         Engine engine = loggedInUser.getUserEngine();
 
         List<Commit> commitList = new ArrayList<>();
@@ -147,7 +158,8 @@ public class EngineAdapter {
         }).collect(Collectors.toList());
     }
 
-    public List<Object> getRepositoryName(User loggedInUser) {
+    public List<Object> getRepositoryName(User loggedInUser)
+    {
         Engine engine = loggedInUser.getUserEngine();
 
         List<Object> lstToReturn = new ArrayList<>();
@@ -157,22 +169,26 @@ public class EngineAdapter {
         return lstToReturn;
     }
 
-    public Set<String> GetBeenConnectedUserNameSet() {
+    public Set<String> GetBeenConnectedUserNameSet()
+    {
         Set<String> userNamesSet = new HashSet<>();
         File[] allDirectories = Paths.get(ResourceUtils.MainRepositoriesPath).toFile().listFiles();
-        for (int i = 0; i < allDirectories.length; i++) {
+        for (int i = 0; i < allDirectories.length; i++)
+        {
             userNamesSet.add(allDirectories[i].getName());
         }
         return userNamesSet;
     }
 
-    public List<Object> getPullRequests(User loggedInUser) {
+    public List<Object> getPullRequests(User loggedInUser)
+    {
         List<Object> lstToReturn = new ArrayList<>();
         //lstToReturn.add(new PullRequestNotification());
         return lstToReturn;
     }
 
-    public List<Object> isLocalRepository(User loggedInUser) {
+    public List<Object> isLocalRepository(User loggedInUser)
+    {
         Engine engine = loggedInUser.getUserEngine();
 
         List<Object> isLocalList = new ArrayList<>();
@@ -183,15 +199,18 @@ public class EngineAdapter {
         return isLocalList;
     }
 
-    public void checkout(String branchName, User loggedInUser) throws Exception {
+    public void checkout(String branchName, User loggedInUser) throws Exception
+    {
         loggedInUser.getUserEngine().CheckOut(branchName);
     }
 
-    public void createNewLocalBranch(String branchName, String sha1Commit, User loggedInUser) throws Exception {
+    public void createNewLocalBranch(String branchName, String sha1Commit, User loggedInUser) throws Exception
+    {
         loggedInUser.getUserEngine().CreateNewBranchToSystem(branchName, sha1Commit);
     }
 
-    public String createNewRTB(String remoteBranchName, User loggedInUser) throws IOException {
+    public String createNewRTB(String remoteBranchName, User loggedInUser) throws IOException
+    {
         Engine engine = loggedInUser.getUserEngine();
 
         LocalRepository localRepository = (LocalRepository) engine.getCurrentRepository();
@@ -205,26 +224,31 @@ public class EngineAdapter {
         return rtbName;
     }
 
-    public List<Object> getLocalBrances(User loggedInUser) {
+    public List<Object> getLocalBrances(User loggedInUser)
+    {
         LocalRepository localRepository = (LocalRepository) loggedInUser.getUserEngine().getCurrentRepository();
 
         return localRepository.getLocalBranches().stream().
                 map(branch -> (Object) branch).collect(Collectors.toList());
     }
 
-    public void pushBranch(String branchToPushName, User loggedInUser) throws Exception {
+    public void pushBranch(String branchToPushName, User loggedInUser) throws Exception
+    {
         loggedInUser.getUserEngine().pushBranch(branchToPushName);
     }
 
-    public void commitChanges(String commitMessage, User loggedInUser) throws Exception {
+    public void commitChanges(String commitMessage, User loggedInUser) throws Exception
+    {
         loggedInUser.getUserEngine().CommitInCurrentRepository(commitMessage, null, loggedInUser);
     }
 
-    public void pull(User loggedInUser) throws Exception {
+    public void pull(User loggedInUser) throws Exception
+    {
         loggedInUser.getUserEngine().Pull();
     }
 
-    public void push(User loggedInUser) throws Exception {
+    public void push(User loggedInUser) throws Exception
+    {
         Engine engine = loggedInUser.getUserEngine();
 
         Push pusher = new Push(engine, (LocalRepository) engine.getCurrentRepository());
@@ -234,21 +258,25 @@ public class EngineAdapter {
     }
 
     public void RemoveFileFromWorkingCopy(Path i_FilePath, User i_user) throws Exception {
-        Item fileToDelete = allItemMapOfWorkingCopy.get(i_FilePath);
-        fileToDelete.GetPath().toFile().delete();
-        WorkingCopy = i_user.getUserEngine().getCurrentRepository().GetUpdatedWorkingCopy(i_user);
-        allItemMapOfWorkingCopy = WorkingCopy.getAllItemsMap();
+        i_FilePath.toFile().delete();
     }
 
-
-    public void sendPullRequest(User loggedInUser) {
+    public void sendPullRequest(User loggedInUser, String message, String branchBaseName, String branchTargetName)
+    {
         //create object pull request and add pullrequest notification to other user
+        Repository userRepository = loggedInUser.getUserEngine().getCurrentRepository();
+
+        int pullRequestID = userRepository.getAllPullRequests().size() + 1;
+
+        userRepository.getAllPullRequests().add(
+                new PullRequestLogic(new PullRequestNotification(
+                        new Date(), userRepository.getName(), Status.WAITING, loggedInUser.getUserName(),
+                        branchTargetName, branchBaseName, message, pullRequestID), pullRequestID));
     }
 
     public ItemInfo getItemInfoByPath(Path i_PathOfFile, User loggedInUser) throws Exception {
-        WorkingCopy = loggedInUser.getUserEngine().getCurrentRepository().GetUpdatedWorkingCopy(loggedInUser);
-        allItemMapOfWorkingCopy = WorkingCopy.getAllItemsMap();
-        Item item = allItemMapOfWorkingCopy.get(i_PathOfFile);
+        Folder wc = loggedInUser.getUserEngine().getCurrentRepository().GetUpdatedWorkingCopy(loggedInUser);
+        Item item =  wc.getAllItemsMap().get(i_PathOfFile);
         return getItemInfo(item,loggedInUser);
     }
 
@@ -264,9 +292,14 @@ public class EngineAdapter {
 
     public ItemInfo getItemInfoByPathAndCommit(Path i_ItemPath, User i_LoggedInUser, String i_CommitSha1) throws Exception {
         Commit commitToGetInfoFrom = Commit.CreateCommitFromSha1(i_CommitSha1,i_LoggedInUser.getUserEngine().getCurrentRepository().GetObjectsFolderPath());
-        Folder wc = i_LoggedInUser.getUserEngine().getCurrentRepository().GetUpdatedWorkingCopy(i_LoggedInUser);
-        Item item = wc.getAllItemsMap().get(i_ItemPath);
+        Item item = commitToGetInfoFrom.getRootFolder().getAllItemsMap().get(i_ItemPath);
         return getItemInfo(item,i_LoggedInUser);
+    }
+
+    public void CreateNewFileInPath(Path i_PathOfDirectoryToPutFileIn, String newContentOfFile, String newFileName) throws IOException {
+        File newFile = new File(i_PathOfDirectoryToPutFileIn.toString()+"\\"+newFileName+".txt");
+        newFile.createNewFile();
+        FileUtils.writeStringToFile(newFile, newContentOfFile, "UTF-8");
     }
 
 
@@ -332,7 +365,8 @@ public class EngineAdapter {
     private Item getParent(Item i_item,User i_user) {
         if (!isRootFolder(i_item,i_user)) {
             Path parentPath = i_item.GetPath().getParent();
-            return allItemMapOfWorkingCopy.get(parentPath);
+            Map<Path,Item> allItemsMap = i_user.getUserEngine().getCurrentRepository().getActiveBranch().getPointedCommit().getRootFolder().getAllItemsMap();
+            return allItemsMap.get(parentPath);
         } else return i_item;
     }
 

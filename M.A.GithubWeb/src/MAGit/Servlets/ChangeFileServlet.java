@@ -56,6 +56,16 @@ public class ChangeFileServlet extends HttpServlet {
             }
 
         }
+        else if(request.getParameter(Constants.CHANGE_OR_DELETE).equals("new")){
+            String filePathToPutTheNewFile = request.getParameter(Constants.PATH);
+            String newFileName = request.getParameter(Constants.NEW_NAME);
+            String newContentOfFile = request.getParameter(Constants.NEW_CONTENT);
+            try {
+                ServletUtils.getEngineAdapter(getServletContext()).CreateNewFileInPath(Paths.get(filePathToPutTheNewFile),newContentOfFile,newFileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 

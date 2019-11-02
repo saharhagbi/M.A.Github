@@ -33,7 +33,7 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <a href="#" class="nav-item active nav-link">Pull Requests</a>
+            <a href="pull/pullRequest/pullRequest.html" class="nav-item active nav-link">Pull Requests</a>
             <a href="#" id="createPullRequestBtn" data-target="#modalRegisterForm"
                data-toggle="modal"
                class="nav-item active nav-link">Create Pull Requests</a>
@@ -96,22 +96,24 @@
 
 <div id="commitsSection">
     <h4> Commits: </h4>
-
-    <table id="commitsTable">
-        <tr>
-            <th>SHA-1</th>
-            <th>Message</th>
-            <th>Creator</th>
-            <th>BranchesPointed</th>
-        </tr>
-    </table>
-
     <div id="FileSystemShowOnly" class="fileSystem-container">
         <!--<button type="button" id="GoBackButtonShowOnly">Go Back</button>-->
         <div id="FileSystemShow_ShowOnly">
 
         </div>
     </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">SHA-1</th>
+                <th scope="col">Message</th>
+                <th scope="col">Creator</th>
+                <th scope="col">BranchesPointed</th>
+            </tr>
+        </thead>
+        <tbody  id="commitsTable">
+        </tbody>
+    </table>
 
     <!--<button id="commitBtn" type="button" onclick="commitChanges()">Commit</button>-->
 </div>
@@ -147,9 +149,10 @@
 
 
 <div id="FileSystem" class="fileSystem-container">
-    <button type="button" id="SaveButton">Save</button>
-    <button type="button" id="GoBackButton">Go Back</button>
-    <div id="FileSystemShow">
+    <button class='btn btn-success btn-sm' type="button" id="SaveButton">Save</button>
+    <button class='btn btn-success btn-sm' type="button" id="GoBackButton">Go Back</button>
+    <button class='btn btn-success btn-sm' type="button" id="NewFileButton">New FIle</button>
+    <div class="table" id="FileSystemShow">
 
     </div>
 </div>

@@ -1,27 +1,8 @@
 var PULL_REQUEST_TYPE = "4";
+var PULL_REQUEST_URL = "pullrequest";
 
 
 //need to do setInterval
-/*
-$(function () {
-    $.ajax({
-
-        url: REPOSITORY_INFO_URL,
-        dataType: "json",
-        data: {"requestType": PULL_REQUEST_TYPE},
-
-        success: function (pullRequests) {
-            console.log(pullRequests);
-            uploadPullRequestData(pullRequests);
-        },
-
-        error: function (e) {
-            console.log(e.toString());
-        }
-    });
-});
-
-*/
 
 function uploadPullRequestData(pullRequests) {
 
@@ -55,25 +36,31 @@ function changeStatusDenied(pullRequest) {
 
 $("#check").on('click', function () {
 
-    console.log("click detected");
     console.log($("#baseBranchName").val());
     console.log($("#targetBranchName").val());
     console.log($("#message").val());
 
+    var branchTargetName = $("#baseBranchName").val();
+    var branchBaseName = $("#targetBranchName").val();
+    var message = $("#message").val();
 
     $.ajax({
 
-        url: REPOSITORY_INFO_URL,
+        url: PULL_REQUEST_URL,
         dataType: "json",
-        data: {"requestType": PULL_REQUEST_TYPE},
+        data: {
+            "branchTargetName": branchTargetName,
+            "branchBaseName": branchBaseName,
+            "message": message
+        },
 
-        success: function (pullRequests) {
-            console.log(pullRequests);
-            uploadPullRequestData(pullRequests);
+        success: function () {
+            alert("in success function");
         },
 
         error: function (e) {
-            console.log(e.toString());
+            alert("in error function");
         }
     });
 });
+

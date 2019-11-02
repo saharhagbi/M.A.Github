@@ -1,5 +1,7 @@
 package github.notifications;
 
+import java.util.Date;
+
 public class PullRequestNotification extends Notification
 {
     private Status status;
@@ -7,15 +9,17 @@ public class PullRequestNotification extends Notification
     private String targetBranchName; // my branch
     private String baseBranchName; // merge to branch
     private String message;
+    private int id;
 
-    public PullRequestNotification(Status status, String userName, String targetBranch, String baseBranch, String message)
+    public PullRequestNotification(Date dateCreated, String repositoryName, Status status, String userName, String targetBranchName, String baseBranchName, String message, int id)
     {
-        super(null, null);
+        super(dateCreated, repositoryName);
         this.status = status;
         this.userName = userName;
-        this.targetBranchName = targetBranch;
-        this.baseBranchName = baseBranch;
+        this.targetBranchName = targetBranchName;
+        this.baseBranchName = baseBranchName;
         this.message = message;
+        this.id = id;
     }
 
     @Override
