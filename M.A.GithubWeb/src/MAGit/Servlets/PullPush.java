@@ -1,6 +1,8 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
+import MAGit.Utils.SessionUtils;
+import System.Users.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,16 +26,18 @@ public class PullPush extends HttpServlet
 
         String commandType = request.getParameter(COMMAND_TYPE);
 
+        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(SessionUtils.getUsername(request));
+
         try
         {
             switch (commandType)
             {
                 case PULL:
-                    ServletUtils.getEngineAdapter(getServletContext()).pull();
+                    ServletUtils.getEngineAdapter(getServletContext()).pull(loggedInUser);
                     break;
 
                 case PUSH:
-                    ServletUtils.getEngineAdapter(getServletContext()).push();
+                    ServletUtils.getEngineAdapter(getServletContext()).push(loggedInUser);
                     break;
             }
 

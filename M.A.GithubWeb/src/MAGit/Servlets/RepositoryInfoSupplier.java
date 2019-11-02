@@ -45,23 +45,23 @@ public class RepositoryInfoSupplier extends HttpServlet
             {
                 //randomly i decided that userName and repositoryName will return with branches
                 case Branches:
-                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getBranchesList();
+                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getBranchesList(loggedInUser);
                     break;
                 case Commits:
-                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getCommitsData();
+                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getCommitsData(loggedInUser);
                     Collections.reverse(dataRequested);
                     break;
                 case Names:
-                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getRepositoryName(loggedInUser.getUserName());
+                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getRepositoryName(loggedInUser);
                     break;
                 case PullRequest:
-                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getPullRequests();
+                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getPullRequests(loggedInUser);
                     break;
                 case IsLocalRepository:
-                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).isLocalRepository();
+                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).isLocalRepository(loggedInUser);
                     break;
                 case LocalBranches:
-                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getLocalBrances();
+                    dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getLocalBrances(loggedInUser);
                     break;
             }
         } catch (Exception e)

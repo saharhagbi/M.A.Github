@@ -1,6 +1,8 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
+import MAGit.Utils.SessionUtils;
+import System.Users.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,9 +24,11 @@ public class Commit extends HttpServlet
 
         String commitMessage = request.getParameter(COMMIT_MSG);
 
+        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(SessionUtils.getUsername(request));
+
         try
         {
-            ServletUtils.getEngineAdapter(getServletContext()).commitChanges(commitMessage);
+            ServletUtils.getEngineAdapter(getServletContext()).commitChanges(commitMessage, loggedInUser);
         } catch (Exception e)
         {
             //todo -

@@ -332,16 +332,7 @@ public class Repository
     public void setActiveBranch(Branch i_ActiveBranch)
     {
         this.m_ActiveBranch = i_ActiveBranch;
-       /* for (int i = 0; i < m_Branches.size(); i++)
-        {
-            if (m_ActiveBranch.getBranchName().equals(m_Branches.get(i).getBranchName()))
-            {
-                m_Branches.remove(i);
-                m_Branches.add(m_ActiveBranch);
-            }
-        }*/
     }
-
 
     public Path GetObjectsFolderPath()
     {

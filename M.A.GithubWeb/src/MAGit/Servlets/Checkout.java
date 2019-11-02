@@ -1,6 +1,8 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
+import MAGit.Utils.SessionUtils;
+import System.Users.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,9 +32,11 @@ public class Checkout extends HttpServlet
     {
         String branchName = request.getParameter(BRANCH_NAME);
 
+        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(SessionUtils.getUsername(request));
+
         try
         {
-            ServletUtils.getEngineAdapter(getServletContext()).checkout(branchName);
+            ServletUtils.getEngineAdapter(getServletContext()).checkout(branchName, loggedInUser);
         } catch (Exception e)
         {
             //todo -

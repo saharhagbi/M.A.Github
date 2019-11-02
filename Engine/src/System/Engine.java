@@ -34,7 +34,7 @@ public class Engine
 {
     public static final String sf_NOTHING_TO_COMMIT_ON = "There Is Nothing To Commit On";
     private Repository m_CurrentRepository = null;
-    private User m_User = new User("Administrator");
+//    private User m_User = new User("Administrator");
     private XMLMain m_XMLMain = new XMLMain();
     private LocalRepository m_CurrentLocalRepository = null;
 
@@ -77,9 +77,9 @@ public class Engine
         }
     }*/
 
-    public void CommitInCurrentRepository(String i_CommitMessage, Commit prevSecondCommit) throws Exception
+    public void CommitInCurrentRepository(String i_CommitMessage, Commit prevSecondCommit, User loggedInUser) throws Exception
     {
-        getCurrentRepository().CreateNewCommitAndUpdateActiveBranch(m_User, i_CommitMessage, prevSecondCommit);
+        getCurrentRepository().CreateNewCommitAndUpdateActiveBranch(loggedInUser, i_CommitMessage, prevSecondCommit);
     }
 
     public void CreateNewRepository(Path i_PathToRootFolderOfRepository, String i_RepositoryName) throws Exception
@@ -128,11 +128,11 @@ public class Engine
         org.apache.commons.io.FileUtils.writeStringToFile(HEADFilePath.toFile(), "Master", "UTF-8", false);
     }
 
-    public FolderDifferences ShowStatus() throws Exception
+    public FolderDifferences ShowStatus(User loggedInUser) throws Exception
     {
         //1. create the currentWorkingCopy as Folder
         FolderDifferences differences = null;
-        Folder wc = this.getCurrentRepository().GetUpdatedWorkingCopy(this.m_User);
+        Folder wc = this.getCurrentRepository().GetUpdatedWorkingCopy(loggedInUser);
         if (this.getCurrentRepository().getActiveBranch().getPointedCommit() == null)
             throw new Exception("Before show status, you need to commit first!");
 
@@ -442,7 +442,7 @@ public class Engine
         }
     }*/
 
-    public boolean CheckIfRootFolderChanged() throws Exception
+    /*public boolean CheckIfRootFolderChanged() throws Exception
     {
         //1. get sha1 of root folder of last commit
         Folder rootFolderOfCommit = this.getCurrentRepository().getActiveBranch().getPointedCommit().getRootFolder();
@@ -454,7 +454,7 @@ public class Engine
             return false;
         } else
             return true;
-    }
+    }*/
 
     public void AssignFitRepository(MagitRepository i_MagitRepository, XMLMain i_XmlMain)
     {
@@ -671,7 +671,7 @@ public class Engine
         getCurrentRepository().getConflictsItemsAndNames().CreateChosenBlobInWC(blobText, chosenBlob);
     }
 
-    public void CreateCommitMerge(String commitMessage, String selectedBranchName) throws Exception
+   /* public void CreateCommitMerge(String commitMessage, String selectedBranchName) throws Exception
     {
         Branch selectedBranch;
 
@@ -685,9 +685,9 @@ public class Engine
                     branch.getBranchName().equals(selectedBranchName));
         }
 
-        CommitInCurrentRepository(commitMessage, selectedBranch.getPointedCommit());
+        CommitInCurrentRepository(commitMessage, selectedBranch.getPointedCommit(), loggedInUser);
     }
-
+*/
     public void FastForwardBranch(String selectedBranchName) throws IOException
     {
         Branch selectedBranch = getCurrentRepository().getActiveBranches().stream().filter(branch ->
@@ -714,11 +714,11 @@ public class Engine
         return null;
     }
 
-    public void createMainRepositoryFolder() throws Exception
+   /* public void createMainRepositoryFolder() throws Exception
     {
         MagitFileUtils.CreateDirectory(MainRepositoriesPath);
     }
-
+*/
     public void createUserFolder(String usernameFromParameter)
     {
         //MagitFileUtils.CreateWholePathDirecories(MainRepositoriesPath + ResourceUtils.Slash + usernameFromParameter);

@@ -102,7 +102,7 @@ public class LoginServlet extends HttpServlet
                         request.getSession(true).setAttribute(Constants.USERNAME, usernameFromParameter);
                         try
                         {
-                            ServletUtils.getEngineAdapter(getServletContext()).createUserFolder(usernameFromParameter);
+                            ServletUtils.getEngineAdapter(getServletContext()).createUserFolder(loggedInUser);
                         } catch (Exception e)
                         {
                             //todo-
