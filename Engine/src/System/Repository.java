@@ -8,6 +8,7 @@ import Objects.branch.Branch;
 import System.Users.User;
 import common.MagitFileUtils;
 import common.constants.StringConstants;
+import github.PullRequestLogic;
 import javafx.collections.ObservableList;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class Repository
     private Map<String, Commit> m_AllCommitsSHA1ToCommit = new HashMap<String, Commit>();
 
 
-
+    private List<PullRequestLogic> allPullRequests;
 
     public Repository(Path i_RepositoryPath, String i_RepositoryName, Branch i_ActiveBranch)
     {
@@ -63,8 +64,8 @@ public class Repository
         m_Branches.add(i_ActiveBranch);
         settingAllPathsInRepository(i_RepositoryPath);
 
+        allPullRequests = new ArrayList<>();
     }
-
 
     public Repository(Branch i_ActiveBranch, Path i_RepositoryPath, String i_RepositoryName, List<Branch> i_AllBranches,
                       Map<String, Commit> i_AllCommitsRepository)
@@ -76,6 +77,8 @@ public class Repository
         this.m_Branches = i_AllBranches;
 
         setAllPathsOfRepositoryDirectories(i_RepositoryPath);
+
+        allPullRequests = new ArrayList<>();
     }
 
     // this method creates a temp file - writes into it and returns its Path
@@ -93,6 +96,11 @@ public class Repository
             return null;
         }
 
+    }
+
+    public List<PullRequestLogic> getAllPullRequests()
+    {
+        return allPullRequests;
     }
 
     public List<Branch> getActiveBranches()

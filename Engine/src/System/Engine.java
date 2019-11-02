@@ -34,12 +34,14 @@ public class Engine
 {
     public static final String sf_NOTHING_TO_COMMIT_ON = "There Is Nothing To Commit On";
     private Repository m_CurrentRepository = null;
-//    private User m_User = new User("Administrator");
-    private XMLMain m_XMLMain = new XMLMain();
+    private XMLMain m_XMLMain;
     private LocalRepository m_CurrentLocalRepository = null;
+    private Map<String, Repository> nameToRepository;
 
     public Engine()
     {
+        m_XMLMain = new XMLMain();
+        nameToRepository = new HashMap<String, Repository>();
     }
 
     public static void CreateRepositoryDirectories(Path i_rootFolderPath)
@@ -515,6 +517,11 @@ public class Engine
         }
     }
 
+    public Map<String, Repository> getNameToRepository()
+    {
+        return nameToRepository;
+    }
+
     public FolderDifferences ShowDeltaCommits(Commit i_Commit)
     {
         Commit prevCommit = null;
@@ -671,23 +678,23 @@ public class Engine
         getCurrentRepository().getConflictsItemsAndNames().CreateChosenBlobInWC(blobText, chosenBlob);
     }
 
-   /* public void CreateCommitMerge(String commitMessage, String selectedBranchName) throws Exception
-    {
-        Branch selectedBranch;
+    /* public void CreateCommitMerge(String commitMessage, String selectedBranchName) throws Exception
+     {
+         Branch selectedBranch;
 
-        if (IsLocalRepository())
-        {
-            LocalRepository localRepository = (LocalRepository) getCurrentRepository();
-            selectedBranch = localRepository.FindBranchInActiveBranchesByName(selectedBranchName);
-        } else
-        {
-            selectedBranch = getCurrentRepository().findBranchByPredicate(branch ->
-                    branch.getBranchName().equals(selectedBranchName));
-        }
+         if (IsLocalRepository())
+         {
+             LocalRepository localRepository = (LocalRepository) getCurrentRepository();
+             selectedBranch = localRepository.FindBranchInActiveBranchesByName(selectedBranchName);
+         } else
+         {
+             selectedBranch = getCurrentRepository().findBranchByPredicate(branch ->
+                     branch.getBranchName().equals(selectedBranchName));
+         }
 
-        CommitInCurrentRepository(commitMessage, selectedBranch.getPointedCommit(), loggedInUser);
-    }
-*/
+         CommitInCurrentRepository(commitMessage, selectedBranch.getPointedCommit(), loggedInUser);
+     }
+ */
     public void FastForwardBranch(String selectedBranchName) throws IOException
     {
         Branch selectedBranch = getCurrentRepository().getActiveBranches().stream().filter(branch ->
@@ -714,11 +721,11 @@ public class Engine
         return null;
     }
 
-   /* public void createMainRepositoryFolder() throws Exception
-    {
-        MagitFileUtils.CreateDirectory(MainRepositoriesPath);
-    }
-*/
+    /* public void createMainRepositoryFolder() throws Exception
+     {
+         MagitFileUtils.CreateDirectory(MainRepositoriesPath);
+     }
+ */
     public void createUserFolder(String usernameFromParameter)
     {
         //MagitFileUtils.CreateWholePathDirecories(MainRepositoriesPath + ResourceUtils.Slash + usernameFromParameter);

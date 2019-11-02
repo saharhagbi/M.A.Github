@@ -3,26 +3,6 @@ var PULL_REQUEST_URL = "pullrequest";
 
 
 //need to do setInterval
-/*
-$(function () {
-    $.ajax({
-
-        url: REPOSITORY_INFO_URL,
-        dataType: "json",
-        data: {"requestType": PULL_REQUEST_TYPE},
-
-        success: function (pullRequests) {
-            console.log(pullRequests);
-            uploadPullRequestData(pullRequests);
-        },
-
-        error: function (e) {
-            console.log(e.toString());
-        }
-    });
-});
-
-*/
 
 function uploadPullRequestData(pullRequests) {
 
@@ -61,9 +41,8 @@ $("#check").on('click', function () {
     console.log($("#message").val());
 
     var branchTargetName = $("#baseBranchName").val();
-    var branchBaseName = $("#targetBranchName").val()
-    var message = $("#message").val()
-
+    var branchBaseName = $("#targetBranchName").val();
+    var message = $("#message").val();
 
     $.ajax({
 

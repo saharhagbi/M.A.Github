@@ -47,6 +47,10 @@ public class PullRequest extends HttpServlet
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         User loggedInUser = userManager.getUserByName(SessionUtils.getUsername(request));
 
+
+        //we should have/get all the data for create new pull request to the notify user
+
+        //and later the notify user will show the CARD that represent the pr
         try
         {
             ServletUtils.getEngineAdapter(getServletContext()).sendPullRequest(loggedInUser, message, branchBaseName, branchTargetName);

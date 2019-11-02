@@ -12,8 +12,11 @@ import collaboration.RemoteBranch;
 import common.MagitFileUtils;
 import common.constants.ResourceUtils;
 import common.constants.StringConstants;
+import github.PullRequestLogic;
 import github.commit.CommitData;
 import github.notifications.ForkNotification;
+import github.notifications.PullRequestNotification;
+import github.notifications.Status;
 import github.repository.RepositoryData;
 
 import java.io.File;
@@ -252,5 +255,13 @@ public class EngineAdapter
     public void sendPullRequest(User loggedInUser, String message, String branchBaseName, String branchTargetName)
     {
         //create object pull request and add pullrequest notification to other user
+        Repository userRepository = loggedInUser.getUserEngine().getCurrentRepository();
+
+        int pullRequestID = userRepository.getAllPullRequests().size() + 1;
+
+        userRepository.getAllPullRequests().add(
+                new PullRequestLogic(new PullRequestNotification(
+                        new Date(), userRepository.getName(), Status.WAITING, loggedInUser.getUserName(),
+                        branchTargetName, branchBaseName, message, pullRequestID), pullRequestID));
     }
 }

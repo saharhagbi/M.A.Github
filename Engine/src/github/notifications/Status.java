@@ -1,6 +1,6 @@
 package github.notifications;
 
-enum Status
+public enum Status
 {
     CONFIRMED,
     DENIED,
