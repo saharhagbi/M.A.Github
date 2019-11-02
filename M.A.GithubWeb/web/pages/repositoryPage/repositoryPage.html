@@ -12,7 +12,6 @@
     <!--scripts:-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="repositoryPage.js"></script>
-    <script src="pull/pullRequest.js"></script>
     <script src="pull/pull.js"></script>
     <script src="push/pushBranch.js"></script>
     <script src="push/push.js"></script>
@@ -21,7 +20,6 @@
     <script src="commit/commit.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
 
 </head>
 <body>
@@ -36,6 +34,9 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <a href="#" class="nav-item active nav-link">Pull Requests</a>
+            <a href="#" id="createPullRequestBtn" data-target="#modalRegisterForm"
+               data-toggle="modal"
+               class="nav-item active nav-link">Create Pull Requests</a>
             <a href="#" id="commitBtn" onclick="commitChanges()" class="nav-item active nav-link">Commit</a>
             <a href="#" id="pullBtn" onclick="pull()" class="nav item active nav-link">Pull</a>
             <a href="#" id="pushBtn" onclick="push()" class="nav item active nav-link">Push</a>
@@ -105,6 +106,13 @@
         </tr>
     </table>
 
+    <div id="FileSystemShowOnly" class="fileSystem-container">
+        <!--<button type="button" id="GoBackButtonShowOnly">Go Back</button>-->
+        <div id="FileSystemShow_ShowOnly">
+
+        </div>
+    </div>
+
     <!--<button id="commitBtn" type="button" onclick="commitChanges()">Commit</button>-->
 </div>
 
@@ -146,15 +154,44 @@
     </div>
 </div>
 
+<!-------------------------------------------input Pull Request:----------------------------------------------->
 
-<div id="FileSystemShowOnly" class="fileSystem-container">
-    <!--<button type="button" id="GoBackButtonShowOnly">Go Back</button>-->
-    <div id="FileSystemShow_ShowOnly">
+<div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Create Pull Request:</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <div class="md-form mb-5">
+                    <i class="fas fa-user prefix grey-text"></i>
+                    <input type="text" id="baseBranchName" class="form-control validate">
+                    <label data-error="wrong" data-success="right" for="baseBranchName">Enter base branch:</label>
+                </div>
+                <div class="md-form mb-5">
+                    <i class="fas fa-envelope prefix grey-text"></i>
+                    <input type="text" id="targetBranchName" class="form-control validate">
+                    <label data-error="wrong" data-success="right" for="targetBranchName">Enter target branch:</label>
+                </div>
 
+                <div class="md-form mb-4">
+                    <i class="fas fa-lock prefix grey-text"></i>
+                    <input type="text" id="message" class="form-control validate">
+                    <label data-error="wrong" data-success="right" for="message">Enter you message:</label>
+                </div>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button id="check" class="btn btn-deep-orange">Create!</button>
+            </div>
+        </div>
     </div>
 </div>
-
-
-
+<script src="pull/pullRequest/pullRequest.js"></script>
+<!-------------------------------------------input Pull Request:----------------------------------------------->
 </body>
 </html>

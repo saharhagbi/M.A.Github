@@ -12,8 +12,10 @@ public class User
     private String userName;
     private List<Notification> notificationList;
     private boolean loggedIn;
-//    private Engine userEngine = new Engine();
-//
+    private transient Engine userEngine = new Engine();
+
+    //need to check if need to reback to hold user in engine
+
     public User(String i_UserName)
     {
         userName = i_UserName;
@@ -21,10 +23,10 @@ public class User
         loggedIn = true;
     }
 
-/*    public Engine getUserEngine()
+    public Engine getUserEngine()
     {
         return userEngine;
-    }*/
+    }
 
     public void setLoggedIn(boolean loggedIn)
     {

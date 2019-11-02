@@ -1,5 +1,10 @@
 package MAGit.Servlets;
 
+import MAGit.Utils.ServletUtils;
+import MAGit.Utils.SessionUtils;
+import System.Users.User;
+import github.users.UserManager;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,14 +22,34 @@ public class PullRequest extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException
     {
-        response.sendRedirect(PULL_REQUEST_URL);
+        proccessRequest(request, response);
     }
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        proccessRequest(request, response);
+    }
+
+    private void proccessRequest(HttpServletRequest request, HttpServletResponse response)
+    {
         response.setContentType("text/html");
+
+        //need to get 3 params
+
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        User loggedInUser = userManager.getUserByName(SessionUtils.getUsername(request));
+
+        try
+        {
+            ServletUtils.getEngineAdapter(getServletContext()).sendPullRequest(loggedInUser);
+        } catch (Exception e)
+        {
+            //todo-
+            // message in UI
+            e.printStackTrace();
+        }
+
     }
 
 }

@@ -5,6 +5,7 @@ import Objects.Folder;
 import Objects.branch.Branch;
 import Objects.branch.BranchUtils;
 import System.Engine;
+import System.Users.User;
 import XmlObjects.repositoryWriters.LocalRepositoryWriter;
 import XmlObjects.repositoryWriters.RepositoryWriter;
 import common.constants.ResourceUtils;
@@ -28,9 +29,9 @@ public class Push
     }
 
 
-    public boolean isPossibleToPush() throws Exception
+    public boolean isPossibleToPush(User loggedInUser) throws Exception
     {
-        if (m_Engine.ShowStatus() != null)
+        if (m_Engine.ShowStatus(loggedInUser) != null)
             return false;
 
         //check if active branch is RTB

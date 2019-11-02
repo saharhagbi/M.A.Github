@@ -20,4 +20,5 @@ public class Constants {
     public static final String PATH = "path";
     public static final String CHANGE_OR_DELETE = "changeOrDelete";
     public static final String NEW_CONTENT = "newContent";
+    public static final String COMMIT_SHA1 = "commitSha1";
 }

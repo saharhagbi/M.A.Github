@@ -8,7 +8,7 @@ var YES = "Yes";
 var CHECKOUT_URL = "checkout";
 var refreshBranches = 1000;
 var REPOSITORY_INFO_URL = "repositoryInfo";
-
+var SHOW_COMMIT_FILE_SYSTEM_SERVLET = "ShowCommitFileSystemServlet"
 var FILE_SYSTEM_INFO_URL = "fileSystemServlet";
 var CHANGE_FILE_SERVLET_URL = "ChangeFileServlet";
 // export let isLocalRepository;
@@ -87,6 +87,90 @@ $(function () {
 
 /*---------------------------request Commits-------------------------------------------*/
 
+function showFileContent_ShowOnly(file, commit) {
+    $("#FileSystemShow_ShowOnly").empty();
+
+    $("#GoBackButton").click(function () {
+        $.ajax({
+            url: SHOW_COMMIT_FILE_SYSTEM_SERVLET,
+            dataType: "json",
+            data: {"commitSha1": commit, "path": file.m_ParentFolderPath, "isRootFolder": "false"},
+
+            success: function (folder) {
+                showFolderItems_ShowOnly(folder,commit);
+            },
+            error: function () {
+                console.log("couldnt get the requested folder");
+            }
+        })
+    });
+    $("<textarea id='contentTextArea_ShowOnly' placeholder='type new content here'>" + file.m_FileContent + "</textarea>").appendTo("#FileSystemShow");
+    $("#contentTextArea_ShowOnly").prop("disabled", true);
+}
+
+function showFolderItems_ShowOnly(folderInfo, commitSha1) {
+    $("#FileSystemShow_ShowOnly").empty();
+    $("<th id='NameOfFolder_ShowOnly'>" + folderInfo.m_ItemName + "</th>").appendTo("#FileSystemShow_ShowOnly");
+    var wc = "workingCopy";
+    $("#GoBackButton").click(function () {
+        $.ajax({
+            url: SHOW_COMMIT_FILE_SYSTEM_SERVLET,
+            dataType: "json",
+            data: {"path": folderInfo.m_ParentFolderPath, "isRootFolder": "false", "commitSha1": commitSha1},
+
+            success: function (folderInfo) {
+                showFolderItems_ShowOnly(folderInfo, commitSha1);
+            },
+            error: function () {
+                console.log("couldnt get the requested folder");
+            }
+        })
+    });
+
+
+    $.each(folderInfo.m_ItemInfos || [], function (index, item) {
+        var td = "<td>" + item.m_ItemName + "</td>";
+        $("<tr id=" + index + wc + ">" + td + "</tr>").appendTo("#NameOfFolder_ShowOnly");
+
+        if (item.m_ItemType == "folder") {
+            $("#" + index + wc).click(function () {
+                $.ajax({
+                    url: SHOW_COMMIT_FILE_SYSTEM_SERVLET,
+                    dataType: "json",
+                    data: {"commitSha1": commitSha1, "path": item.m_ItemPath, "isRootFolder": "false"},
+
+                    success: function (folder) {
+                        showFolderItems_ShowOnly(folder, commitSha1);
+                    },
+                    error: function () {
+                        console.log("couldnt get the requested folder");
+                    }
+                })
+            });
+
+        } else if (item.m_ItemType == "file") {
+            $("#" + index + wc).click(function () {
+                $.ajax({
+                    url: SHOW_COMMIT_FILE_SYSTEM_SERVLET,
+                    dataType: "json",
+                    data: {"commitSha1": commitSha1, "path": item.m_ItemPath, "isRootFolder": "false"},
+
+                    success: function (file) {
+                        showFileContent_ShowOnly(file, commitSha1);
+                    },
+                    error: function () {
+                        console.log("couldnt get the requested file");
+                    }
+                })
+            });
+        } else {
+            console.log("the item is no good - it's type is neither FOLDER nor FILE")
+        }
+
+    });
+}
+
+
 $(function () {
     $.ajax({
 
@@ -111,6 +195,26 @@ $(function () {
                         "<td>" + element.creator + "</td>" +
                         "<td>" + element.branchPointed + "</td>" +
                         "</tr>").appendTo($("#commitsTable"));
+
+
+                    $("#" + index).click(function () {
+                        $.ajax({
+                            url: SHOW_COMMIT_FILE_SYSTEM_SERVLET,
+                            dataType: "json",
+                            data: {"isRootFolder": "true", "commitSha1": element.sha1},
+
+                            success: function (folderInfo) {
+                                console.log(folderInfo);
+                                showFolderItems_ShowOnly(folderInfo, element.sha1);
+
+                            },
+                            error: function () {
+                                console.log("couldnt get commit root folder info");
+                            }
+
+                        })
+
+                    })
                 });
             }
         }
@@ -167,7 +271,7 @@ function showFolderItems(folderInfo) {
         $.ajax({
             url: FILE_SYSTEM_INFO_URL,
             dataType: "json",
-            data: {"itemName": folderInfo.m_ItemName, "path":folderInfo.m_ParentFolderPath,"isRootFolder":"false"},
+            data: {"itemName": folderInfo.m_ItemName, "path": folderInfo.m_ParentFolderPath, "isRootFolder": "false"},
 
             success: function (folder) {
                 showFolderItems(folder);
@@ -180,15 +284,15 @@ function showFolderItems(folderInfo) {
 
 
     $.each(folderInfo.m_ItemInfos || [], function (index, item) {
-        var td = "<td>"+item.m_ItemName+"</td>";
-        $("<tr id=" + index+wc + ">" + td + "</tr>").appendTo("#NameOfFolder");
+        var td = "<td>" + item.m_ItemName + "</td>";
+        $("<tr id=" + index + wc + ">" + td + "</tr>").appendTo("#NameOfFolder");
 
         if (item.m_ItemType == "folder") {
-            $("#" + index+wc).click(function () {
+            $("#" + index + wc).click(function () {
                 $.ajax({
                     url: FILE_SYSTEM_INFO_URL,
                     dataType: "json",
-                    data: {"itemName": item.m_ItemName, "path": item.m_ItemPath,"isRootFolder":"false"},
+                    data: {"itemName": item.m_ItemName, "path": item.m_ItemPath, "isRootFolder": "false"},
 
                     success: function (folder) {
                         showFolderItems(folder);
@@ -200,11 +304,11 @@ function showFolderItems(folderInfo) {
             });
 
         } else if (item.m_ItemType == "file") {
-            $("#" + index+wc).click(function () {
+            $("#" + index + wc).click(function () {
                 $.ajax({
                     url: FILE_SYSTEM_INFO_URL,
                     dataType: "json",
-                    data: {"itemName": item.m_ItemName,"path":item.m_ItemPath,"isRootFolder":"false"},
+                    data: {"itemName": item.m_ItemName, "path": item.m_ItemPath, "isRootFolder": "false"},
 
                     success: function (file) {
                         showFileContent(file);
@@ -231,7 +335,7 @@ function showFileContent(fileInfo) {
         $.ajax({
             url: CHANGE_FILE_SERVLET_URL,
             dataType: "json",
-            data: {"itemName": fileInfo.m_ItemName, "path": fileInfo.m_ItemPath,"changeOrDelete":"delete"},
+            data: {"itemName": fileInfo.m_ItemName, "path": fileInfo.m_ItemPath, "changeOrDelete": "delete"},
 
             success: function (folder) {
                 $("#FileSystemShow").empty();
@@ -249,7 +353,7 @@ function showFileContent(fileInfo) {
         $.ajax({
             url: CHANGE_FILE_SERVLET_URL,
             dataType: "json",
-            data: {"newContent":newContent, "path": fileInfo.m_ItemPath,"changeOrDelete":"change"},
+            data: {"newContent": newContent, "path": fileInfo.m_ItemPath, "changeOrDelete": "change"},
 
             success: function (folder) {
                 $("#FileSystemShow").empty();
@@ -262,13 +366,11 @@ function showFileContent(fileInfo) {
     });
 
 
-
-
     $("#GoBackButton").click(function () {
         $.ajax({
             url: FILE_SYSTEM_INFO_URL,
             dataType: "json",
-            data: {"itemName": fileInfo.m_ItemName, "path": fileInfo.m_ParentFolderPath,"isRootFolder":"false"},
+            data: {"itemName": fileInfo.m_ItemName, "path": fileInfo.m_ParentFolderPath, "isRootFolder": "false"},
 
             success: function (folder) {
                 showFolderItems(folder);
@@ -278,5 +380,5 @@ function showFileContent(fileInfo) {
             }
         })
     });
-    $("<textarea id='contentTextArea' placeholder='type new content here'>"+fileInfo.m_FileContent+"</textarea>").appendTo("#FileSystemShow");
+    $("<textarea id='contentTextArea' placeholder='type new content here'>" + fileInfo.m_FileContent + "</textarea>").appendTo("#FileSystemShow");
 }

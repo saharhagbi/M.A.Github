@@ -1,6 +1,8 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
+import MAGit.Utils.SessionUtils;
+import System.Users.User;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
@@ -39,17 +41,20 @@ public class NewBranch extends HttpServlet
         String branchName = request.getParameter(BRANCH_NAME);
         String branchType = request.getParameter(BRANCH_TYPE);
 
+        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(SessionUtils.getUsername(request));
+
+
         try
         {
             switch (branchType)
             {
                 case LocalBranch:
                     String sha1Commit = request.getParameter(SHA1_COMMIT);
-                    ServletUtils.getEngineAdapter(getServletContext()).createNewLocalBranch(branchName, sha1Commit);
+                    ServletUtils.getEngineAdapter(getServletContext()).createNewLocalBranch(branchName, sha1Commit, loggedInUser);
                     break;
 
                 case RTB:
-                    String rtbName = ServletUtils.getEngineAdapter(getServletContext()).createNewRTB(branchName);
+                    String rtbName = ServletUtils.getEngineAdapter(getServletContext()).createNewRTB(branchName, loggedInUser);
                     returnRTBNameInResponse(rtbName, response);
                     break;
             }

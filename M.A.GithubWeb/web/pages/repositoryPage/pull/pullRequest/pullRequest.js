@@ -2,6 +2,7 @@ var PULL_REQUEST_TYPE = "4";
 
 
 //need to do setInterval
+/*
 $(function () {
     $.ajax({
 
@@ -20,6 +21,7 @@ $(function () {
     });
 });
 
+*/
 
 function uploadPullRequestData(pullRequests) {
 
@@ -51,6 +53,27 @@ function changeStatusDenied(pullRequest) {
     alert("In change status denied" + pullRequest);
 }
 
-function createPullRequest() {
+$("#check").on('click', function () {
 
-}
+    console.log("click detected");
+    console.log($("#baseBranchName").val());
+    console.log($("#targetBranchName").val());
+    console.log($("#message").val());
+
+
+    $.ajax({
+
+        url: REPOSITORY_INFO_URL,
+        dataType: "json",
+        data: {"requestType": PULL_REQUEST_TYPE},
+
+        success: function (pullRequests) {
+            console.log(pullRequests);
+            uploadPullRequestData(pullRequests);
+        },
+
+        error: function (e) {
+            console.log(e.toString());
+        }
+    });
+});
