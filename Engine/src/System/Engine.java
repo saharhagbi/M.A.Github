@@ -40,17 +40,7 @@ public class Engine
 
     public Engine()
     {
-       /* try
-        {
-            CreateMainRepositoryFolder();
-        } catch (Exception e)
-        {
-            //todo -
-            // printing fit message
-            e.printStackTrace();
-        }*/
     }
-
 
     public static void CreateRepositoryDirectories(Path i_rootFolderPath)
     {
@@ -76,7 +66,7 @@ public class Engine
         }
     }
 
-    public void UpdateNewUserInSystem(String i_UserName)
+   /* public void UpdateNewUserInSystem(String i_UserName)
     {
         if (m_User == null)
         {
@@ -85,7 +75,7 @@ public class Engine
         {
             m_User.setUserName(i_UserName);
         }
-    }
+    }*/
 
     public void CommitInCurrentRepository(String i_CommitMessage, Commit prevSecondCommit) throws Exception
     {
@@ -756,7 +746,8 @@ public class Engine
 
         /*-----make local branch to rtb and create remote branch----*/
 
-        RemoteBranch newRemoteBranchPushed = new RemoteBranch(branchToPushName, branchToPush.getPointedCommit());
+        RemoteBranch newRemoteBranchPushed = new RemoteBranch(remoteRepository.getName() + ResourceUtils.Slash + branchToPushName,
+                branchToPush.getPointedCommit());
         RemoteTrackingBranch newRTBPushed = new RemoteTrackingBranch(branchToPush);
 
         m_CurrentLocalRepository.getLocalBranches().remove(branchToPush);

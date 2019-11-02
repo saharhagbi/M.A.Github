@@ -1,6 +1,7 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
+import MAGit.Utils.SessionUtils;
 import System.Users.User;
 import com.google.gson.Gson;
 import github.repository.RepositoryData;
@@ -21,10 +22,11 @@ public class RepositoryDataTable extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+
+        String usernameFromSession = SessionUtils.getUsername(request);
+        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(usernameFromSession);
         response.setContentType("application/json");
         List<RepositoryData> allRepositoriesData = null;
-        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
-
         PrintWriter out = response.getWriter();
         try
         {

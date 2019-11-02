@@ -1,6 +1,7 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
+import MAGit.Utils.SessionUtils;
 import System.Users.User;
 import com.google.gson.Gson;
 
@@ -34,10 +35,12 @@ public class RepositoryInfoSupplier extends HttpServlet
         response.setCharacterEncoding("UTF-8");
         List<Object> dataRequested = null;
         String dataType = request.getParameter(REQUEST_TYPE);
-        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
+//        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
 
         try
         {
+            User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(SessionUtils.getUsername(request));
+
             switch (dataType)
             {
                 //randomly i decided that userName and repositoryName will return with branches

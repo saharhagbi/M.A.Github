@@ -2,6 +2,7 @@ package MAGit.Servlets;
 
 import MAGit.Constants.Constants;
 import MAGit.Utils.ServletUtils;
+import MAGit.Utils.SessionUtils;
 import System.Users.User;
 
 import javax.servlet.ServletException;
@@ -12,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Paths;
 
-@WebServlet(urlPatterns = {"/pages/repositoryPage/DeleteFileServlet"})
-public class DeleteFileServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/pages/repositoryPage/ChangeFileServlet"})
+public class ChangeFileServlet extends HttpServlet {
 
     // urls that starts with forward slash '/' are considered absolute
     // urls that doesn't start with forward slash '/' are considered relative to the place where this servlet request comes from
@@ -33,12 +34,27 @@ public class DeleteFileServlet extends HttpServlet {
     @SuppressWarnings("Duplicates")
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
-        String filePathToDelete = request.getParameter(Constants.PATH);
-        try {
-            ServletUtils.getEngineAdapter(getServletContext()).RemoveFileFromWorkingCopy(Paths.get(filePathToDelete),loggedInUser);
-        } catch (Exception e) {
-            e.printStackTrace();
+        String usernameFromSession = SessionUtils.getUsername(request);
+        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(usernameFromSession);
+
+
+        if (request.getParameter(Constants.CHANGE_OR_DELETE).equals("delete")) {
+            String filePathToDelete = request.getParameter(Constants.PATH);
+            try {
+                ServletUtils.getEngineAdapter(getServletContext()).RemoveFileFromWorkingCopy(Paths.get(filePathToDelete), loggedInUser);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if(request.getParameter(Constants.CHANGE_OR_DELETE).equals("change")){
+            String filePathToChange = request.getParameter(Constants.PATH);
+            String newContentOfFile = request.getParameter(Constants.NEW_CONTENT);
+            try {
+                ServletUtils.getEngineAdapter(getServletContext()).ChangeFileInWorkingCopy(Paths.get(filePathToChange),newContentOfFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 

@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 /*
 Adding and retrieving users is synchronized and in that manner - these actions are thread safe
@@ -18,19 +16,14 @@ public class UserManager
 {
 
     private final Set<User> usersSet;
-    private User currentUserName;
+    //private User currentUserName;
 
     public UserManager()
     {
         usersSet = new HashSet<>();
     }
 
-    public User getCurrentUser()
-    {
-        return currentUserName;
-    }
-
-    public void setCurrentUserName(User currentUserName)
+    /*public void setCurrentUserName(User currentUserName)
     {
         AtomicBoolean isExist = new AtomicBoolean(false);
         usersSet.forEach(user ->
@@ -43,14 +36,16 @@ public class UserManager
         });
         if (isExist.get() == false)
             this.currentUserName = currentUserName;
-    }
+    }*/
 
+/*
     public void setCurrentUserName(String currentUserName)
     {
         this.currentUserName = usersSet.stream()
                 .filter(user -> user.getUserName().equals(currentUserName))
                 .findAny().orElse(null);
     }
+*/
 
     public synchronized void addUser(User user)
     {
@@ -80,12 +75,14 @@ public class UserManager
         return false;
     }
 
-    public User GetUserByName(String i_UserNameToFind) throws Exception {
-        if (!isUserExists(i_UserNameToFind))
-            throw new Exception("in function UserManager.GetUserByName - couldnt find the requested name");
+    public User getUserByName(String i_UserNameToFind)
+    {
+        /*if (!isUserExists(i_UserNameToFind))
+            throw new Exception("in function UserManager.GetUserByName - couldnt find the requested name");*/
 
         Iterator<User> userIterator = usersSet.iterator();
-        while (userIterator.hasNext()) {
+        while (userIterator.hasNext())
+        {
             User currUser = userIterator.next();
             if (currUser.getUserName().equals(i_UserNameToFind))
                 return currUser;
@@ -93,7 +90,9 @@ public class UserManager
         return null;
     }
 
-    public Set<User> CreateUsersSetByNames(Set<String> i_NameList) {
+
+
+    /*public Set<User> CreateUsersSetByNames(Set<String> i_NameList) {
         Set<User> userList = new HashSet<>();
         i_NameList.forEach(name -> {
             if(isUserExists(name)){
@@ -107,11 +106,11 @@ public class UserManager
                 userList.add(new User(name));
         });
         return userList;
-    }
+    }*/
 
-    public Set<User> CreateUsersSetByNamesWithoutCurrentUser(Set<String> i_NameList) {
+    /*public Set<User> CreateUsersSetByNamesWithoutCurrentUser(Set<String> i_NameList) {
         Set<User> userList = CreateUsersSetByNames(i_NameList);
         userList.remove(getCurrentUser());
         return userList;
-    }
+    }*/
 }

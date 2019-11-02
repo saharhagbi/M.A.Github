@@ -3,7 +3,7 @@ var LOCAL_BRANCHES = "6";
 var BRANCH_NAME = "branchName";
 var FOR_PUSHING = "forPushingBranch";
 
-function showAllBranches(branches) {
+function addBranchesToDropDown(branches) {
     $.each(branches || [], function (index, branch) {
         console.log("Adding branch #" + index + ": " + branch.m_BranchName);
         //create a new <option> tag with a value in it and
@@ -17,7 +17,9 @@ function showAllBranches(branches) {
 
         branchNameID += FOR_PUSHING;
 
-        $("#branchesList").append("<li><button type=\"button\" id=" + "\"" + branchNameID + "\"" + ">" + branch.m_BranchName + "</button></li>");
+        /*    <a href="#" class="dropdown-item">Divisão Militar</a>*/
+
+        $("#pushBranch").append("<a href=\"#\" class=\"dropdown-item\" id=" + "\"" + branchNameID + "\"" + ">" + branch.m_BranchName + "</a>");
 
         $("#" + branchNameID).click(function () {
             pushBranch(branch.m_BranchName);
@@ -25,22 +27,25 @@ function showAllBranches(branches) {
     });
 }
 
-function showBranchesListForPushing() {
+function addAllBranchesForPushing() {
     $.ajax({
         url: REPOSITORY_INFO_URL,
         data: {"requestType": LOCAL_BRANCHES},
 
         success: function (branches) {
             console.log(branches);
-            $("#branchesList").empty();
+            $("#pushBranch").empty();
 
-            if ((branches === undefined) || (branches.length == 0))
+            /*if ((branches === undefined) || (branches.length == 0))
                 $("#branchesList").append("<h4>There are no local branches</h4>");
             else {
-                $("#branchesList").append("<h4>Choose Branch for pushing</h4>");
+                $("#branchesList").append("<h4>Choose Branch for pushing</h4>");*/
 
-                showAllBranches(branches);
-            }
+            addBranchesToDropDown(branches);
+        },
+        error: function () {
+            alert("Problem while bringing all branches");
+
         }
     });
 }

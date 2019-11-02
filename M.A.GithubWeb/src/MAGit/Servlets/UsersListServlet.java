@@ -16,7 +16,6 @@ import java.util.Set;
 @WebServlet(urlPatterns = {"/userslist"})
 public class UsersListServlet extends HttpServlet
 {
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {

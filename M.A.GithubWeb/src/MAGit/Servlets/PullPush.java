@@ -9,22 +9,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "Commit", urlPatterns = {"/pages/repositoryPage/commit"})
-public class Commit extends HttpServlet
+@WebServlet(urlPatterns = {"/pages/repositoryPage/pullpush"})
+public class PullPush extends HttpServlet
 {
     private final String REPOSITORY_PAGE_URL = "repositoryPage.html";
-    private final String COMMIT_MSG = "commitMsg";
+    private final String PULL = "pull";
+    private final String PUSH = "push";
+    private final String COMMAND_TYPE = "commandType";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException
     {
 
-        String commitMessage = request.getParameter(COMMIT_MSG);
+        String commandType = request.getParameter(COMMAND_TYPE);
 
         try
         {
-            ServletUtils.getEngineAdapter(getServletContext()).commitChanges(commitMessage);
+            switch (commandType)
+            {
+                case PULL:
+                    ServletUtils.getEngineAdapter(getServletContext()).pull();
+                    break;
+
+                case PUSH:
+                    ServletUtils.getEngineAdapter(getServletContext()).push();
+                    break;
+            }
+
         } catch (Exception e)
         {
             //todo -

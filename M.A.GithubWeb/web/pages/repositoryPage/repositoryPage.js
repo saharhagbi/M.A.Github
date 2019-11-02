@@ -10,7 +10,7 @@ var refreshBranches = 1000;
 var REPOSITORY_INFO_URL = "repositoryInfo";
 
 var FILE_SYSTEM_INFO_URL = "fileSystemServlet";
-var DELETE_FILE_SERVLET_URL = "DeleteFileServlet";
+var CHANGE_FILE_SERVLET_URL = "ChangeFileServlet";
 // export let isLocalRepository;
 
 /*---------------------------request RepositoryName And userName-------------------------------------------*/
@@ -29,7 +29,7 @@ $(function () {
             handleUseCaseOfLocalRepository(isLocalRepositoryInString);
 
             function addCollaborationButtons() {
-                $("#pushBranchSection").append("<button type=\"button\" onclick=\"showBranchesListForPushing()\">Push Branch</button>")
+                $("#pushBranchSection").append("<button type=\"button\" onclick=\"addAllBranchesForPushing()\">Push Branch</button>")
                 $("#pullSection").append("<button type=\"button\" onclick=\"pull()\">Pull</button>")
                 $("#createPullRequest").append("<button type=\"button\" onclick=\"createPullRequest()\">Create Pull Request</button>")
 
@@ -74,11 +74,11 @@ $(function () {
                     brancNameTrimmed = brancNameTrimmed.replace(/ /g, "_").replace("/", "_");
                 }
 
-                $("#branches").append("<li><button type=\"button\" id=" + "\"" + brancNameTrimmed + "\"" + ">" + branch.m_BranchName + "</button></li>");
+                $("#branches").append("<li>" + branch.m_BranchName + "</li>");
 
-                $("#" + brancNameTrimmed).click(function () {
-                    checkout(branch.m_BranchName)
-                })
+                /*$("#" + brancNameTrimmed).click(function () {
+                        checkout(branch.m_BranchName)
+                })*/
             });
         }
     });
@@ -159,12 +159,15 @@ $(function () {
 
 function showFolderItems(folderInfo) {
     $("#FileSystemShow").empty();
-    $("<th id=" + folderInfo.m_ItemPath + ">" + folderInfo.m_ItemName + "</th>").appendTo("#FileSystemShow");
+    $("#DeleteButton").remove();
+    $("#SaveButton").remove();
+    $("<th id='NameOfFolder'>" + folderInfo.m_ItemName + "</th>").appendTo("#FileSystemShow");
+    var wc = "workingCopy";
     $("#GoBackButton").click(function () {
         $.ajax({
             url: FILE_SYSTEM_INFO_URL,
             dataType: "json",
-            data: {"itemName": folderInfo.m_ItemName, "path":folderInfo.m_ItemPath,"isRootFolder":"false"},
+            data: {"itemName": folderInfo.m_ItemName, "path":folderInfo.m_ParentFolderPath,"isRootFolder":"false"},
 
             success: function (folder) {
                 showFolderItems(folder);
@@ -178,10 +181,10 @@ function showFolderItems(folderInfo) {
 
     $.each(folderInfo.m_ItemInfos || [], function (index, item) {
         var td = "<td>"+item.m_ItemName+"</td>";
-        $("<tr id=" + item.m_ItemPath + ">" + td + "</tr>").appendTo("#"+folderInfo.m_ItemPath);
+        $("<tr id=" + index+wc + ">" + td + "</tr>").appendTo("#NameOfFolder");
 
         if (item.m_ItemType == "folder") {
-            $("#" + item.m_ItemPath).click(function () {
+            $("#" + index+wc).click(function () {
                 $.ajax({
                     url: FILE_SYSTEM_INFO_URL,
                     dataType: "json",
@@ -197,7 +200,7 @@ function showFolderItems(folderInfo) {
             });
 
         } else if (item.m_ItemType == "file") {
-            $("#" + item.m_ItemPath).click(function () {
+            $("#" + index+wc).click(function () {
                 $.ajax({
                     url: FILE_SYSTEM_INFO_URL,
                     dataType: "json",
@@ -221,13 +224,14 @@ function showFolderItems(folderInfo) {
 function showFileContent(fileInfo) {
     $("#FileSystemShow").empty();
     $("#DeleteButton").remove();
+    $("#SaveButton").remove();
     $("<button type=\"button\" id=\"DeleteButton\">Delete File</button>").appendTo("#FileSystem");
-
+    $("<button type=\"button\" id=\"SaveButton\">Save Changes</button>").appendTo("#FileSystem");
     $("#DeleteButton").click(function () {
         $.ajax({
-            url: DELETE_FILE_SERVLET_URL,
+            url: CHANGE_FILE_SERVLET_URL,
             dataType: "json",
-            data: {"itemName": fileInfo.m_ItemName, "path": fileInfo.m_ItemPath},
+            data: {"itemName": fileInfo.m_ItemName, "path": fileInfo.m_ItemPath,"changeOrDelete":"delete"},
 
             success: function (folder) {
                 $("#FileSystemShow").empty();
@@ -238,6 +242,25 @@ function showFileContent(fileInfo) {
             }
         })
     });
+
+    $("#SaveButton").click(function () {
+
+        var newContent = $("#contentTextArea").val();
+        $.ajax({
+            url: CHANGE_FILE_SERVLET_URL,
+            dataType: "json",
+            data: {"newContent":newContent, "path": fileInfo.m_ItemPath,"changeOrDelete":"change"},
+
+            success: function (folder) {
+                $("#FileSystemShow").empty();
+                $("<p><i>File Deleted</i></p>").appendTo("#FileSystemShow");
+            },
+            error: function () {
+                console.log("couldnt get the requested folder");
+            }
+        })
+    });
+
 
 
 
@@ -255,5 +278,5 @@ function showFileContent(fileInfo) {
             }
         })
     });
-    $("<textarea placeholder='type new content here'>"+fileInfo.m_FileContent+"</textarea>").appendTo("#FileSystemShow");
+    $("<textarea id='contentTextArea' placeholder='type new content here'>"+fileInfo.m_FileContent+"</textarea>").appendTo("#FileSystemShow");
 }

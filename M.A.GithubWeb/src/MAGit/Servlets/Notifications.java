@@ -3,35 +3,44 @@ package MAGit.Servlets;
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
 import System.Users.User;
+import com.google.gson.Gson;
+import github.notifications.Notification;
 import github.users.UserManager;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
-public class LogoutServlet extends HttpServlet
+@WebServlet(urlPatterns = {"/notifications"})
+public class Notifications extends HttpServlet
 {
-    private static final String REPOHUB_URL = "../login/signup.html";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws ServletException, IOException
     {
-        response.setContentType("text/html;charset=UTF-8");
-        UserManager userManager = ServletUtils.getUserManager(getServletContext());
-        User loggedInUser = userManager.getUserByName(SessionUtils.getUsername(request));
+        //returning JSON objects, not HTML
+        response.setContentType("application/json");
 
-        if (loggedInUser != null)
+        try (PrintWriter out = response.getWriter())
         {
-            loggedInUser.setLoggedIn(false);
+            Gson gson = new Gson();
+            // get all the names of who ever was connected from directory
 
-            loggedInUser.clearNotifications();
-            SessionUtils.clearSession(request);
+            UserManager userManager = ServletUtils.getUserManager(getServletContext());
+            User loggenInUser = userManager.getUserByName(SessionUtils.getUsername(request));
+
+            String json = gson.toJson(loggenInUser.prepareNotifications());
+            out.println(json);
+            out.flush();
         }
-
-        response.sendRedirect(REPOHUB_URL);
     }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -43,7 +52,7 @@ public class LogoutServlet extends HttpServlet
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws ServletException, IOException
     {
         processRequest(request, response);
     }
@@ -63,9 +72,14 @@ public class LogoutServlet extends HttpServlet
         processRequest(request, response);
     }
 
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo()
     {
         return "Short description";
-    }
+    }// </editor-fold>
 }

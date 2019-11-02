@@ -18,4 +18,6 @@ public class Constants {
     public static final String FOLDER_TYPE = "folder";
     public static final String FILE_TYPE = "file";
     public static final String PATH = "path";
+    public static final String CHANGE_OR_DELETE = "changeOrDelete";
+    public static final String NEW_CONTENT = "newContent";
 }

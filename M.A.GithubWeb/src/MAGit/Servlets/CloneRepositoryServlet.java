@@ -1,13 +1,10 @@
 package MAGit.Servlets;
 
 import MAGit.Constants.Constants;
-import System.Users.User;
-import com.google.gson.Gson;
-import github.repository.RepositoryData;
-import github.users.UserManager;
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
-import org.apache.commons.collections4.ListUtils;
+import System.Users.User;
+import github.users.UserManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,12 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet(urlPatterns = {"/pages/fork/CloneServlet"})
-public class CloneRepositoryServlet extends HttpServlet {
+public class CloneRepositoryServlet extends HttpServlet
+{
 
     private final String FORK_URL = "../fork/fork.html";
 
@@ -41,16 +36,21 @@ public class CloneRepositoryServlet extends HttpServlet {
      */
     @SuppressWarnings("Duplicates")
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         String userNameToCopyFrom = request.getParameter(Constants.USERNAME);
         String repositoryName = request.getParameter(Constants.REPOSITORY_NAME);
         String repositoryNewName = request.getParameter(Constants.REPOSITORY_NEW_MAME);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
-        String currentUser = userManager.getCurrentUser().getUserName();
 
-        try {
-            ServletUtils.getEngineAdapter(getServletContext()).Clone(currentUser,userNameToCopyFrom ,repositoryName,repositoryNewName);
-        } catch (Exception e) {
+        try
+        {
+            User currentUser = userManager.getUserByName(SessionUtils.getUsername(request));
+            ServletUtils.getEngineAdapter(getServletContext()).Clone(currentUser, userNameToCopyFrom, repositoryName, repositoryNewName);
+        } catch (Exception e)
+        {
+            //todo -
+            // handle proper message in UI
             e.printStackTrace();
         }
     }
@@ -68,7 +68,8 @@ public class CloneRepositoryServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -82,7 +83,8 @@ public class CloneRepositoryServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -92,7 +94,8 @@ public class CloneRepositoryServlet extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 }

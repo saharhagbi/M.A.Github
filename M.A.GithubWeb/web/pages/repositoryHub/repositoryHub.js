@@ -76,6 +76,10 @@ $(function () {
             console.log(repositories);
 
             uploadRepositoryData(repositories);
+        },
+        error: function () {
+            alert("Problem occured while bringing repositories");
+
         }
     });
 });
@@ -88,6 +92,11 @@ $("#logoutButton").on('click', function () {
             location.replace("../login/signup.html");
             alert("logout Done!");
 
+        },
+
+        error: function (e) {
+            alert("problen occured while logout");
+            console.log(e);
         }
     });
 });
@@ -103,14 +112,15 @@ $("#file-input").change(function () {
 
     formData.append("xml", input);
 
-
     $.ajax({
         url: REPOSITORY_UPLOAD_URL,
         method: "POST",
-        data: input,
+        data: formData,
         processData: false,
+        contentType: false,
         success: function () {
-            alert("working");
+            alert("Repository Upload Succeeded");
+            location.replace("repositoryHub.html");
         },
 
         error: function (err) {

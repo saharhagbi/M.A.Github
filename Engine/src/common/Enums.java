@@ -6,9 +6,4 @@ public class Enums
     {
         REMOTE_BRANCH, REMOTE_TRACKING_BRANCH, BRANCH
     }
-
-    /*public enum Blob
-    {
-        REMOTE_BRANCH, REMOTE_TRACKING_BRANCH, BRANCH
-    }*/
 }

@@ -2,6 +2,7 @@ package MAGit.Servlets;
 
 import MAGit.Constants.Constants;
 import MAGit.Utils.ServletUtils;
+import MAGit.Utils.SessionUtils;
 import System.Users.User;
 import com.google.gson.Gson;
 
@@ -37,7 +38,8 @@ public class FileSystemServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
+        String usernameFromSession = SessionUtils.getUsername(request);
+        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(usernameFromSession);
         if (request.getParameter(Constants.IS_ROOT_FOLDER).equals("true")) {
             response.setContentType("application/json");
             try (PrintWriter out = response.getWriter()) {
