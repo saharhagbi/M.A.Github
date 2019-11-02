@@ -1,6 +1,8 @@
 package MAGit.Servlets;
 
+import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
+import github.users.UserManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +19,9 @@ public class LogoutServlet extends HttpServlet
     {
         response.setContentType("text/html;charset=UTF-8");
         SessionUtils.clearSession(request);
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+
+        userManager.removeUser(userManager.getCurrentUser());
 
         response.sendRedirect(REPOHUB_URL);
     }

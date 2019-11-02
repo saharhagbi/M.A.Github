@@ -22,13 +22,13 @@ function refreshUsersList(users) {
     $.each(users || [], function (index, user) {
         repoNameTrimmed = user.userName;
         console.log("Adding user #" + index + ": " + repoNameTrimmed);
-        if(user.userName.indexOf(' ') >= 0){
-            repoNameTrimmed = repoNameTrimmed.replace(" ", "_");
+        if (user.userName.indexOf(' ') >= 0) {
+            repoNameTrimmed = repoNameTrimmed.replace(/ /g, "_");
             console.log(repoNameTrimmed);
         }
         $("<li id=" + "\"" + repoNameTrimmed + "\"" + ">" + user.userName + "</li>").appendTo($("#userList"));
         /*todo: fix- when a name is with space in it example: "roy roy" as opposed to "royroy" click does'nt work*/
-        $("#" + repoNameTrimmed).on("click",function (event) {
+        $("#" + repoNameTrimmed).on("click", function (event) {
             console.log("click detected");
             $.ajax({
                 url: All_REPOSITORIES_DETAILS_URL,
@@ -46,19 +46,21 @@ function refreshUsersList(users) {
 }
 
 function uploadRepositoryData(repositories) {
-    $("#tb").after().empty();
+    $("#repositoriesDetails").empty();
+
     $(repositories).each(function (index, element) {
         var buttonNumber = 0;
-        var button = "<input type=\"button\" id =" + buttonNumber + " value=\"clone this\">";
+        var button = "<input type   =\"button\" id =" + buttonNumber + " value=\"clone this\">";
 
         $("<tr>" +
+            `<th>${index}</th>` +
             "<td>" + button + "</td>" +
             "<td >" + element.repositoryName + "</td>" +
             "<td>" + element.latestCommit + "</td>" +
             "<td>" + element.message + "</td>" +
             "<td>" + element.activeBranch + "</td>" +
             "<td>" + element.commitAmount + "</td>" +
-            "</tr>").appendTo($("#tb"));
+            "</tr>").appendTo($("#repositoriesDetails"));
 
         $("#" + buttonNumber).click(function (event) {
             console.log(buttonNumber);
@@ -66,9 +68,11 @@ function uploadRepositoryData(repositories) {
             $.ajax({
                 url: CLONE_SERVLET_URL,
                 /*todo:sendredirect to correct page*/
-                data: {"repositoryName": element.repositoryName,
+                data: {
+                    "repositoryName": element.repositoryName,
                     "username": element.userName,
-                     "repoNewName":repoName},
+                    "repoNewName": repoName
+                },
                 success: function () {
                     console.log("in success");
                 },

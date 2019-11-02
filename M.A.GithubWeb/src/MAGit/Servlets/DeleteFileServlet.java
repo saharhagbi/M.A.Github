@@ -1,5 +1,6 @@
 package MAGit.Servlets;
 
+import MAGit.Constants.Constants;
 import MAGit.Utils.ServletUtils;
 import System.Users.User;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 @WebServlet(urlPatterns = {"/pages/repositoryPage/DeleteFileServlet"})
 public class DeleteFileServlet extends HttpServlet {
@@ -32,9 +34,9 @@ public class DeleteFileServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
-        String fileSha1ToDelete = request.getParameter("itemSha1");
+        String filePathToDelete = request.getParameter(Constants.PATH);
         try {
-            //ServletUtils.getEngineAdapter(getServletContext()).RemoveFileFromWorkingCopy();
+            ServletUtils.getEngineAdapter(getServletContext()).RemoveFileFromWorkingCopy(Paths.get(filePathToDelete),loggedInUser);
         } catch (Exception e) {
             e.printStackTrace();
         }

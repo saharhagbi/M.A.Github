@@ -28,7 +28,7 @@ public class RepositoryDataTable extends HttpServlet
         PrintWriter out = response.getWriter();
         try
         {
-            allRepositoriesData = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(loggedInUser);
+            allRepositoriesData = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(loggedInUser, false);
         } catch (Exception e)
         {
             //todo -

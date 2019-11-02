@@ -3,6 +3,8 @@ package Objects.branch;
 import Objects.Commit;
 import Objects.Item;
 import System.MergeConflictsAndMergedItems;
+import XmlObjects.repositoryWriters.RepositoryWriter;
+import collaboration.Fetch;
 import common.MagitFileUtils;
 import common.constants.NumConstants;
 
@@ -176,5 +178,3 @@ public class Branch
         lst.add(m_PointedCommit);
     }
 }
-
-

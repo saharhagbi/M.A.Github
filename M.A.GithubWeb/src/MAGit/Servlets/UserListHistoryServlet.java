@@ -19,6 +19,8 @@ import java.util.Set;
 public class UserListHistoryServlet extends HttpServlet
 {
 
+    private final String AllUsers = "1";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
@@ -32,6 +34,8 @@ public class UserListHistoryServlet extends HttpServlet
             try {
                 connectedHistorySet = ServletUtils.getEngineAdapter(getServletContext()).GetBeenConnectedUserNameSet();
             } catch (Exception e) {
+                //todo -
+                // handle proper message in ui
                 e.printStackTrace();
             }
             UserManager userManager = ServletUtils.getUserManager(getServletContext());

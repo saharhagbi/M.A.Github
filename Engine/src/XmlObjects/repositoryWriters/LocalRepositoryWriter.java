@@ -34,9 +34,9 @@ public class LocalRepositoryWriter
     {
         m_Writer.MakeDirectoriesForRepositories();
 
-        if (m_RepositoryToWrite.getRegularBranches() != null)
-            if ((m_RepositoryToWrite.getRegularBranches().size()) != NumConstants.ZERO)
-                m_Writer.WriteAllBranches(i_BranchName, m_RepositoryToWrite.getRegularBranches());
+        if (m_RepositoryToWrite.getLocalBranches() != null)
+            if ((m_RepositoryToWrite.getLocalBranches().size()) != NumConstants.ZERO)
+                m_Writer.WriteAllBranches(i_BranchName, m_RepositoryToWrite.getLocalBranches());
 
         WriteAllRemoteTrackingBranches(i_BranchName);
 
@@ -48,7 +48,7 @@ public class LocalRepositoryWriter
 
         WriteAllRemoteBranches();
 
-        //writing repository details
+        //writing repository details and repository name
 
         String remoteRepositoryDetailsToWrite = m_RepositoryToWrite.getRemoteRepoRef().getName() + System.lineSeparator()
                 + m_RepositoryToWrite.getRemoteRepoRef().getRepoPath();
@@ -56,6 +56,8 @@ public class LocalRepositoryWriter
         MagitFileUtils.WritingFileByPath(m_RepositoryToWrite.getRepositoryPath() +
                         ResourceUtils.AdditinalPathMagit + ResourceUtils.Slash + StringConstants.REPOSITORY_DETAILS + sf_txtExtension,
                 remoteRepositoryDetailsToWrite);
+
+        m_Writer.WriteRepositoryNameFileInMagitRepository();
 
         Folder.SpanDirectory(m_RepositoryToWrite.getActiveBranch().getPointedCommit().getRootFolder());
     }
@@ -91,17 +93,17 @@ public class LocalRepositoryWriter
             m_Writer.CheckIfCurrentBranchIsHeadAndUpdateIfItDoes(remoteTrackingBranch.getBranchName(), i_BranchName,
                     m_RepositoryToWrite.getRepositoryPath().toString() + sf_PathForBranches);
 
-            WriteRemoteTrackingBranch(remoteTrackingBranch, currentCommit);
+            WriteRemoteTrackingBranch(remoteTrackingBranch);
         }
     }
 
-    public void WriteRemoteTrackingBranch(RemoteTrackingBranch remoteTrackingBranch, Commit currentCommit) throws IOException
+    public void WriteRemoteTrackingBranch(RemoteTrackingBranch remoteTrackingBranch) throws IOException
     {
         MagitFileUtils.WritingFileByPath(
                 m_RepositoryToWrite.getRepositoryPath().toString() + sf_PathForBranches
                         + sf_Slash + remoteTrackingBranch.getBranchName()
                         + sf_txtExtension,
-                currentCommit.getSHA1() + System.lineSeparator() + StringConstants.TRUE);
+                remoteTrackingBranch.getPointedCommit().getSHA1() + System.lineSeparator() + StringConstants.TRUE);
     }
 
     public void WriteBranch(Branch branchToWrite) throws IOException, ParseException

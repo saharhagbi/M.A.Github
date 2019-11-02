@@ -17,4 +17,5 @@ public class Constants {
     public static final String IS_ROOT_FOLDER = "isRootFolder";
     public static final String FOLDER_TYPE = "folder";
     public static final String FILE_TYPE = "file";
+    public static final String PATH = "path";
 }

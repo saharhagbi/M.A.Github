@@ -10,6 +10,7 @@ import System.Users.User;
 import XmlObjects.MagitRepository;
 import XmlObjects.XMLMain;
 import XmlObjects.repositoryWriters.LocalRepositoryWriter;
+import XmlObjects.repositoryWriters.RepositoryWriter;
 import collaboration.*;
 import common.Enums;
 import common.MagitFileUtils;
@@ -418,7 +419,7 @@ public class Engine
         {
             LocalRepository localRepository = (LocalRepository) getCurrentRepository();
             localRepository.getRemoteTrackingBranches().removeIf(branch -> branch.getBranchName().equals(i_BranchNameToErase));
-            localRepository.getRegularBranches().removeIf(branch -> branch.getBranchName().equals(i_BranchNameToErase));
+            localRepository.getLocalBranches().removeIf(branch -> branch.getBranchName().equals(i_BranchNameToErase));
 
         } else
             getCurrentRepository().getAllBranches().removeIf(branch -> branch.getBranchName().equals(i_BranchNameToErase));
@@ -613,7 +614,7 @@ public class Engine
         LocalRepositoryWriter writer = new LocalRepositoryWriter(m_CurrentLocalRepository);
 
         if (BranchUtils.IsRemoteTrackingBranch(activeBranchInLocal))
-            writer.WriteRemoteTrackingBranch((RemoteTrackingBranch) activeBranchInLocal, activeBranchInLocal.getPointedCommit());
+            writer.WriteRemoteTrackingBranch((RemoteTrackingBranch) activeBranchInLocal);
         else
             writer.WriteBranch(activeBranchInLocal);
     }
@@ -632,14 +633,14 @@ public class Engine
     {
         LocalRepository localRepository = (LocalRepository) getCurrentRepository();
 
-        BranchFactory.CreateBranchInBranchFactory(localRepository.getRegularBranches(), localRepository.getRemoteTrackingBranches(),
+        BranchFactory.CreateBranchInBranchFactory(localRepository.getLocalBranches(), localRepository.getRemoteTrackingBranches(),
                 localRepository.getRemoteBranches(), branchName, commit, Enums.BranchType.REMOTE_TRACKING_BRANCH);
 
 
         LocalRepositoryWriter writer = new LocalRepositoryWriter(localRepository);
         RemoteTrackingBranch remoteTrackingBranch = localRepository.findRemoteTrackingBranchByPredicate(RTB ->
                 RTB.getBranchName().equals(branchName));
-        writer.WriteRemoteTrackingBranch(remoteTrackingBranch, remoteTrackingBranch.getPointedCommit());
+        writer.WriteRemoteTrackingBranch(remoteTrackingBranch);
     }
 
 
@@ -736,5 +737,36 @@ public class Engine
 
     public User GetUser() {
         return m_User;
+    }
+
+    public void pushBranch(String branchToPushName) throws Exception
+    {
+        Fetch fetcher = new Fetch(this, m_CurrentLocalRepository);
+        Repository remoteRepository = fetcher.getRemoteRepositoryToFetchFrom();
+        RepositoryWriter repositoryWriter = new RepositoryWriter(remoteRepository);
+        LocalRepositoryWriter localRepositoryWriter = new LocalRepositoryWriter(m_CurrentLocalRepository);
+
+        /*-----------------push branch to RR------------------*/
+
+        Branch branchToPush = getCurrentRepository().findBranchByPredicate(branch ->
+                branch.getBranchName().equals(branchToPushName));
+
+
+        repositoryWriter.WriteBranch(branchToPush);
+
+        /*-----make local branch to rtb and create remote branch----*/
+
+        RemoteBranch newRemoteBranchPushed = new RemoteBranch(branchToPushName, branchToPush.getPointedCommit());
+        RemoteTrackingBranch newRTBPushed = new RemoteTrackingBranch(branchToPush);
+
+        m_CurrentLocalRepository.getLocalBranches().remove(branchToPush);
+        m_CurrentLocalRepository.getRemoteTrackingBranches().add(
+                newRTBPushed);
+
+        m_CurrentLocalRepository.getRemoteBranches().add(
+                newRemoteBranchPushed);
+
+        localRepositoryWriter.WriteRemoteBranch(newRemoteBranchPushed);
+        localRepositoryWriter.WriteRemoteTrackingBranch(newRTBPushed);
     }
 }

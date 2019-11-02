@@ -7,12 +7,14 @@ import System.Users.User;
 import github.users.UserManager;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static MAGit.Constants.Constants.USERNAME;
+
 
 public class LoginServlet extends HttpServlet
 {
@@ -23,7 +25,7 @@ public class LoginServlet extends HttpServlet
     // ( can be fetched from request.getContextPath() ) and then the 'absolute' path from it.
     // Each method with it's pros and cons...
     private final String REPOSITORY_HUB_URL = "../repositoryHub/repositoryHub.html";
-    private final String SIGN_UP_URL = "signup.html";
+    private final String SIGN_UP_URL = "index.html";
     private final String LOGIN_ERROR_URL = "/pages/login/login_attempt_after_error.jsp";  // must start with '/' since will be used in request dispatcher...
 
     /**

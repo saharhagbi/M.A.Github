@@ -1,5 +1,5 @@
 var PULL_REQUEST_TYPE = "4";
-var REPOSITORY_INFO_URL = "repositoryInfo";
+
 
 $(function () {
     $.ajax({

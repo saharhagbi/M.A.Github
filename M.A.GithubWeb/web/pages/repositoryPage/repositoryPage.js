@@ -1,12 +1,14 @@
 var repositoryName = 0;
 var userName = 1;
-var BRANCHES = "1";
+var ALL_BRANCHES = "1";
 var COMMIT_TYPE = "2";
 var NAME_TYPE = "3";
 var REPOSITORY_TYPE = "5";
 var YES = "Yes";
 var CHECKOUT_URL = "checkout";
 var refreshBranches = 1000;
+var REPOSITORY_INFO_URL = "repositoryInfo";
+
 var FILE_SYSTEM_INFO_URL = "fileSystemServlet";
 var DELETE_FILE_SERVLET_URL = "DeleteFileServlet";
 // export let isLocalRepository;
@@ -27,9 +29,9 @@ $(function () {
             handleUseCaseOfLocalRepository(isLocalRepositoryInString);
 
             function addCollaborationButtons() {
-                $("#pushBranchSection").append("<button type=\"button\" onclick=\"pushBranch()\">Push Branch</button>")
+                $("#pushBranchSection").append("<button type=\"button\" onclick=\"showBranchesListForPushing()\">Push Branch</button>")
                 $("#pullSection").append("<button type=\"button\" onclick=\"pull()\">Pull</button>")
-                $("#createPullRequest").append("<button type=\"button\" onclick=\"createPullRequest()\">Pull Branch</button>")
+                $("#createPullRequest").append("<button type=\"button\" onclick=\"createPullRequest()\">Create Pull Request</button>")
 
                 $("#pullRequestsTable").append("<tr>" +
                     "<th>Status</th>" +
@@ -55,7 +57,7 @@ $(function () {
 
         url: REPOSITORY_INFO_URL,
         dataType: "json",
-        data: {"requestType": BRANCHES},
+        data: {"requestType": ALL_BRANCHES},
 
         success: function (branches) {
 
@@ -68,8 +70,8 @@ $(function () {
 
                 var brancNameTrimmed = branch.m_BranchName;
 
-                if (brancNameTrimmed.includes(" ")) {
-                    brancNameTrimmed = brancNameTrimmed.replace(" ", "_");
+                if (brancNameTrimmed.includes(" ") || brancNameTrimmed.includes("/")) {
+                    brancNameTrimmed = brancNameTrimmed.replace(/ /g, "_").replace("/", "_");
                 }
 
                 $("#branches").append("<li><button type=\"button\" id=" + "\"" + brancNameTrimmed + "\"" + ">" + branch.m_BranchName + "</button></li>");
@@ -157,12 +159,12 @@ $(function () {
 
 function showFolderItems(folderInfo) {
     $("#FileSystemShow").empty();
-    $("<th id=" + folderInfo.m_ItemSha1 + ">" + folderInfo.m_ItemName + "</th>").appendTo("#FileSystemShow");
+    $("<th id=" + folderInfo.m_ItemPath + ">" + folderInfo.m_ItemName + "</th>").appendTo("#FileSystemShow");
     $("#GoBackButton").click(function () {
         $.ajax({
             url: FILE_SYSTEM_INFO_URL,
             dataType: "json",
-            data: {"itemName": folderInfo.m_ItemName, "itemSha1": folderInfo.m_ParentFolderSha1,"isRootFolder":"false"},
+            data: {"itemName": folderInfo.m_ItemName, "path":folderInfo.m_ItemPath,"isRootFolder":"false"},
 
             success: function (folder) {
                 showFolderItems(folder);
@@ -176,14 +178,14 @@ function showFolderItems(folderInfo) {
 
     $.each(folderInfo.m_ItemInfos || [], function (index, item) {
         var td = "<td>"+item.m_ItemName+"</td>";
-        $("<tr id=" + item.m_ItemSha1 + ">" + td + "</tr>").appendTo("#"+folderInfo.m_ItemSha1);
+        $("<tr id=" + item.m_ItemPath + ">" + td + "</tr>").appendTo("#"+folderInfo.m_ItemPath);
 
         if (item.m_ItemType == "folder") {
-            $("#" + item.m_ItemSha1).click(function () {
+            $("#" + item.m_ItemPath).click(function () {
                 $.ajax({
                     url: FILE_SYSTEM_INFO_URL,
                     dataType: "json",
-                    data: {"itemName": item.m_ItemName, "itemSha1": item.m_ItemSha1,"isRootFolder":"false"},
+                    data: {"itemName": item.m_ItemName, "path": item.m_ItemPath,"isRootFolder":"false"},
 
                     success: function (folder) {
                         showFolderItems(folder);
@@ -195,11 +197,11 @@ function showFolderItems(folderInfo) {
             });
 
         } else if (item.m_ItemType == "file") {
-            $("#" + item.m_ItemSha1).click(function () {
+            $("#" + item.m_ItemPath).click(function () {
                 $.ajax({
                     url: FILE_SYSTEM_INFO_URL,
                     dataType: "json",
-                    data: {"itemName": item.m_ItemName,"itemSha1":item.m_ItemSha1,"isRootFolder":"false"},
+                    data: {"itemName": item.m_ItemName,"path":item.m_ItemPath,"isRootFolder":"false"},
 
                     success: function (file) {
                         showFileContent(file);
@@ -225,7 +227,7 @@ function showFileContent(fileInfo) {
         $.ajax({
             url: DELETE_FILE_SERVLET_URL,
             dataType: "json",
-            data: {"itemName": fileInfo.m_ItemName, "itemSha1": fileInfo.m_ItemSha1},
+            data: {"itemName": fileInfo.m_ItemName, "path": fileInfo.m_ItemPath},
 
             success: function (folder) {
                 $("#FileSystemShow").empty();
@@ -243,7 +245,7 @@ function showFileContent(fileInfo) {
         $.ajax({
             url: FILE_SYSTEM_INFO_URL,
             dataType: "json",
-            data: {"itemName": fileInfo.m_ItemName, "itemSha1": fileInfo.m_ParentFolderSha1,"isRootFolder":"false"},
+            data: {"itemName": fileInfo.m_ItemName, "path": fileInfo.m_ParentFolderPath,"isRootFolder":"false"},
 
             success: function (folder) {
                 showFolderItems(folder);

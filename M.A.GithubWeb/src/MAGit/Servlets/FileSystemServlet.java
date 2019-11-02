@@ -2,6 +2,7 @@ package MAGit.Servlets;
 
 import MAGit.Constants.Constants;
 import MAGit.Utils.ServletUtils;
+import System.Users.User;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @WebServlet(urlPatterns = {"/pages/repositoryPage/fileSystemServlet"})
 public class FileSystemServlet extends HttpServlet {
@@ -34,13 +37,14 @@ public class FileSystemServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
         if (request.getParameter(Constants.IS_ROOT_FOLDER).equals("true")) {
             response.setContentType("application/json");
             try (PrintWriter out = response.getWriter()) {
                 Gson gson = new Gson();
                 Object itemInfo = null;
                 try {
-                    itemInfo = ServletUtils.getEngineAdapter(getServletContext()).GetWorkingCopyItemInfo();
+                    itemInfo = ServletUtils.getEngineAdapter(getServletContext()).GetWorkingCopyItemInfo(loggedInUser);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -54,7 +58,8 @@ public class FileSystemServlet extends HttpServlet {
                 Gson gson = new Gson();
                 Object itemInfo = null;
                 try {
-                    itemInfo = ServletUtils.getEngineAdapter(getServletContext()).getItemInfoBySha1(request.getParameter(Constants.ITEM_SHA1));
+                    Path itemPath = Paths.get(request.getParameter(Constants.PATH));
+                    itemInfo = ServletUtils.getEngineAdapter(getServletContext()).getItemInfoByPath(itemPath,loggedInUser);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

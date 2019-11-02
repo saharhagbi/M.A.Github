@@ -1,9 +1,8 @@
 package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
-import System.Users.User;
-import github.users.UserManager;
 import com.google.gson.Gson;
+import github.users.UserManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,7 +26,16 @@ public class UsersListServlet extends HttpServlet
         {
             Gson gson = new Gson();
             UserManager userManager = ServletUtils.getUserManager(getServletContext());
-            Set<User> usersList = userManager.getUsers();
+            Set<String> usersList = null;
+            try
+            {
+                usersList = ServletUtils.getEngineAdapter(getServletContext()).GetBeenConnectedUserNameSet();
+            } catch (Exception e)
+            {
+                //todo -
+                // handle proper message in UI in case failed in bringing users list
+                e.printStackTrace();
+            }
             String json = gson.toJson(usersList);
             out.println(json);
             out.flush();
