@@ -95,14 +95,23 @@
 
 <div id="commitsSection">
     <h4> Commits: </h4>
+    <div id="FileSystemShowOnly" class="fileSystem-container">
+        <!--<button type="button" id="GoBackButtonShowOnly">Go Back</button>-->
+        <div id="FileSystemShow_ShowOnly">
 
-    <table id="commitsTable">
-        <tr>
-            <th>SHA-1</th>
-            <th>Message</th>
-            <th>Creator</th>
-            <th>BranchesPointed</th>
-        </tr>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">SHA-1</th>
+                <th scope="col">Message</th>
+                <th scope="col">Creator</th>
+                <th scope="col">BranchesPointed</th>
+            </tr>
+        </thead>
+        <tbody  id="commitsTable">
+        </tbody>
     </table>
 
     <!--<button id="commitBtn" type="button" onclick="commitChanges()">Commit</button>-->
@@ -137,6 +146,15 @@
      </table>-->
 </div>
 
+
+<div id="FileSystem" class="fileSystem-container">
+    <button class='btn btn-success btn-sm' type="button" id="SaveButton">Save</button>
+    <button class='btn btn-success btn-sm' type="button" id="GoBackButton">Go Back</button>
+    <button class='btn btn-success btn-sm' type="button" id="NewFileButton">New FIle</button>
+    <div class="table" id="FileSystemShow">
+
+    </div>
+</div>
 
 <!-------------------------------------------input Pull Request:----------------------------------------------->
 
