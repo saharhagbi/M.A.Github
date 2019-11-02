@@ -20,31 +20,21 @@ import java.util.Set;
 public class UserListHistoryServlet extends HttpServlet
 {
 
-    private final String AllUsers = "1";
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         //returning JSON objects, not HTML
         response.setContentType("application/json");
-        Set<String> connectedHistorySet = new HashSet<>();
+
         try (PrintWriter out = response.getWriter())
         {
             Gson gson = new Gson();
             // get all the names of who ever was connected from directory
-            try
-            {
-                connectedHistorySet = ServletUtils.getEngineAdapter(getServletContext()).GetBeenConnectedUserNameSet();
-            } catch (Exception e)
-            {
-                //todo -
-                // handle proper message in ui
-                e.printStackTrace();
-            }
+
             UserManager userManager = ServletUtils.getUserManager(getServletContext());
             Set<User> usersList = new HashSet<>(userManager.getUsers());
-            usersList.remove(SessionUtils.getUsername(request));
-//                       CreateUsersSetByNamesWithoutCurrentUser(connectedHistorySet);
+            usersList.remove(userManager.getUserByName(SessionUtils.getUsername(request)));
+
             String json = gson.toJson(usersList);
             out.println(json);
             out.flush();

@@ -1,5 +1,7 @@
 package github.notifications;
 
+import Objects.Item;
+
 import java.util.Date;
 
 public class ForkNotification extends Notification
@@ -10,5 +12,11 @@ public class ForkNotification extends Notification
     {
         super(dateCreated, repositoryName);
         this.userName = userName;
+    }
+
+    @Override
+    public String createNotificationTemplate()
+    {
+        return String.format(userName + " forked " + repositoryName + " on " + Item.getDateStringByFormat(dateCreated));
     }
 }

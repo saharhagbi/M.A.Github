@@ -13,15 +13,13 @@ import common.MagitFileUtils;
 import common.constants.ResourceUtils;
 import common.constants.StringConstants;
 import github.commit.CommitData;
+import github.notifications.ForkNotification;
 import github.repository.RepositoryData;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EngineAdapter
@@ -91,7 +89,6 @@ public class EngineAdapter
         allRepositoriesData.add(repositoryData);
     }
 
-
     public void initRepositoryInSystemByName(String repositoryNameClicked, User loggedInUser) throws Exception
     {
         String pathToUserFolderRepositories = loggedInUser.buildUserPath();
@@ -105,13 +102,13 @@ public class EngineAdapter
         }
     }
 
-    public void Clone(String i_UserNamerToCopyTo, String i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception
+    public void Clone(User i_UserNamerToCopyTo, String i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception
     {
         File dirToCloneFrom = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNameToCopyFrom + "\\" + i_RepositoryName).toFile();
-        File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNamerToCopyTo + "\\" + i_RepositoryNewName).toFile();
+        File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNamerToCopyTo.getUserName() + "\\" + i_RepositoryNewName).toFile();
         this.engine.Clone(dirToCloneTo, i_RepositoryNewName, dirToCloneFrom);
 
-
+        i_UserNamerToCopyTo.addNotification(new ForkNotification(new Date(), i_RepositoryName, i_UserNamerToCopyTo.getUserName()));
     }
 
     public List<Object> getBranchesList()
@@ -187,7 +184,6 @@ public class EngineAdapter
     {
         engine.CheckOut(branchName);
     }
-
 
     public void createNewLocalBranch(String branchName, String sha1Commit) throws Exception
     {

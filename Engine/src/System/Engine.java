@@ -66,7 +66,7 @@ public class Engine
         }
     }
 
-    public void UpdateNewUserInSystem(String i_UserName)
+   /* public void UpdateNewUserInSystem(String i_UserName)
     {
         if (m_User == null)
         {
@@ -75,7 +75,7 @@ public class Engine
         {
             m_User.setUserName(i_UserName);
         }
-    }
+    }*/
 
     public void CommitInCurrentRepository(String i_CommitMessage, Commit prevSecondCommit) throws Exception
     {

@@ -4,13 +4,13 @@ import java.util.Date;
 
 public abstract class Notification
 {
-    private Date dateCreated;
-    private String RepositoryName;
+    protected Date dateCreated;
+    protected String repositoryName;
 
     public Notification(Date dateCreated, String repositoryName)
     {
         this.dateCreated = dateCreated;
-        RepositoryName = repositoryName;
+        this.repositoryName = repositoryName;
     }
 
     public Date getDateCreated()
@@ -20,6 +20,8 @@ public abstract class Notification
 
     public String getRepositoryName()
     {
-        return RepositoryName;
+        return repositoryName;
     }
+
+    public abstract String createNotificationTemplate();
 }

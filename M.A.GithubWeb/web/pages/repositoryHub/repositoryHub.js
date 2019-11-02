@@ -76,6 +76,10 @@ $(function () {
             console.log(repositories);
 
             uploadRepositoryData(repositories);
+        },
+        error: function () {
+            alert("Problem occured while bringing repositories");
+
         }
     });
 });
@@ -88,6 +92,11 @@ $("#logoutButton").on('click', function () {
             location.replace("../login/signup.html");
             alert("logout Done!");
 
+        },
+
+        error: function (e) {
+            alert("problen occured while logout");
+            console.log(e);
         }
     });
 });
@@ -102,25 +111,6 @@ $("#file-input").change(function () {
     var formData = new FormData();
 
     formData.append("xml", input);
-    /*
-        $.ajax({
-            method: "POST",
-            url: REPO_URL,
-            data: formData,
-            dataType: "json",
-            processData: false, // Don't process the files
-            contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-            success: function (repo) {
-                console.log(repo)
-
-                addRepoDOMElement(repo);
-
-                alert("Repository added successfully!");
-            },
-            error: function (request, status, error) {
-                alert(request.responseText);
-            }
-        })*/
 
     $.ajax({
         url: REPOSITORY_UPLOAD_URL,

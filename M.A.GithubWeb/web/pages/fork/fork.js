@@ -49,8 +49,7 @@ function uploadRepositoryData(repositories) {
     $("#repositoriesDetails").empty();
 
     $(repositories).each(function (index, element) {
-        var buttonNumber = 0;
-        var button = "<input type   =\"button\" id =" + buttonNumber + " value=\"clone this\">";
+        var button = "<input type   =\"button\" id =\"" + index + "\" value=\"clone this\">";
 
         $("<tr>" +
             `<th>${index}</th>` +
@@ -62,9 +61,15 @@ function uploadRepositoryData(repositories) {
             "<td>" + element.commitAmount + "</td>" +
             "</tr>").appendTo($("#repositoriesDetails"));
 
-        $("#" + buttonNumber).click(function (event) {
-            console.log(buttonNumber);
+        $("#" + index).click(function (event) {
+            console.log(index);
+
+
             var repoName = prompt("Enter The Name Of The Repository", "Repositoryation");
+
+            if (!(repoName != "" && repoName != null))
+                return;
+
             $.ajax({
                 url: CLONE_SERVLET_URL,
                 /*todo:sendredirect to correct page*/
@@ -74,6 +79,7 @@ function uploadRepositoryData(repositories) {
                     "repoNewName": repoName
                 },
                 success: function () {
+                    location.replace("../repositoryHub/repositoryHub.html");
                     console.log("in success");
                 },
                 error: function () {
@@ -83,8 +89,6 @@ function uploadRepositoryData(repositories) {
                 return: true
             });
         });
-
-        buttonNumber++;
     })
 }
 

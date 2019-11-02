@@ -258,6 +258,7 @@ public class Folder extends Item {
                 }
             }
         }
+
         for (int i = 0; i < allItemsInCurrentFolder.size(); i++) {
             i_ItemsMapWithPaths.put(allItemsInCurrentFolder.get(i).GetPath(), allItemsInCurrentFolder.get(i));
         }

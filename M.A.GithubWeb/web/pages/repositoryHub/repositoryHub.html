@@ -21,7 +21,9 @@
     <!--    <script src="../../common/bootstrap.min.css"></script>-->
     <link rel='stylesheet' type='text/css' href='repositoryHub.css'/>
     <link rel='stylesheet' type='text/css' href='shit.css'/>
+    <link rel='stylesheet' type='text/css' href='notifications/notifications.css'/>
     <script src="../../common/context-path-helper.js"></script>
+    <script src="notifications/notifications.js"></script>
 </head>
 <body>
 <!-----------------------------------------------zivon----------------------------------->
@@ -91,15 +93,6 @@
 </div>-->
 
 
-<header class="header-container" role="menubar">
-    <div class="header-grid">
-    </div>
-</header>
-
-<div class="notifications">
-    <h1>Notifications</h1>
-</div>
-
 <div id="wrapper" class="toggled">
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
@@ -131,7 +124,51 @@
     });
 
 </script>
-<script src="repositoryHub.js"></script>
 
+
+<div class="notifications">
+    <h3>Notifications:</h3>
+</div>
+<div class="notifications">
+    <ul id="notificationsList" class="notification-list">
+        <li>
+            <!--<p class="media-heading"><b>Sahar </b>was forked you</p>-->
+        </li>
+
+        <li>
+            <div class="media">
+                <div class="media-left">
+                    <!--<a href="#">
+                        <img src="https://cdn4.iconfinder.com/data/icons/mayssam/512/heart-128.png"
+                             class="media-object cat-icon rounded-circle" alt="...">
+                    </a>-->
+                </div>
+                <div class="media-body">
+                    <ul class="n-user-list">
+                        <!-- <li><a href="#"><img
+                                 src="http://1plusx.com/app/mu-plugins/all-in-one-seo-pack-pro/images/default-user-image.png"
+                                 class="avatar rounded" alt="..."></a></li>
+                         <li><a href="#"><img
+                                 src="http://1plusx.com/app/mu-plugins/all-in-one-seo-pack-pro/images/default-user-image.png"
+                                 class="avatar rounded" alt="..."></a></li>
+                         <li><a href="#"><img
+                                 src="http://1plusx.com/app/mu-plugins/all-in-one-seo-pack-pro/images/default-user-image.png"
+                                 class="avatar rounded" alt="..."></a></li>
+                         <li><a href="#"><img
+                                 src="http://1plusx.com/app/mu-plugins/all-in-one-seo-pack-pro/images/default-user-image.png"
+                                 class="avatar rounded" alt="..."></a></li>
+                         <li><a href="#"><img
+                                 src="http://1plusx.com/app/mu-plugins/all-in-one-seo-pack-pro/images/default-user-image.png"
+                                 class="avatar rounded" alt="..."></a></li>-->
+                    </ul>
+                    <!-- <p class="media-heading"><b>Ranjeet Rajput</b> and 4 others Like your Post.</p>-->
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+
+<script src="repositoryHub.js"></script>
 </body>
 </html>

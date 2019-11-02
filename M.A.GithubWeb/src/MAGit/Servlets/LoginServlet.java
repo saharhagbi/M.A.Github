@@ -7,7 +7,6 @@ import System.Users.User;
 import github.users.UserManager;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +42,8 @@ public class LoginServlet extends HttpServlet
         response.setContentType("text/html;charset=UTF-8");
         String usernameFromSession = SessionUtils.getUsername(request);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        User loggedInUser;
+
         if (usernameFromSession == null)
         {
             //user is not logged in yet
@@ -56,6 +57,7 @@ public class LoginServlet extends HttpServlet
             } else
             {
                 //normalize the username value
+                loggedInUser = userManager.getUserByName(usernameFromParameter);
                 usernameFromParameter = usernameFromParameter.trim();
 
                 /*
@@ -72,17 +74,23 @@ public class LoginServlet extends HttpServlet
                  */
                 synchronized (this)
                 {
-                    if (userManager.isUserExists(usernameFromParameter))
+                    if ((loggedInUser != null))
                     {
-                        String errorMessage = "Username " + usernameFromParameter + " already exists. Please enter a different username.";
-                        // username already exists, forward the request back to index.jsp
-                        // with a parameter that indicates that an error should be displayed
-                        // the request dispatcher obtained from the servlet context is one that MUST get an absolute path (starting with'/')
-                        // and is relative to the web app root
-                        // see this link for more details:
-                        // http://timjansen.github.io/jarfiller/guide/servlet25/requestdispatcher.xhtml
-                        request.setAttribute(Constants.USER_NAME_ERROR, errorMessage);
-                        getServletContext().getRequestDispatcher(LOGIN_ERROR_URL).forward(request, response);
+                        if (loggedInUser.isLogIn())
+                        {
+                            String errorMessage = "Username " + usernameFromParameter + " already exists. Please enter a different username.";
+                            // username already exists, forward the request back to index.jsp
+                            // with a parameter that indicates that an error should be displayed
+                            // the request dispatcher obtained from the servlet context is one that MUST get an absolute path (starting with'/')
+                            // and is relative to the web app root
+                            // see this link for more details:
+                            // http://timjansen.github.io/jarfiller/guide/servlet25/requestdispatcher.xhtml
+                            request.setAttribute(Constants.USER_NAME_ERROR, errorMessage);
+                            getServletContext().getRequestDispatcher(LOGIN_ERROR_URL).forward(request, response);
+                        }
+
+                        request.getSession(true).setAttribute(Constants.USERNAME, usernameFromParameter);
+                        response.sendRedirect(REPOSITORY_HUB_URL);
                     } else
                     {
                         //add the new user to the users list
@@ -104,7 +112,6 @@ public class LoginServlet extends HttpServlet
 
                         //redirect the request to the chat room - in order to actually change the URL
                         System.out.println("On login, request URI is: " + request.getRequestURI());
-//                        userManager.setCurrentUserName(currentUser);
                         response.sendRedirect(REPOSITORY_HUB_URL);
                     }
                 }
@@ -112,7 +119,7 @@ public class LoginServlet extends HttpServlet
         } else
         {
             //user is already logged in
-//            userManager.setCurrentUserName(usernameFromSession);
+            userManager.getUserByName(usernameFromSession).setLoggedIn(true);
             response.sendRedirect(REPOSITORY_HUB_URL);
         }
     }

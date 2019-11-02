@@ -17,4 +17,12 @@ public class PullRequestNotification extends Notification
         this.baseBranchName = baseBranch;
         this.message = message;
     }
+
+    @Override
+    public String createNotificationTemplate()
+    {
+        return String.format("Pull Request:" + System.lineSeparator() +
+                "Status:" + status.toString() + System.lineSeparator() +
+                "Message:" + message + System.lineSeparator());
+    }
 }

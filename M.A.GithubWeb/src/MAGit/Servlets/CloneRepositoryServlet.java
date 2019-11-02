@@ -3,6 +3,7 @@ package MAGit.Servlets;
 import MAGit.Constants.Constants;
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
+import System.Users.User;
 import github.users.UserManager;
 
 import javax.servlet.ServletException;
@@ -41,10 +42,10 @@ public class CloneRepositoryServlet extends HttpServlet
         String repositoryName = request.getParameter(Constants.REPOSITORY_NAME);
         String repositoryNewName = request.getParameter(Constants.REPOSITORY_NEW_MAME);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
-        String currentUser = SessionUtils.getUsername(request);
 
         try
         {
+            User currentUser = userManager.getUserByName(SessionUtils.getUsername(request));
             ServletUtils.getEngineAdapter(getServletContext()).Clone(currentUser, userNameToCopyFrom, repositoryName, repositoryNewName);
         } catch (Exception e)
         {
