@@ -12,10 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "PullRequest", urlPatterns = {"/pages/repositoryHub/pullrequest"})
+@WebServlet(name = "PullRequest", urlPatterns = {"/pages/repositoryPage/pullrequest"})
 public class PullRequest extends HttpServlet
 {
     private final String PULL_REQUEST_URL = "repositoryPage.html";
+    private final String BRANCH_TARGET = "branchTargetName";
+    private final String BRANCH_BASE = "branchBaseName";
+    private final String MESSAGE = "message";
 
 
     @Override
@@ -35,6 +38,10 @@ public class PullRequest extends HttpServlet
     {
         response.setContentType("text/html");
 
+        String message = request.getParameter(MESSAGE);
+        String branchTargetName = request.getParameter(BRANCH_TARGET);
+        String branchBaseName = request.getParameter(BRANCH_BASE);
+
         //need to get 3 params
 
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
@@ -42,7 +49,7 @@ public class PullRequest extends HttpServlet
 
         try
         {
-            ServletUtils.getEngineAdapter(getServletContext()).sendPullRequest(loggedInUser);
+            ServletUtils.getEngineAdapter(getServletContext()).sendPullRequest(loggedInUser, message, branchBaseName, branchTargetName);
         } catch (Exception e)
         {
             //todo-
@@ -51,5 +58,4 @@ public class PullRequest extends HttpServlet
         }
 
     }
-
 }

@@ -249,7 +249,7 @@ public class EngineAdapter
             pusher.Push();
     }
 
-    public void sendPullRequest(User loggedInUser)
+    public void sendPullRequest(User loggedInUser, String message, String branchBaseName, String branchTargetName)
     {
         //create object pull request and add pullrequest notification to other user
     }

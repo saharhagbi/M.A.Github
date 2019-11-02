@@ -45,6 +45,9 @@ public class Repository
     private Path m_TempFolderPath;
     private Map<String, Commit> m_AllCommitsSHA1ToCommit = new HashMap<String, Commit>();
 
+
+
+
     public Repository(Path i_RepositoryPath, String i_RepositoryName, Branch i_ActiveBranch)
     {
         this.m_RepositoryPath = i_RepositoryPath;
