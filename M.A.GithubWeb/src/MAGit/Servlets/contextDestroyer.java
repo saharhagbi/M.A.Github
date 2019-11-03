@@ -12,7 +12,11 @@ import java.io.IOException;
 public class contextDestroyer implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-
+        try {
+            FileUtils.deleteDirectory(new File("c:\\magit-ex3"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
