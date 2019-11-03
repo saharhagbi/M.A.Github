@@ -106,8 +106,7 @@ public class EngineAdapter {
         }
     }
 
-    public void Clone(User i_UserNamerToCopyTo, User i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception
-    {
+    public void Clone(User i_UserNamerToCopyTo, User i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception {
         File dirToCloneFrom = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNameToCopyFrom.getUserName() + "\\" + i_RepositoryName).toFile();
         File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNamerToCopyTo.getUserName() + "\\" + i_RepositoryNewName).toFile();
         i_UserNamerToCopyTo.getUserEngine().Clone(dirToCloneTo, i_RepositoryNewName, dirToCloneFrom);
@@ -193,7 +192,7 @@ public class EngineAdapter {
         loggedInUser.getUserEngine().CreateNewBranchToSystem(branchName, sha1Commit);
     }
 
-    public String createNewRTB(String remoteBranchName, User loggedInUser) throws IOException {
+    public String createNewRTB(String remoteBranchName, User loggedInUser) throws IOException, ParseException {
         Engine engine = loggedInUser.getUserEngine();
 
         LocalRepository localRepository = (LocalRepository) engine.getCurrentRepository();
@@ -201,7 +200,7 @@ public class EngineAdapter {
         RemoteBranch remoteBranch = localRepository.findRemoteBranchByPredicate(remoteBranch1 -> remoteBranch1.getBranchName().equals(remoteBranchName));
         Commit pointedCommit = remoteBranch.getPointedCommit();
 
-        String rtbName = remoteBranchName.split(ResourceUtils.Slash)[0];
+        String rtbName = remoteBranchName.split(ResourceUtils.Slash)[1];
         engine.CreateRTB(pointedCommit, rtbName);
 
         return rtbName;
@@ -235,8 +234,7 @@ public class EngineAdapter {
             pusher.Push();
     }
 
-    public void sendPullRequest(User loggedInUser, User userToNotify, String message, String branchBaseName, String branchTargetName, String remoteRepoName)
-    {
+    public void sendPullRequest(User loggedInUser, User userToNotify, String message, String branchBaseName, String branchTargetName, String remoteRepoName) {
         int pullRequestID = userToNotify.getPullRequestLogicList().size() + 1;
         PullRequestNotification pullRequestNotification = new PullRequestNotification(
                 new Date(), remoteRepoName, Status.WAITING, userToNotify.getUserName(),
@@ -400,8 +398,7 @@ public class EngineAdapter {
                 .findAny().orElse(null);
     }
 
-    public void fastForwardBaseToTarget(PullRequestLogic pullRequest, User loggedInUser) throws IOException, ParseException
-    {
+    public void fastForwardBaseToTarget(PullRequestLogic pullRequest, User loggedInUser) throws IOException, ParseException {
         Repository prRepository = loggedInUser.getUserEngine().getNameToRepository().get(pullRequest.getNotification().getRepositoryName());
         RepositoryWriter writer = new RepositoryWriter(prRepository);
 

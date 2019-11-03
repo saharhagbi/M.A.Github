@@ -627,18 +627,20 @@ public class Engine
         return branchName.equals(getCurrentRepository().getActiveBranch().getBranchName());
     }
 
-    public void CreateRTB(Commit commit, String branchName) throws IOException
+    public void CreateRTB(Commit commit, String branchName) throws IOException, ParseException
     {
         LocalRepository localRepository = (LocalRepository) getCurrentRepository();
 
         BranchFactory.CreateBranchInBranchFactory(localRepository.getLocalBranches(), localRepository.getRemoteTrackingBranches(),
                 localRepository.getRemoteBranches(), branchName, commit, Enums.BranchType.REMOTE_TRACKING_BRANCH);
 
+        localRepository.setActiveBranch(localRepository.findRemoteTrackingBranchByPredicate(branch -> branch.getBranchName().equals(branchName)));
 
         LocalRepositoryWriter writer = new LocalRepositoryWriter(localRepository);
         RemoteTrackingBranch remoteTrackingBranch = localRepository.findRemoteTrackingBranchByPredicate(RTB ->
                 RTB.getBranchName().equals(branchName));
-        writer.WriteRemoteTrackingBranch(remoteTrackingBranch);
+
+        writer.WriteAllRemoteTrackingBranches(branchName);
     }
 
 
