@@ -36,7 +36,7 @@ function refreshUsersList(users) {
             console.log("click detected");
             $.ajax({
                 url: All_REPOSITORIES_DETAILS_URL,
-                data: {"username": users.userName},
+                data: {"username": user.userName},
                 success: function (repositories) {
                     console.log("in success");
                     uploadRepositoryData(repositories)

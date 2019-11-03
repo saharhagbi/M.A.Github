@@ -45,8 +45,7 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
         List<RepositoryData> currUserRepositories = new ArrayList<>();
         // todo: go through all users and appened all repositories - except current user
         UserManager manager = ServletUtils.getUserManager(getServletContext());
-
-        User requestedUserName = manager.getUserByName(SessionUtils.getUsername(request));
+        User requestedUserName = manager.getUserByName(request.getParameter(Constants.USERNAME));
 
         try {
             currUserRepositories = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(requestedUserName, true);
