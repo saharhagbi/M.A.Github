@@ -60,4 +60,24 @@ public class PullRequestNotification extends Notification
                 "Status:  " + status.toString() + System.lineSeparator() +
                 "Message:  " + message + System.lineSeparator());
     }
+
+    public Status GetStatus(){
+        return status;
+    }
+
+    public String GetUserName(){
+        return userName;
+    }
+
+    public String GetTargetBranchName(){
+        return targetBranchName;
+    }
+    public String GetBaseBranchName(){
+        return baseBranchName;
+    }
+    public String GetMessage(){
+        return message;
+    }
+
+
 }

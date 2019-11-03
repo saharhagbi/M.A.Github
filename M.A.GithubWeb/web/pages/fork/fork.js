@@ -9,6 +9,10 @@ $(function () {
         url: USER_LIST_HISTORY_URL,
         success: function (users) {
             refreshUsersList(users);
+        },
+        error: function () {
+            console.log("couldnt refresh the user list");
+
         }
     });
 });
@@ -22,7 +26,7 @@ function refreshUsersList(users) {
     $.each(users || [], function (index, user) {
         repoNameTrimmed = user.userName;
         console.log("Adding user #" + index + ": " + repoNameTrimmed);
-        if (user.userName.indexOf(' ') >= 0) {
+        if (user.userName.indexOf(" ") >= 0) {
             repoNameTrimmed = repoNameTrimmed.replace(/ /g, "_");
             console.log(repoNameTrimmed);
         }

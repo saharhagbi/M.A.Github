@@ -5,63 +5,64 @@ import Objects.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FolderDifferences
-{
+public class FolderDifferences {
     private List<Item> m_AddedItemList;
     private List<Item> m_RemovedItemList;
     private List<Item> m_ChangedItemList;
 
-    public FolderDifferences()
-    {
+    public FolderDifferences() {
         m_AddedItemList = new ArrayList<>();
         m_RemovedItemList = new ArrayList<>();
         m_ChangedItemList = new ArrayList<>();
     }
 
-    public List<Item> getAddedItemList()
-    {
+    public List<Item> getAddedItemList() {
         return m_AddedItemList;
     }
 
-    public List<Item> getRemovedItemList()
-    {
+    public List<Item> getRemovedItemList() {
         return m_RemovedItemList;
     }
 
-    public List<Item> getChangedItemList()
-    {
+    public List<Item> getChangedItemList() {
         return m_ChangedItemList;
     }
 
-    public void AddToAddedItemList(Item i_AddedItem)
-    {
+    public void AddToAddedItemList(Item i_AddedItem) {
         m_AddedItemList.add(i_AddedItem);
     }
 
-    public void AddToRemovedItemList(Item i_RemovedItem)
-    {
+    public void AddToRemovedItemList(Item i_RemovedItem) {
         m_RemovedItemList.add(i_RemovedItem);
     }
 
-    public void AddToChangedItemList(Item i_ChangedItem)
-    {
+    public void AddToChangedItemList(Item i_ChangedItem) {
         m_ChangedItemList.add(i_ChangedItem);
     }
 
-    public void AddAnEntireFolderDifference(FolderDifferences i_FolderDifference)
-    {
-        for (int i = 0; i < i_FolderDifference.m_AddedItemList.size(); i++)
-        {
+    public void AddAnEntireFolderDifference(FolderDifferences i_FolderDifference) {
+        for (int i = 0; i < i_FolderDifference.m_AddedItemList.size(); i++) {
             m_AddedItemList.add(i_FolderDifference.m_AddedItemList.get(i));
         }
-        for (int i = 0; i < i_FolderDifference.m_ChangedItemList.size(); i++)
-        {
+        for (int i = 0; i < i_FolderDifference.m_ChangedItemList.size(); i++) {
             m_ChangedItemList.add(i_FolderDifference.m_ChangedItemList.get(i));
         }
-        for (int i = 0; i < i_FolderDifference.m_RemovedItemList.size(); i++)
-        {
+        for (int i = 0; i < i_FolderDifference.m_RemovedItemList.size(); i++) {
             m_RemovedItemList.add(i_FolderDifference.m_RemovedItemList.get(i));
         }
+    }
+
+    public void SumInFolderDiffernce(FolderDifferences i_FolderDifference) {
+        i_FolderDifference.m_AddedItemList.forEach(item -> {
+            this.m_AddedItemList.add(item);
+        });
+        i_FolderDifference.m_ChangedItemList.forEach(item -> {
+            this.m_ChangedItemList.add(item);
+        });
+        i_FolderDifference.m_RemovedItemList.forEach(item -> {
+            this.m_RemovedItemList.add(item);
+        });
+
     }
 }
 

@@ -25,6 +25,8 @@ public class RepositoryInfoSupplier extends HttpServlet
     private final String PullRequest = "4";
     private final String IsLocalRepository = "5";
     private final String LocalBranches = "6";
+    private final String IsWCDirty = "7";
+
 
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -34,6 +36,7 @@ public class RepositoryInfoSupplier extends HttpServlet
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         List<Object> dataRequested = null;
+        String isDirtyWc;
         String dataType = request.getParameter(REQUEST_TYPE);
 //        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getCurrentUser();
 
@@ -62,6 +65,17 @@ public class RepositoryInfoSupplier extends HttpServlet
                     break;
                 case LocalBranches:
                     dataRequested = ServletUtils.getEngineAdapter(getServletContext()).getLocalBrances(loggedInUser);
+                    break;
+                    case IsWCDirty:
+                    isDirtyWc = ServletUtils.getEngineAdapter(getServletContext()).isDirtyWc(loggedInUser);
+                        try (PrintWriter out = response.getWriter())
+                        {
+                            Gson gson = new Gson();
+                            String json = gson.toJson(isDirtyWc);
+
+                            out.println(json);
+                            out.flush();
+                        }
                     break;
             }
         } catch (Exception e)

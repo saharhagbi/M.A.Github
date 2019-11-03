@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class Item {
+public class    Item {
 
     private final TypeOfFile m_TypeOfFile;
     protected Path m_Path;
