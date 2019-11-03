@@ -36,26 +36,17 @@ public class WatchPR extends HttpServlet {
 
     private void proccessRequest(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html");
-
         String prID = request.getParameter(PR_ID);
-
         User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(SessionUtils.getUsername(request));
         int id = Integer.parseInt(prID);
-        List<Path> paths = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Path p = Paths.get("C:\\helloWorlddd" + "\\" + i+".txt");
-            paths.add(p);
-        }
+
         //and later the notify user will show the CARD that represent the pr
         try {
             PullRequestLogic pullRequest = ServletUtils.getEngineAdapter(getServletContext()).getPullRequestInstance(loggedInUser, id);
             FolderDifferences differences = ServletUtils.getEngineAdapter(getServletContext()).GetChangesFromPullRequestLogic(pullRequest, loggedInUser);
             try (PrintWriter out = response.getWriter()) {
-                paths.forEach(path -> {
-                    out.println(path.subpath(3, path.getNameCount()));
-                });
 
-/*                differences.getAddedItemList().forEach(item -> {
+                differences.getAddedItemList().forEach(item -> {
                     if (item.getTypeOfFile().equals(Item.TypeOfFile.BLOB)) {
                         out.println(item.GetPath().subpath(3, item.GetPath().getNameCount()));
                     }
@@ -69,7 +60,7 @@ public class WatchPR extends HttpServlet {
                     if (item.getTypeOfFile().equals(Item.TypeOfFile.BLOB)) {
                         out.println(item.GetPath().subpath(3, item.GetPath().getNameCount()));
                     }
-                });*/
+                });
                 out.flush();
                 out.close();
             }

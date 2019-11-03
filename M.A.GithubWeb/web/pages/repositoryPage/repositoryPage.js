@@ -53,13 +53,15 @@ $(function () {
                 $("#pullBtn").empty();
                 $("#pushBtn").empty();
                 $("#createPullRequestBtn").empty();
-                $("#pullRequestBtn").empty();
                 $("#pushBranch").empty();
             }
 
             function handleUseCaseOfLocalRepository(isLocalRepository) {
-                if (isLocalRepositoryInString[0].localeCompare(YES) == 0) {
+                if (isLocalRepositoryInString[0].localeCompare(YES) !== 0) {
                     addCollaborationButtons();
+                }
+                else {
+                    $("#pullRequestBtn").empty();
                 }
             }
         }
@@ -401,7 +403,6 @@ function showFileContent(fileInfo) {
 
             success: function () {
                 $("#FileSystemShow").empty();
-                $("<p><i>File Deleted</i></p>").appendTo("#FileSystemShow");
                 $("#wcButtonDirty").show();
                 $("#wcButtonClean").hide();
 
