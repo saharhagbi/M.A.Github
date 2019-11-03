@@ -46,7 +46,7 @@ function addBranchesToDropDownCheckout(branches) {
 function checkout(branchName) {
 
     //check if the currentBranch is rtb
-    if (branchName.includes('\\')) {
+    if (branchName.includes('/')) {
         createRTB(branchName);
     } else {
         executeCheckout(branchName);

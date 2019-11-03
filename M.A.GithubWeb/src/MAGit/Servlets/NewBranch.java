@@ -55,7 +55,7 @@ public class NewBranch extends HttpServlet
 
                 case RTB:
                     String rtbName = ServletUtils.getEngineAdapter(getServletContext()).createNewRTB(branchName, loggedInUser);
-                    returnRTBNameInResponse(rtbName, response);
+//                    returnRTBNameInResponse(rtbName, response);
                     break;
             }
 
@@ -70,6 +70,7 @@ public class NewBranch extends HttpServlet
         }
     }
 
+/*
     private void returnRTBNameInResponse(String rtbName, HttpServletResponse response) throws IOException
     {
         try (PrintWriter out = response.getWriter())
@@ -81,4 +82,5 @@ public class NewBranch extends HttpServlet
             out.flush();
         }
     }
+*/
 }

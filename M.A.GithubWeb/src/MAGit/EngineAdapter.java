@@ -212,7 +212,7 @@ public class EngineAdapter
         loggedInUser.getUserEngine().CreateNewBranchToSystem(branchName, sha1Commit);
     }
 
-    public String createNewRTB(String remoteBranchName, User loggedInUser) throws IOException
+    public String createNewRTB(String remoteBranchName, User loggedInUser) throws IOException, ParseException
     {
         Engine engine = loggedInUser.getUserEngine();
 
@@ -221,7 +221,7 @@ public class EngineAdapter
         RemoteBranch remoteBranch = localRepository.findRemoteBranchByPredicate(remoteBranch1 -> remoteBranch1.getBranchName().equals(remoteBranchName));
         Commit pointedCommit = remoteBranch.getPointedCommit();
 
-        String rtbName = remoteBranchName.split(ResourceUtils.Slash)[0];
+        String rtbName = remoteBranchName.split(ResourceUtils.Slash)[1];
         engine.CreateRTB(pointedCommit, rtbName);
 
         return rtbName;

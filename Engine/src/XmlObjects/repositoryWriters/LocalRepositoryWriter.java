@@ -79,7 +79,7 @@ public class LocalRepositoryWriter
                 + sf_Slash + remoteBranch.getBranchName() + sf_txtExtension, currentCommit.getSHA1());
     }
 
-    public void WriteAllRemoteTrackingBranches(String i_BranchName) throws IOException, ParseException
+    public void WriteAllRemoteTrackingBranches(String i_HeadBranchName) throws IOException, ParseException
     {
         if (m_RepositoryToWrite.getRemoteTrackingBranches() == null)
             return;
@@ -90,7 +90,7 @@ public class LocalRepositoryWriter
 
             m_Writer.WriteCommitInFileSystem(currentCommit);
 
-            m_Writer.CheckIfCurrentBranchIsHeadAndUpdateIfItDoes(remoteTrackingBranch.getBranchName(), i_BranchName,
+            m_Writer.CheckIfCurrentBranchIsHeadAndUpdateIfItDoes(remoteTrackingBranch.getBranchName(), i_HeadBranchName,
                     m_RepositoryToWrite.getRepositoryPath().toString() + sf_PathForBranches);
 
             WriteRemoteTrackingBranch(remoteTrackingBranch);
