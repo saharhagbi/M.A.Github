@@ -1,5 +1,6 @@
 var PULL_REQUEST_TYPE = "4";
-var USER_INFO = "userinfo"
+var USER_INFO = "userinfo";
+var WATCH_PR_URL = "watchPR";
 
 //need to do setInterval
 
@@ -77,47 +78,59 @@ function creatingPullRequestsCards(pullRequests) {
             `<a href="#" class=\"card-link\" id=\"${watch}\">Watch</a>\n` + '</div></div>'
         ).appendTo($("#pullRequestsCards"));
 
-        $("#approve").click(function () {
-            ajaxUpdateStatus("approve");
+        $("#" + approve).click(function () {
+
+            console.log("click detected");
+
+            ajaxUproveStatus(element);
         });
 
 
-        $("#watch").click(function () {
-            //open watch pull request data
+        $("#" + watch).click(function () {
+            ajaxWatchClick(element);
         });
 
-        $("#denie").click(function () {
-            ajaxUpdateStatus("approve");
+        $("#" + denie).click(function () {
+
+            console.log("click detected");
+
+            ajaxDenieStatus(element);
         });
     });
+}
+
+function ajaxUproveStatus(element) {
+
+}
+
+function ajaxDenieStatus(element) {
 
 
-    /*
-   <div class="card" style="width: 18rem;">
-    <div class="card-body">
-        <h5 class="card-title">Repository Name</h5>
-        <p class="card-text">pr of master to test.</p>
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">id: 1</li>
-        <li class="list-group-item">Base branch: master</li>
-        <li class="list-group-item">target branch: fitcher 1</li>
-    </ul>
-    <div class="card-body">
-        <a href="#" class="card-link">Approve</a>
-        <a href="#" class="card-link">Denie</a>
-        <a href="#" class="card-link">Watch</a>
+}
 
-    </div>
-</div>
-    */
+function ajaxWatchClick(element) {
 
-    /*private Status status;
-    private String userName;
-    private String targetBranchName; // my branch
-    private String baseBranchName; // merge to branch
-    private String message;
-    private int id;*/
+    console.log("click detected");
 
+    var prID = element.id;
+
+    $.ajax({
+
+        url: WATCH_PR_URL,
+        dataType: "json",
+        data: {
+            "prID": prID
+        },
+
+        success: function () {
+
+            alert("in success function");
+            console.log("in success function");
+        },
+
+        error: function (e) {
+            alert("in error function" + e);
+        }
+    })
 
 }

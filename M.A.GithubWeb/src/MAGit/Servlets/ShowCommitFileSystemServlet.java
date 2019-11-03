@@ -17,7 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @WebServlet(urlPatterns = {"/pages/repositoryPage/ShowCommitFileSystemServlet"})
-public class ShowCommitFileSystemServlet extends HttpServlet {
+public class ShowCommitFileSystemServlet extends HttpServlet
+{
 
     // urls that starts with forward slash '/' are considered absolute
     // urls that doesn't start with forward slash '/' are considered relative to the place where this servlet request comes from
@@ -36,34 +37,42 @@ public class ShowCommitFileSystemServlet extends HttpServlet {
      */
     @SuppressWarnings("Duplicates")
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
+            throws ServletException, IOException
+    {
         String usernameFromSession = SessionUtils.getUsername(request);
         User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(usernameFromSession);
         String commitSha1 = request.getParameter(Constants.COMMIT_SHA1);
-        if (request.getParameter(Constants.IS_ROOT_FOLDER).equals("true")) {
+        if (request.getParameter(Constants.IS_ROOT_FOLDER).equals("true"))
+        {
             response.setContentType("application/json");
-            try (PrintWriter out = response.getWriter()) {
+            try (PrintWriter out = response.getWriter())
+            {
                 Gson gson = new Gson();
                 Object itemInfo = null;
-                try {
-                    itemInfo = ServletUtils.getEngineAdapter(getServletContext()).GetWorkingCopyItemInfoByCommit(loggedInUser,commitSha1);
-                } catch (Exception e) {
+                try
+                {
+                    itemInfo = ServletUtils.getEngineAdapter(getServletContext()).GetWorkingCopyItemInfoByCommit(loggedInUser, commitSha1);
+                } catch (Exception e)
+                {
                     e.printStackTrace();
                 }
                 String json = gson.toJson(itemInfo);
                 out.println(json);
                 out.flush();
             }
-        } else {
+        } else
+        {
             response.setContentType("application/json");
-            try (PrintWriter out = response.getWriter()) {
+            try (PrintWriter out = response.getWriter())
+            {
                 Gson gson = new Gson();
                 Object itemInfo = null;
-                try {
+                try
+                {
                     Path itemPath = Paths.get(request.getParameter(Constants.PATH));
-                    itemInfo = ServletUtils.getEngineAdapter(getServletContext()).getItemInfoByPathAndCommit(itemPath,loggedInUser,commitSha1);
-                } catch (Exception e) {
+                    itemInfo = ServletUtils.getEngineAdapter(getServletContext()).getItemInfoByPathAndCommit(itemPath, loggedInUser, commitSha1);
+                } catch (Exception e)
+                {
                     e.printStackTrace();
                 }
                 String json = gson.toJson(itemInfo);
@@ -88,7 +97,8 @@ public class ShowCommitFileSystemServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -102,7 +112,8 @@ public class ShowCommitFileSystemServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -112,7 +123,8 @@ public class ShowCommitFileSystemServlet extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 }
