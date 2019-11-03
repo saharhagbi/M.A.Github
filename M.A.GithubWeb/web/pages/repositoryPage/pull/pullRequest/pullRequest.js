@@ -2,6 +2,7 @@ var PULL_REQUEST_TYPE = "4";
 var USER_INFO = "userinfo";
 var WATCH_PR_URL = "watchPR";
 var SEND_NOTIFICATION_URL = "sendnotification";
+var APPROVED_URL = "approvedpr";
 
 //need to do setInterval
 
@@ -10,7 +11,6 @@ var SEND_NOTIFICATION_URL = "sendnotification";
 
 /*variablesForCardBody:*/
 
-var card = "card";
 
 var beginTillName = "class=\"card\" style=\"width: 18rem;\">\n" +
     "<div class=\"card-body\">\n" +
@@ -62,6 +62,7 @@ function creatingPullRequestsCards(pullRequests) {
     var approve = "approve";
     var denie = "denie";
     var watch = "watch";
+    var card = "card";
 
     $(pullRequests).each(function (index, element) {
 
@@ -85,7 +86,7 @@ function creatingPullRequestsCards(pullRequests) {
         $("#" + approve).click(function () {
             console.log("click detected");
 
-            ajaxUproveStatus(element);
+            ajaxUproveStatus(element, card);
         });
 
 
@@ -99,38 +100,32 @@ function creatingPullRequestsCards(pullRequests) {
 
             console.log("click detected");
 
-            ajaxDenieStatus(element);
+            ajaxDenieStatus(element, card);
         });
     });
 }
 
 
 /*-----------------------------------------------------APPROVED-----------------------------------------------------------*/
-function ajaxUproveStatus(element) {
-
-
-}
-
-/*-----------------------------------------------------DENIED-----------------------------------------------------------*/
-
-function ajaxDenieStatus(element) {
-
+function ajaxUproveStatus(element, card) {
     console.log("click detected");
 
     var prID = element.id;
 
+    sendNotificationResponse("Approved", element.message, prID);
+
     $.ajax({
 
-        url: SEND_NOTIFICATION_URL,
+        url: APPROVED_URL,
         data: {
             "prID": prID,
-            "status": "Denied"
         },
-
 
         success: function () {
 
             alert("in success function");
+
+            $("#" + card).empty();
             console.log("in success function");
         },
 
@@ -139,6 +134,24 @@ function ajaxDenieStatus(element) {
         }
     });
 
+
+}
+
+/*-----------------------------------------------------DENIED-----------------------------------------------------------*/
+
+
+function ajaxDenieStatus(element, card) {
+
+    console.log("click detected");
+
+    var message = prompt("Enter you reason of denied");
+
+    if (message == null || message == "")
+        return;
+
+    var prID = element.id;
+
+    sendNotificationResponse("Denied", message, prID);
 }
 
 /*-----------------------------------------------------WATCH-----------------------------------------------------------*/
@@ -146,4 +159,33 @@ function ajaxDenieStatus(element) {
 function ajaxWatchClick(element) {
 
     window.location.href = 'viewPR/viewPR.html?PRID=' + element.id;
+}
+
+
+/*-----------------------------------------------------FUNCTIONS:-----------------------------------------------------------*/
+
+
+function sendNotificationResponse(status, message, prID) {
+    $.ajax({
+
+        url: SEND_NOTIFICATION_URL,
+        data: {
+            "prID": prID,
+            "status": status,
+            "message": message
+        },
+
+
+        success: function () {
+
+            alert("in success function");
+
+            $("#" + card).empty();
+            console.log("in success function");
+        },
+
+        error: function (e) {
+            alert("in error function" + e);
+        }
+    });
 }

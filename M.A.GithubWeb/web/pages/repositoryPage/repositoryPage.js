@@ -416,8 +416,8 @@ $("#check").on('click', function () {
     console.log($("#targetBranchName").val());
     console.log($("#message").val());
 
-    var branchTargetName = $("#baseBranchName").val();
-    var branchBaseName = $("#targetBranchName").val();
+    var branchBaseName = $("#baseBranchName").val();
+    var branchTargetName = $("#targetBranchName").val();
     var message = $("#message").val();
 
     $.ajax({
