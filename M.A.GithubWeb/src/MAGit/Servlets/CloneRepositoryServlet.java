@@ -42,8 +42,8 @@ public class CloneRepositoryServlet extends HttpServlet
         String userNameToCopyFrom = request.getParameter(Constants.USERNAME);
         String repositoryName = request.getParameter(Constants.REPOSITORY_NAME);
         String repositoryNewName = request.getParameter(Constants.REPOSITORY_NEW_MAME);
+//stam message
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
-
         try
         {
             User currentUser = userManager.getUserByName(SessionUtils.getUsername(request));

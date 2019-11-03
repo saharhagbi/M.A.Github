@@ -1,8 +1,9 @@
 var CLONE_SERVLET_URL = "CloneServlet";
 var All_REPOSITORIES_DETAILS_URL = "allRepositoriesDetails";
 var USER_LIST_HISTORY_URL = "../../usersListHistory";
-/*var refreshRate = 4000;*/
+//stam message
 
+/*var refreshRate = 4000;*/
 /*-----------------------------------refreshRepositoryTable-------------------------------------*/
 $(function () {
     $.ajax({
