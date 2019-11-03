@@ -11,6 +11,7 @@ import System.FolderDifferences;
 import System.Repository;
 import System.Users.User;
 import XmlObjects.XMLMain;
+import XmlObjects.repositoryWriters.RepositoryWriter;
 import collaboration.LocalRepository;
 import collaboration.Push;
 import collaboration.RemoteBranch;
@@ -29,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -104,7 +106,8 @@ public class EngineAdapter {
         }
     }
 
-    public void Clone(User i_UserNamerToCopyTo, User i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception {
+    public void Clone(User i_UserNamerToCopyTo, User i_UserNameToCopyFrom, String i_RepositoryName, String i_RepositoryNewName) throws Exception
+    {
         File dirToCloneFrom = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNameToCopyFrom.getUserName() + "\\" + i_RepositoryName).toFile();
         File dirToCloneTo = Paths.get(ResourceUtils.MainRepositoriesPath + "\\" + i_UserNamerToCopyTo.getUserName() + "\\" + i_RepositoryNewName).toFile();
         i_UserNamerToCopyTo.getUserEngine().Clone(dirToCloneTo, i_RepositoryNewName, dirToCloneFrom);
@@ -232,17 +235,15 @@ public class EngineAdapter {
             pusher.Push();
     }
 
-    public void sendPullRequest(User loggedInUser, User userToNotify, String message, String branchBaseName, String branchTargetName, String remoteRepoName) {
-        //create object pull request and add pullrequest notification to other user
-//        Repository userRepository = loggedInUser.getUserEngine().getCurrentRepository();
-
+    public void sendPullRequest(User loggedInUser, User userToNotify, String message, String branchBaseName, String branchTargetName, String remoteRepoName)
+    {
         int pullRequestID = userToNotify.getPullRequestLogicList().size() + 1;
+        PullRequestNotification pullRequestNotification = new PullRequestNotification(
+                new Date(), remoteRepoName, Status.WAITING, userToNotify.getUserName(),
+                branchTargetName, branchBaseName, message, pullRequestID);
 
-        userToNotify.getPullRequestLogicList().add(
-                new PullRequestLogic(new PullRequestNotification(
-                        new Date(), remoteRepoName, Status.WAITING, userToNotify.getUserName(),
-                        branchTargetName, branchBaseName, message, pullRequestID), pullRequestID,
-                        userToNotify, loggedInUser));
+        userToNotify.getPullRequestLogicList().add(new PullRequestLogic((pullRequestNotification), pullRequestID, userToNotify, loggedInUser));
+        userToNotify.getNotificationList().add(pullRequestNotification);
     }
 
     public ItemInfo getItemInfoByPath(Path i_PathOfFile, User loggedInUser) throws Exception {
@@ -397,6 +398,19 @@ public class EngineAdapter {
                 .stream()
                 .filter(pullRequest -> pullRequest.getId() == id)
                 .findAny().orElse(null);
+    }
+
+    public void fastForwardBaseToTarget(PullRequestLogic pullRequest, User loggedInUser) throws IOException, ParseException
+    {
+        Repository prRepository = loggedInUser.getUserEngine().getNameToRepository().get(pullRequest.getNotification().getRepositoryName());
+        RepositoryWriter writer = new RepositoryWriter(prRepository);
+
+
+        Branch baseBranch = prRepository.getBranchByName(pullRequest.getNotification().getBaseBranchName());
+        Branch targetBranch = prRepository.getBranchByName(pullRequest.getNotification().getTargetBranchName());
+
+        baseBranch.setPointedCommit(targetBranch.getPointedCommit());
+        writer.WriteBranch(baseBranch);
     }
 
 }

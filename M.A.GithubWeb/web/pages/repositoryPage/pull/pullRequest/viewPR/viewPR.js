@@ -25,6 +25,11 @@ $(function() { //onload function
         var url = "../pullRequest.html";
         window.location.href = url;
     });
+
+
+
+
+
     $.ajax({
         // this ajax is calling the PRContent servlet in order to get the list of paths for all the FolderDifference items.
         url: "../watchPR",

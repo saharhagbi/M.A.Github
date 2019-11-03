@@ -15,7 +15,7 @@ $(function () {
 
         }
     });
-})
+});
 
 
 function refreshUsersList(users) {

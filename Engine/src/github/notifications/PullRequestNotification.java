@@ -56,9 +56,9 @@ public class PullRequestNotification extends Notification
     @Override
     public String createNotificationTemplate()
     {
-        return String.format("Pull Request:" + System.lineSeparator() +
-                "Status:" + status.toString() + System.lineSeparator() +
-                "Message:" + message + System.lineSeparator());
+        return String.format("Pull Request Of: " + repositoryName + System.lineSeparator() +
+                "Status:  " + status.toString() + System.lineSeparator() +
+                "Message:  " + message + System.lineSeparator());
     }
 
     public Status GetStatus(){

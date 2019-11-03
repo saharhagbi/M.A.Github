@@ -14,10 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(urlPatterns = {"/pages/repositoryPage/pull/pullRequest/watchPR"})
-public class WatchPR extends HttpServlet
-{
+public class WatchPR extends HttpServlet {
     private final String PR_ID = "PRID";
 
     @Override
@@ -37,15 +40,22 @@ public class WatchPR extends HttpServlet
         String prID = request.getParameter(PR_ID);
 
         User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(SessionUtils.getUsername(request));
-
         int id = Integer.parseInt(prID);
-
+        List<Path> paths = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Path p = Paths.get("C:\\helloWorlddd" + "\\" + i+".txt");
+            paths.add(p);
+        }
         //and later the notify user will show the CARD that represent the pr
         try {
             PullRequestLogic pullRequest = ServletUtils.getEngineAdapter(getServletContext()).getPullRequestInstance(loggedInUser, id);
             FolderDifferences differences = ServletUtils.getEngineAdapter(getServletContext()).GetChangesFromPullRequestLogic(pullRequest, loggedInUser);
             try (PrintWriter out = response.getWriter()) {
-                differences.getAddedItemList().forEach(item -> {
+                paths.forEach(path -> {
+                    out.println(path.subpath(3, path.getNameCount()));
+                });
+
+/*                differences.getAddedItemList().forEach(item -> {
                     if (item.getTypeOfFile().equals(Item.TypeOfFile.BLOB)) {
                         out.println(item.GetPath().subpath(3, item.GetPath().getNameCount()));
                     }
@@ -59,7 +69,7 @@ public class WatchPR extends HttpServlet
                     if (item.getTypeOfFile().equals(Item.TypeOfFile.BLOB)) {
                         out.println(item.GetPath().subpath(3, item.GetPath().getNameCount()));
                     }
-                });
+                });*/
                 out.flush();
                 out.close();
             }
