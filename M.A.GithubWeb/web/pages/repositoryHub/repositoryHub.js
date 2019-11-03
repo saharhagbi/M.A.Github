@@ -6,6 +6,10 @@ var refreshRate = 2000;
 var REPO_NAME = "repoName";
 
 function ajaxUsersList() {
+
+    console.log("sahar");
+
+
     $.ajax({
         url: USER_LIST_URL,
         success: function (users) {
@@ -70,6 +74,7 @@ function uploadRepositoryData(repositories) {
 }
 
 $(function () {
+
     $.ajax({
         url: REPOSITORY_DATA_URL,
         success: function (repositories) {

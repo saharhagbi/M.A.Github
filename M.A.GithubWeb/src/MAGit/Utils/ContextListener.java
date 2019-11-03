@@ -26,8 +26,6 @@ public class ContextListener implements ServletContextListener
             FileUtils.deleteDirectory(Paths.get(ResourceUtils.MainRepositoriesPath).toFile());
         } catch (IOException e)
         {
-            //todo-
-            // handle proper message in UI
             e.printStackTrace();
         }
         System.out.println("Shutting down!");

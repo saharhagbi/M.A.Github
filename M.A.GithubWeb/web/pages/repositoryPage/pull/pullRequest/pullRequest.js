@@ -107,12 +107,12 @@ function creatingPullRequestsCards(pullRequests) {
 
 
 /*-----------------------------------------------------APPROVED-----------------------------------------------------------*/
-function ajaxUproveStatus(element, card) {
+async function ajaxUproveStatus(element, card) {
     console.log("click detected");
 
     var prID = element.id;
 
-    sendNotificationResponse("Approved", element.message, prID);
+    var stam = await sendNotificationResponse("Approved", element.message, prID);
 
     $.ajax({
 
@@ -152,6 +152,7 @@ function ajaxDenieStatus(element, card) {
     var prID = element.id;
 
     sendNotificationResponse("Denied", message, prID);
+
 }
 
 /*-----------------------------------------------------WATCH-----------------------------------------------------------*/
