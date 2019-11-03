@@ -32,20 +32,15 @@ $(function () {
             handleUseCaseOfLocalRepository(isLocalRepositoryInString);
 
             function addCollaborationButtons() {
-                $("#pushBranchSection").append("<button type=\"button\" onclick=\"addAllBranchesForPushing()\">Push Branch</button>")
-                $("#pullSection").append("<button type=\"button\" onclick=\"pull()\">Pull</button>")
-                $("#createPullRequest").append("<button type=\"button\" onclick=\"createPullRequest()\">Create Pull Request</button>")
-
-                $("#pullRequestsTable").append("<tr>" +
-                    "<th>Status</th>" +
-                    "<th>Message</th>" +
-                    "<th>Confirm</th>" +
-                    "<th>Denied</th>" +
-                    "</tr>")
+                $("#pullBtn").empty();
+                $("#pushBtn").empty();
+                $("#createPullRequestBtn").empty();
+                $("#pullRequestBtn").empty();
+                $("#pushBranch").empty();
             }
 
             function handleUseCaseOfLocalRepository(isLocalRepository) {
-                if (isLocalRepositoryInString[0].localeCompare(YES) == 0) {
+                if (isLocalRepositoryInString[0].localeCompare(YES) != 0) {
                     addCollaborationButtons();
                 }
             }
@@ -100,7 +95,7 @@ function showFileContent_ShowOnly(file, commit) {
             data: {"commitSha1": commit, "path": file.m_ParentFolderPath, "isRootFolder": "false"},
 
             success: function (folder) {
-                showFolderItems_ShowOnly(folder,commit);
+                showFolderItems_ShowOnly(folder, commit);
             },
             error: function () {
                 console.log("couldnt get the requested folder");
@@ -122,7 +117,8 @@ function showFolderItems_ShowOnly(folderInfo, commitSha1) {
             dataType: "json",
             data: {"path": folderInfo.m_ParentFolderPath, "isRootFolder": "false", "commitSha1": commitSha1},
 
-            success: function (folderInfo) {FileSystemShow_ShowOnly
+            success: function (folderInfo) {
+                FileSystemShow_ShowOnly
                 showFolderItems_ShowOnly(folderInfo, commitSha1);
             },
             error: function () {
@@ -287,23 +283,28 @@ function showFolderItems(folderInfo) {
         })
     });
 
-    $("#NewFileButton").click(function (){
+    $("#NewFileButton").click(function () {
         $("<textarea class=\"form-control\" id=\"newFileTextArea\">type here the contenet of the new file</textarea>").appendTo("#FileSystemShow");
         $("#SaveButton").click(function () {
             var newContent = $("#newFileTextArea").val();
             $("#newFileTextArea").remove();
             var nameOfNewFile = prompt("Please enter the name of the new File", "newFile");
-                $.ajax({
-                    url: CHANGE_FILE_SERVLET_URL,
-                    dataType: "json",
-                    data: {"newContent": newContent, "path": folderInfo.m_ItemPath, "changeOrDelete": "new","newName":nameOfNewFile},
-                    error: function () {
-                        console.log("couldnt create new file");
-                    }
-                })
-
-
+            $.ajax({
+                url: CHANGE_FILE_SERVLET_URL,
+                dataType: "json",
+                data: {
+                    "newContent": newContent,
+                    "path": folderInfo.m_ItemPath,
+                    "changeOrDelete": "new",
+                    "newName": nameOfNewFile
+                },
+                error: function () {
+                    console.log("couldnt create new file");
+                }
             })
+
+
+        })
     });
 
 
