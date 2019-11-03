@@ -4,6 +4,7 @@ import MAGit.Constants.Constants;
 import MAGit.Utils.ServletUtils;
 import System.Users.User;
 import com.google.gson.Gson;
+import github.PullRequestLogic;
 import github.repository.RepositoryData;
 import github.users.UserManager;
 
@@ -18,8 +19,7 @@ import java.util.List;
 
 
 @SuppressWarnings("ALL")
-public class AllRepositoriesInfoServlet extends HttpServlet
-{
+public class AllRepositoriesInfoServlet extends HttpServlet {
 
     private final String FORK_URL = "../fork/fork.html";
 
@@ -39,8 +39,7 @@ public class AllRepositoriesInfoServlet extends HttpServlet
      * @throws IOException      if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         response.setContentType("application/json");
         List<RepositoryData> currUserRepositories = new ArrayList<>();
         // todo: go through all users and appened all repositories - except current user
@@ -48,11 +47,9 @@ public class AllRepositoriesInfoServlet extends HttpServlet
 
         User requestedUserName = manager.getUserByName(request.getParameter(Constants.USERNAME));
 
-        try
-        {
+        try {
             currUserRepositories = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(requestedUserName, true);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -62,7 +59,12 @@ public class AllRepositoriesInfoServlet extends HttpServlet
         out.println(json);
         out.flush();
         out.close();
+
+
+
     }
+
+
 
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -77,8 +79,7 @@ public class AllRepositoriesInfoServlet extends HttpServlet
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -92,8 +93,7 @@ public class AllRepositoriesInfoServlet extends HttpServlet
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -103,8 +103,7 @@ public class AllRepositoriesInfoServlet extends HttpServlet
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo()
-    {
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 }

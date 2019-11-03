@@ -583,4 +583,5 @@ public class Commit implements CommitRepresentative
     public void setRootFolder(Folder updatedWorkingCopy) {
         m_RootFolder = updatedWorkingCopy;
     }
+
 }
