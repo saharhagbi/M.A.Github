@@ -258,49 +258,129 @@ public class EngineAdapter
             pusher.Push();
     }
 
-    public void sendPullRequest(User userToNotify, String message, String branchBaseName, String branchTargetName, String remoteRepoName)
+    public void sendPullRequest(User loggedInUser, User userToNotify, String message, String branchBaseName, String branchTargetName, String remoteRepoName)
     {
         //create object pull request and add pullrequest notification to other user
-        Repository userRepository = loggedInUser.getUserEngine().getCurrentRepository();
+//        Repository userRepository = loggedInUser.getUserEngine().getCurrentRepository();
 
         int pullRequestID = userToNotify.getPullRequestLogicList().size() + 1;
 
         userToNotify.getPullRequestLogicList().add(
                 new PullRequestLogic(new PullRequestNotification(
                         new Date(), remoteRepoName, Status.WAITING, userToNotify.getUserName(),
-                        branchTargetName, branchBaseName, message, pullRequestID), pullRequestID));
+                        branchTargetName, branchBaseName, message, pullRequestID), pullRequestID,
+                        userToNotify, loggedInUser));
     }
 
-    public ItemInfo getItemInfoByPath(Path i_PathOfFile, User loggedInUser) throws Exception {
+    public ItemInfo getItemInfoByPath(Path i_PathOfFile, User loggedInUser) throws Exception
+    {
         Folder wc = loggedInUser.getUserEngine().getCurrentRepository().GetUpdatedWorkingCopy(loggedInUser);
-        Item item =  wc.getAllItemsMap().get(i_PathOfFile);
-        return getItemInfo(item,loggedInUser);
+        Item item = wc.getAllItemsMap().get(i_PathOfFile);
+        return getItemInfo(item, loggedInUser);
     }
 
-    public void ChangeFileInWorkingCopy(Path i_filePathToUpdate, String newContentOfFile) throws IOException {
+    public void ChangeFileInWorkingCopy(Path i_filePathToUpdate, String newContentOfFile) throws IOException
+    {
         FileUtils.writeStringToFile(i_filePathToUpdate.toFile(), newContentOfFile, "UTF-8");
     }
 
-    public ItemInfo GetWorkingCopyItemInfoByCommit(User i_LoggedInUser, String i_CommitSha1) throws Exception {
-        Commit commitToGetInfoFrom = Commit.CreateCommitFromSha1(i_CommitSha1,i_LoggedInUser.getUserEngine().getCurrentRepository().GetObjectsFolderPath());
-        return getItemInfo(commitToGetInfoFrom.getRootFolder(),i_LoggedInUser);
+    public ItemInfo GetWorkingCopyItemInfoByCommit(User i_LoggedInUser, String i_CommitSha1) throws Exception
+    {
+        Commit commitToGetInfoFrom = Commit.CreateCommitFromSha1(i_CommitSha1, i_LoggedInUser.getUserEngine().getCurrentRepository().GetObjectsFolderPath());
+        return getItemInfo(commitToGetInfoFrom.getRootFolder(), i_LoggedInUser);
 
     }
 
-    public ItemInfo getItemInfoByPathAndCommit(Path i_ItemPath, User i_LoggedInUser, String i_CommitSha1) throws Exception {
-        Commit commitToGetInfoFrom = Commit.CreateCommitFromSha1(i_CommitSha1,i_LoggedInUser.getUserEngine().getCurrentRepository().GetObjectsFolderPath());
+    public ItemInfo getItemInfoByPathAndCommit(Path i_ItemPath, User i_LoggedInUser, String i_CommitSha1) throws Exception
+    {
+        Commit commitToGetInfoFrom = Commit.CreateCommitFromSha1(i_CommitSha1, i_LoggedInUser.getUserEngine().getCurrentRepository().GetObjectsFolderPath());
         Item item = commitToGetInfoFrom.getRootFolder().getAllItemsMap().get(i_ItemPath);
-        return getItemInfo(item,i_LoggedInUser);
+        return getItemInfo(item, i_LoggedInUser);
     }
 
-    public void CreateNewFileInPath(Path i_PathOfDirectoryToPutFileIn, String newContentOfFile, String newFileName) throws IOException {
-        File newFile = new File(i_PathOfDirectoryToPutFileIn.toString()+"\\"+newFileName+".txt");
+    public void CreateNewFileInPath(Path i_PathOfDirectoryToPutFileIn, String newContentOfFile, String newFileName) throws IOException
+    {
+        File newFile = new File(i_PathOfDirectoryToPutFileIn.toString() + "\\" + newFileName + ".txt");
         newFile.createNewFile();
         FileUtils.writeStringToFile(newFile, newContentOfFile, "UTF-8");
     }
 
+    public void RemoveFileFromWorkingCopy(Path i_FilePath, User i_user) throws Exception
+    {
+        i_FilePath.toFile().delete();
+    }
 
-    class ItemInfo {
+    public ItemInfo GetWorkingCopyItemInfo(User i_user) throws Exception
+    {
+        Folder wc = i_user.getUserEngine().getCurrentRepository().GetUpdatedWorkingCopy(i_user);
+        return getItemInfo(wc, i_user);
+    }
+
+    public ItemInfo getItemInfo(Item i_item, User i_user)
+    {
+        ItemInfo itemInfoResult = null;
+        String itemName = i_item.getName();
+        String itemPath = i_item.GetPath().toString();
+        String itemSha1 = i_item.getSHA1();
+        Item parentFolder = getParent(i_item, i_user);
+
+        List<ItemInfo> itemInfos = new ArrayList<>();
+
+        if (i_item.getTypeOfFile().equals(Item.TypeOfFile.FOLDER))
+        {
+            Folder folder = (Folder) i_item;
+            List<Item> itemsList = folder.getListOfItems();
+            itemsList.forEach(itemInItemList ->
+            {
+                if (itemInItemList.getTypeOfFile().equals(Item.TypeOfFile.BLOB))
+                {
+                    String fileContent = ((Blob) itemInItemList).getContent();
+                    itemInfos.add(new ItemInfo(itemInItemList.getName(), Constants.FILE_TYPE, itemInItemList.getSHA1(), null, fileContent, folder.getSHA1(), itemInItemList.GetPath().toString(), folder.GetPath().toString()));
+
+                } else
+                {
+                    itemInfos.add(new ItemInfo(itemInItemList.getName(), Constants.FOLDER_TYPE, itemInItemList.getSHA1(), null, null, folder.getSHA1(), itemInItemList.GetPath().toString(), folder.GetPath().toString()));
+                }
+            });
+            ItemInfo[] items = new ItemInfo[itemInfos.size()];
+            itemInfos.toArray(items);
+            itemInfoResult = new ItemInfo(itemName, Constants.FOLDER_TYPE, itemSha1, items, null, parentFolder.getSHA1(), i_item.GetPath().toString(), parentFolder.GetPath().toString());
+        } else
+        {// it is a file
+            itemInfoResult = new ItemInfo(itemName, Constants.FILE_TYPE, itemSha1, null, ((Blob) i_item).getContent(), parentFolder.getSHA1(), itemPath, parentFolder.GetPath().toString());
+        }
+
+        return itemInfoResult;
+    }
+
+    private Item getParent(Item i_item, User i_user)
+    {
+        if (!isRootFolder(i_item, i_user))
+        {
+            Path parentPath = i_item.GetPath().getParent();
+            Map<Path, Item> allItemsMap = i_user.getUserEngine().getCurrentRepository().getActiveBranch().getPointedCommit().getRootFolder().getAllItemsMap();
+            return allItemsMap.get(parentPath);
+        } else return i_item;
+    }
+
+    private boolean isRootFolder(Item i_item, User i_user)
+    {
+        if (i_item.GetPath().equals(i_user.getUserEngine().getCurrentRepository().getActiveBranch().getPointedCommit().getRootFolder().GetPath()))
+        {
+            return true;
+        } else return false;
+    }
+
+    public PullRequestLogic getPullRequestInstance(User loggedInUser, int id)
+    {
+        return loggedInUser.getPullRequestLogicList()
+                .stream()
+                .filter(pullRequest -> pullRequest.getId() == id)
+                .findAny().orElse(null);
+    }
+
+    class ItemInfo
+    {
         String m_ItemName = null;
         String m_ItemPath = null;
         String m_ItemType = null;
@@ -310,7 +390,8 @@ public class EngineAdapter
         String m_ParentFolderSha1 = null;
         String m_ParentFolderPath = null;
 
-        ItemInfo(String i_ItemName, String i_ItemType, String i_Sha1, ItemInfo[] i_ItemInfos, String i_FileContent, String i_ParentSha1, String i_ItemPath, String i_ParentPath) {
+        ItemInfo(String i_ItemName, String i_ItemType, String i_Sha1, ItemInfo[] i_ItemInfos, String i_FileContent, String i_ParentSha1, String i_ItemPath, String i_ParentPath)
+        {
             m_ItemName = i_ItemName;
             m_ItemType = i_ItemType;
             m_ItemSha1 = i_Sha1;
@@ -321,55 +402,5 @@ public class EngineAdapter
             m_ItemPath = i_ItemPath;
         }
 
-    }
-
-    public ItemInfo GetWorkingCopyItemInfo(User i_user) throws Exception {
-        Folder wc= i_user.getUserEngine().getCurrentRepository().GetUpdatedWorkingCopy(i_user);
-        return getItemInfo(wc,i_user);
-    }
-
-    public ItemInfo getItemInfo(Item i_item,User i_user) {
-        ItemInfo itemInfoResult = null;
-        String itemName = i_item.getName();
-        String itemPath = i_item.GetPath().toString();
-        String itemSha1 = i_item.getSHA1();
-        Item parentFolder = getParent(i_item,i_user);
-
-        List<ItemInfo> itemInfos = new ArrayList<>();
-
-        if (i_item.getTypeOfFile().equals(Item.TypeOfFile.FOLDER)) {
-            Folder folder = (Folder) i_item;
-            List<Item> itemsList = folder.getListOfItems();
-            itemsList.forEach(itemInItemList -> {
-                if (itemInItemList.getTypeOfFile().equals(Item.TypeOfFile.BLOB)) {
-                    String fileContent = ((Blob) itemInItemList).getContent();
-                    itemInfos.add(new ItemInfo(itemInItemList.getName(), Constants.FILE_TYPE, itemInItemList.getSHA1(), null, fileContent, folder.getSHA1(), itemInItemList.GetPath().toString(), folder.GetPath().toString()));
-
-                } else {
-                    itemInfos.add(new ItemInfo(itemInItemList.getName(), Constants.FOLDER_TYPE, itemInItemList.getSHA1(), null, null, folder.getSHA1(), itemInItemList.GetPath().toString(), folder.GetPath().toString()));
-                }
-            });
-            ItemInfo[] items = new ItemInfo[itemInfos.size()];
-            itemInfos.toArray(items);
-            itemInfoResult = new ItemInfo(itemName, Constants.FOLDER_TYPE, itemSha1, items, null, parentFolder.getSHA1(), i_item.GetPath().toString(), parentFolder.GetPath().toString());
-        } else {// it is a file
-            itemInfoResult = new ItemInfo(itemName, Constants.FILE_TYPE, itemSha1, null, ((Blob) i_item).getContent(), parentFolder.getSHA1(), itemPath, parentFolder.GetPath().toString());
-        }
-
-        return itemInfoResult;
-    }
-
-    private Item getParent(Item i_item,User i_user) {
-        if (!isRootFolder(i_item,i_user)) {
-            Path parentPath = i_item.GetPath().getParent();
-            Map<Path,Item> allItemsMap = i_user.getUserEngine().getCurrentRepository().getActiveBranch().getPointedCommit().getRootFolder().getAllItemsMap();
-            return allItemsMap.get(parentPath);
-        } else return i_item;
-    }
-
-    private boolean isRootFolder(Item i_item,User i_user) {
-        if (i_item.GetPath().equals(i_user.getUserEngine().getCurrentRepository().getActiveBranch().getPointedCommit().getRootFolder().GetPath())) {
-            return true;
-        } else return false;
     }
 }

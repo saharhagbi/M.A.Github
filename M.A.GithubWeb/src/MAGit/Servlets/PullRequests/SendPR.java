@@ -1,4 +1,4 @@
-package MAGit.Servlets;
+package MAGit.Servlets.PullRequests;
 
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "PullRequest", urlPatterns = {"/pages/repositoryPage/pullrequest"})
-public class PullRequest extends HttpServlet
+@WebServlet(urlPatterns = {"/pages/repositoryPage/pullrequest"})
+public class SendPR extends HttpServlet
 {
     private final String PULL_REQUEST_URL = "repositoryPage.html";
     private final String BRANCH_TARGET = "branchTargetName";
@@ -59,7 +59,7 @@ public class PullRequest extends HttpServlet
         //and later the notify user will show the CARD that represent the pr
         try
         {
-            ServletUtils.getEngineAdapter(getServletContext()).sendPullRequest(userToNotify, message, branchBaseName, branchTargetName,
+            ServletUtils.getEngineAdapter(getServletContext()).sendPullRequest(loggedInUser, userToNotify, message, branchBaseName, branchTargetName,
                     userRepository.getRemoteRepoRef().getName());
         } catch (Exception e)
         {
