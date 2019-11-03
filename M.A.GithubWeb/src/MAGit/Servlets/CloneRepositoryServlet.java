@@ -47,7 +47,8 @@ public class CloneRepositoryServlet extends HttpServlet
         try
         {
             User currentUser = userManager.getUserByName(SessionUtils.getUsername(request));
-            ServletUtils.getEngineAdapter(getServletContext()).Clone(currentUser, userNameToCopyFrom, repositoryName, repositoryNewName);
+            User userClonedFrom = userManager.getUserByName(userNameToCopyFrom);
+            ServletUtils.getEngineAdapter(getServletContext()).Clone(currentUser, userClonedFrom, repositoryName, repositoryNewName);
 
             Repository currentRepository = currentUser.getUserEngine().getCurrentRepository();
             currentUser.getUserEngine().getNameToRepository().put(currentUser.getUserEngine().getCurrentRepository().getName(), currentRepository);

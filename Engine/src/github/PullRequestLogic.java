@@ -8,14 +8,14 @@ public class PullRequestLogic
     private PullRequestNotification notification;
     private int id;
     private User userToNotify;
-    private User userSended;
+    private User userSender;
 
     public PullRequestLogic(PullRequestNotification notification, int id, User userToNotify, User userSended)
     {
         this.notification = notification;
         this.id = id;
         this.userToNotify = userToNotify;
-        this.userSended = userSended;
+        this.userSender = userSended;
     }
 
     public int getId()
@@ -26,5 +26,10 @@ public class PullRequestLogic
     public PullRequestNotification getNotification()
     {
         return notification;
+    }
+
+    public User getUserSender()
+    {
+        return userSender;
     }
 }

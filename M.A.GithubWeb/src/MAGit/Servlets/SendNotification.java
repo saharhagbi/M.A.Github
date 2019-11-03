@@ -1,9 +1,12 @@
-package MAGit.Servlets.PullRequests;
+package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
+import Objects.Item;
 import System.Users.User;
 import github.PullRequestLogic;
+import github.notifications.PullRequestNotification;
+import github.notifications.Status;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,11 +14,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
-@WebServlet(urlPatterns = {"/pages/repositoryPage/pull/pullRequest/watchPR"})
-public class WatchPR extends HttpServlet
+@WebServlet(urlPatterns = {"/pages/repositoryPage/pull/pullRequest/sendnotification"})
+public class SendNotification extends HttpServlet
 {
     private final String PR_ID = "prID";
+    private final String STATUS = "status";
+    private final String DENIED_PARAM = "Denied";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
@@ -32,26 +38,28 @@ public class WatchPR extends HttpServlet
 
     private void proccessRequest(HttpServletRequest request, HttpServletResponse response)
     {
-        response.setContentType("text/html");
-
         String prID = request.getParameter(PR_ID);
+
+        Status prStatus = request.getParameter(STATUS).equals(DENIED_PARAM) ? Status.DENIED : Status.CONFIRMED;
 
         User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(SessionUtils.getUsername(request));
 
         int id = Integer.parseInt(prID);
-
         //and later the notify user will show the CARD that represent the pr
         try
         {
             PullRequestLogic pullRequest = ServletUtils.getEngineAdapter(getServletContext()).getPullRequestInstance(loggedInUser, id);
+            PullRequestNotification pullRequestNotification = pullRequest.getNotification();
 
-            System.out.println(pullRequest);
+         /*   pullRequest.getUserSender().getNotificationList().add(new PullRequestNotification(
+                    Item.getDateStringByFormat(new Date()), prStatus, pullRequest.getUserSender().getUserName(), pullRequestNotification.getTargetBranchName(),
+                    pullRequestNotification.getBaseBranchName(), pullRequestNotification.getMessage(), pullRequestNotification.getId());
+            ));*/
         } catch (Exception e)
         {
             //todo-
             // message in UI
             e.printStackTrace();
         }
-
     }
 }

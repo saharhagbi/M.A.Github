@@ -1,6 +1,7 @@
 var PULL_REQUEST_TYPE = "4";
 var USER_INFO = "userinfo";
 var WATCH_PR_URL = "watchPR";
+var SEND_NOTIFICATION_URL = "sendnotification";
 
 //need to do setInterval
 
@@ -9,7 +10,9 @@ var WATCH_PR_URL = "watchPR";
 
 /*variablesForCardBody:*/
 
-var beginTillName = "<div class=\"card\" style=\"width: 18rem;\">\n" +
+var card = "card";
+
+var beginTillName = "class=\"card\" style=\"width: 18rem;\">\n" +
     "<div class=\"card-body\">\n" +
     "<h5 class=\"card-title\">";
 
@@ -67,8 +70,9 @@ function creatingPullRequestsCards(pullRequests) {
         approve += index;
         denie += index;
         watch += index;
+        card += index;
 
-        $(beginTillName + repositoryNameLabel + element.repositoryName + '</h5>' +
+        $(`<div id=\"${card}\" ` + beginTillName + repositoryNameLabel + element.repositoryName + '</h5>' +
             '<p class="card-text">' + element.message + '</p>' +
             middleTillID + idLabel + element.id + '</li>' +
             elementInCard + branchBaseLabel + element.baseBranchName + '</li>' +
@@ -79,7 +83,6 @@ function creatingPullRequestsCards(pullRequests) {
         ).appendTo($("#pullRequestsCards"));
 
         $("#" + approve).click(function () {
-
             console.log("click detected");
 
             ajaxUproveStatus(element);
@@ -87,6 +90,8 @@ function creatingPullRequestsCards(pullRequests) {
 
 
         $("#" + watch).click(function () {
+            console.log("click detected");
+
             ajaxWatchClick(element);
         });
 
@@ -99,16 +104,16 @@ function creatingPullRequestsCards(pullRequests) {
     });
 }
 
+
+/*-----------------------------------------------------APPROVED-----------------------------------------------------------*/
 function ajaxUproveStatus(element) {
 
+
 }
+
+/*-----------------------------------------------------DENIED-----------------------------------------------------------*/
 
 function ajaxDenieStatus(element) {
-
-
-}
-
-function ajaxWatchClick(element) {
 
     console.log("click detected");
 
@@ -116,11 +121,12 @@ function ajaxWatchClick(element) {
 
     $.ajax({
 
-        url: WATCH_PR_URL,
-        dataType: "json",
+        url: SEND_NOTIFICATION_URL,
         data: {
-            "prID": prID
+            "prID": prID,
+            "status": "Denied"
         },
+
 
         success: function () {
 
@@ -131,6 +137,13 @@ function ajaxWatchClick(element) {
         error: function (e) {
             alert("in error function" + e);
         }
-    })
+    });
 
+}
+
+/*-----------------------------------------------------WATCH-----------------------------------------------------------*/
+
+function ajaxWatchClick(element) {
+
+    window.location.href = 'viewPR/viewPR.html?PRID=' + element.id;
 }
