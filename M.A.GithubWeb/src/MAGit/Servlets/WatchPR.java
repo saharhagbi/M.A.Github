@@ -1,4 +1,4 @@
-package MAGit.Servlets.PullRequests;
+package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
@@ -16,8 +16,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @WebServlet(urlPatterns = {"/pages/repositoryPage/pull/pullRequest/watchPR"})
-public class WatchPR extends HttpServlet {
-    private final String PR_ID = "prID";
+public class WatchPR extends HttpServlet
+{
+    private final String PR_ID = "PRID";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws

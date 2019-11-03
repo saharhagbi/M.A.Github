@@ -14,12 +14,43 @@ public class PullRequestNotification extends Notification
     public PullRequestNotification(Date dateCreated, String repositoryName, Status status, String userName, String targetBranchName, String baseBranchName, String message, int id)
     {
         super(dateCreated, repositoryName);
+
         this.status = status;
         this.userName = userName;
         this.targetBranchName = targetBranchName;
         this.baseBranchName = baseBranchName;
         this.message = message;
         this.id = id;
+    }
+
+    public Status getStatus()
+    {
+        return status;
+    }
+
+    public String getUserName()
+    {
+        return userName;
+    }
+
+    public String getTargetBranchName()
+    {
+        return targetBranchName;
+    }
+
+    public String getBaseBranchName()
+    {
+        return baseBranchName;
+    }
+
+    public String getMessage()
+    {
+        return message;
+    }
+
+    public int getId()
+    {
+        return id;
     }
 
     @Override

@@ -18,6 +18,24 @@ var PULL_REQUEST_URL = "pullrequest";
 
 /*---------------------------request RepositoryName And userName-------------------------------------------*/
 
+//check if wc is dirty and show button as supposed to be
+// requestType = 7 => isWcDirty
+$(function () {
+    $.ajax({
+        url: REPOSITORY_INFO_URL,
+        dataType: "json",
+        data: {"requestType": "7"},
+
+        success: function (isDirty) {
+            if (isDirty == "true") {
+                $("#wcButtonClean").hide();
+            } else {
+                $("#wcButtonDirty").hide();
+            }
+        }
+    });
+});
+
 $(function () {
     $.ajax({
 
@@ -100,7 +118,7 @@ function showFileContent_ShowOnly(file, commit) {
             data: {"commitSha1": commit, "path": file.m_ParentFolderPath, "isRootFolder": "false"},
 
             success: function (folder) {
-                showFolderItems_ShowOnly(folder,commit);
+                showFolderItems_ShowOnly(folder, commit);
             },
             error: function () {
                 console.log("couldnt get the requested folder");
@@ -122,7 +140,8 @@ function showFolderItems_ShowOnly(folderInfo, commitSha1) {
             dataType: "json",
             data: {"path": folderInfo.m_ParentFolderPath, "isRootFolder": "false", "commitSha1": commitSha1},
 
-            success: function (folderInfo) {FileSystemShow_ShowOnly
+            success: function (folderInfo) {
+                FileSystemShow_ShowOnly
                 showFolderItems_ShowOnly(folderInfo, commitSha1);
             },
             error: function () {
@@ -287,23 +306,27 @@ function showFolderItems(folderInfo) {
         })
     });
 
-    $("#NewFileButton").click(function (){
+    $("#NewFileButton").click(function () {
         $("<textarea class=\"form-control\" id=\"newFileTextArea\">type here the contenet of the new file</textarea>").appendTo("#FileSystemShow");
         $("#SaveButton").click(function () {
             var newContent = $("#newFileTextArea").val();
             $("#newFileTextArea").remove();
             var nameOfNewFile = prompt("Please enter the name of the new File", "newFile");
-                $.ajax({
-                    url: CHANGE_FILE_SERVLET_URL,
-                    dataType: "json",
-                    data: {"newContent": newContent, "path": folderInfo.m_ItemPath, "changeOrDelete": "new","newName":nameOfNewFile},
-                    error: function () {
-                        console.log("couldnt create new file");
-                    }
-                })
-
-
+            $.ajax({
+                url: CHANGE_FILE_SERVLET_URL,
+                data: {
+                    "newContent": newContent,
+                    "path": folderInfo.m_ItemPath,
+                    "changeOrDelete": "new",
+                    "newName": nameOfNewFile
+                },
+                error: function () {
+                    console.log("couldnt create new file");
+                }
             })
+
+
+        })
     });
 
 
@@ -359,12 +382,14 @@ function showFileContent(fileInfo) {
     $("#DeleteButton").click(function () {
         $.ajax({
             url: CHANGE_FILE_SERVLET_URL,
-            dataType: "json",
             data: {"itemName": fileInfo.m_ItemName, "path": fileInfo.m_ItemPath, "changeOrDelete": "delete"},
 
-            success: function (folder) {
+            success: function () {
                 $("#FileSystemShow").empty();
                 $("<p><i>File Deleted</i></p>").appendTo("#FileSystemShow");
+                $("#wcButtonDirty").show();
+                $("#wcButtonClean").hide();
+
             },
             error: function () {
                 console.log("couldnt get the requested folder");
@@ -377,12 +402,14 @@ function showFileContent(fileInfo) {
         var newContent = $("#contentTextArea").val();
         $.ajax({
             url: CHANGE_FILE_SERVLET_URL,
-            dataType: "json",
             data: {"newContent": newContent, "path": fileInfo.m_ItemPath, "changeOrDelete": "change"},
 
-            success: function (folder) {
+            success: function () {
                 $("#FileSystemShow").empty();
                 $("<p><i>File Deleted</i></p>").appendTo("#FileSystemShow");
+                $("#wcButtonDirty").show();
+                $("#wcButtonClean").hide();
+
             },
             error: function () {
                 console.log("couldnt get the requested folder");

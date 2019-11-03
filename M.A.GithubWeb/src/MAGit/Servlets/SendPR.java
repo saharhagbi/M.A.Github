@@ -1,4 +1,4 @@
-package MAGit.Servlets.PullRequests;
+package MAGit.Servlets;
 
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;

@@ -15,6 +15,10 @@ function commitChanges() {
         success: function () {
             alert("Commit Done!!");
             location.replace("repositoryPage.html");
+            if ($("#wcButtonClean").hidden == true) {
+                $("#wcButtonDirty").hide();
+                $("#wcButtonClean").show();
+            }
         },
 
         error: function () {

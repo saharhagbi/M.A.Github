@@ -27,8 +27,8 @@ $(function() { //onload function
     });
     $.ajax({
         // this ajax is calling the PRContent servlet in order to get the list of paths for all the FolderDifference items.
-        url: "/magitHub/PRContent",
-        data: {"PRID": PRID, "repositoryIdentifier": repositoryIdentifier},
+        url: "../watchPR",
+        data: {"PRID": PRID},
         error: function () {
             console.log("no");
         },
@@ -37,7 +37,7 @@ $(function() { //onload function
             var fileButtonClick = function(event){
                 $.ajax({
                     url: "/magitHub/fileContent",
-                    data: {"filePath": event.data.filePath, "repositoryIdentifier": repositoryIdentifier},
+                    data: {"filePath": event.data.filePath},
                     error: function () {
                         console.log("no");
                     },

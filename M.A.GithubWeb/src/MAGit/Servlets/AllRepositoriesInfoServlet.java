@@ -2,6 +2,7 @@ package MAGit.Servlets;
 
 import MAGit.Constants.Constants;
 import MAGit.Utils.ServletUtils;
+import MAGit.Utils.SessionUtils;
 import System.Users.User;
 import com.google.gson.Gson;
 import github.PullRequestLogic;
@@ -45,7 +46,7 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
         // todo: go through all users and appened all repositories - except current user
         UserManager manager = ServletUtils.getUserManager(getServletContext());
 
-        User requestedUserName = manager.getUserByName(request.getParameter(Constants.USERNAME));
+        User requestedUserName = manager.getUserByName(SessionUtils.getUsername(request));
 
         try {
             currUserRepositories = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(requestedUserName, true);

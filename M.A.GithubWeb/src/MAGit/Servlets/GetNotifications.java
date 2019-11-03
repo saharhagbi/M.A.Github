@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet(urlPatterns = {"/notifications"})
-public class Notifications extends HttpServlet
+public class GetNotifications extends HttpServlet
 {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
