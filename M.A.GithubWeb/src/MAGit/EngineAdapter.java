@@ -24,6 +24,7 @@ import github.notifications.ForkNotification;
 import github.notifications.PullRequestNotification;
 import github.notifications.Status;
 import github.repository.RepositoryData;
+import github.users.UserManager;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -243,9 +244,9 @@ public class EngineAdapter
                 map(branch -> (Object) branch).collect(Collectors.toList());
     }
 
-    public void pushBranch(String branchToPushName, User loggedInUser) throws Exception
+    public void pushBranch(String branchToPushName, User loggedInUser, UserManager userManager) throws Exception
     {
-        loggedInUser.getUserEngine().pushBranch(branchToPushName);
+        loggedInUser.getUserEngine().pushBranch(branchToPushName, userManager);
     }
 
     public void commitChanges(String commitMessage, User loggedInUser) throws Exception

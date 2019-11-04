@@ -16,7 +16,6 @@ function addAllBranchesForCheckout() {
         },
         error: function () {
             alert("Problem while bringing all branches");
-
         }
     });
 }

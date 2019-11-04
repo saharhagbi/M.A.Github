@@ -53,6 +53,9 @@ function createRTB(branchName) {
             location.replace("repositoryPage.html");
 
             executeCheckout(RTBbranchName);
+        },
+        error: function(){
+            alert("problem occured while creating RTB");
         }
     });
 }

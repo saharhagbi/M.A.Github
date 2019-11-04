@@ -31,9 +31,8 @@ public class UsersListServlet extends HttpServlet
                 usersList = ServletUtils.getEngineAdapter(getServletContext()).GetBeenConnectedUserNameSet();
             } catch (Exception e)
             {
-                //todo -
-                // handle proper message in UI in case failed in bringing users list
-                e.printStackTrace();
+                response.setStatus(400);
+
             }
             String json = gson.toJson(usersList);
             out.println(json);

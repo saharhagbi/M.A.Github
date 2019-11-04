@@ -48,7 +48,8 @@ public class FileSystemServlet extends HttpServlet {
                 try {
                     itemInfo = ServletUtils.getEngineAdapter(getServletContext()).GetWorkingCopyItemInfo(loggedInUser);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    response.setStatus(400);
+
                 }
                 String json = gson.toJson(itemInfo);
                 out.println(json);
@@ -63,7 +64,8 @@ public class FileSystemServlet extends HttpServlet {
                     Path itemPath = Paths.get(request.getParameter(Constants.PATH));
                     itemInfo = ServletUtils.getEngineAdapter(getServletContext()).getItemInfoByPath(itemPath,loggedInUser);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    response.setStatus(400);
+
                 }
                 String json = gson.toJson(itemInfo);
                 out.println(json);

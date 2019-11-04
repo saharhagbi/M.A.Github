@@ -43,14 +43,11 @@ $(function () {
 
         success: function (pullRequests) {
             console.log(pullRequests);
-
-            alert("in success function");
-
             creatingPullRequestsCards(pullRequests);
         },
 
         error: function (e) {
-            alert("in error function");
+            alert("error occured while bringing pull requests");
         }
     })
 
@@ -84,21 +81,18 @@ function creatingPullRequestsCards(pullRequests) {
         ).appendTo($("#pullRequestsCards"));
 
         $("#" + approve).click(function () {
-            console.log("click detected");
 
             ajaxUproveStatus(element, card);
         });
 
 
         $("#" + watch).click(function () {
-            console.log("click detected");
 
             ajaxWatchClick(element);
         });
 
         $("#" + denie).click(function () {
 
-            console.log("click detected");
 
             ajaxDenieStatus(element, card);
         });
@@ -108,7 +102,6 @@ function creatingPullRequestsCards(pullRequests) {
 
 /*-----------------------------------------------------APPROVED-----------------------------------------------------------*/
 async function ajaxUproveStatus(element, card) {
-    console.log("click detected");
 
     var prID = element.id;
 
@@ -122,15 +115,12 @@ async function ajaxUproveStatus(element, card) {
         },
 
         success: function () {
-
-            alert("in success function");
-
             $("#" + card).empty();
             console.log("in success function");
         },
 
         error: function (e) {
-            alert("in error function" + e);
+            alert("error occured while approving pull request");
         }
     });
 
@@ -178,15 +168,11 @@ function sendNotificationResponse(status, message, prID) {
 
 
         success: function () {
-
-            alert("in success function");
-
             $("#" + card).empty();
-            console.log("in success function");
         },
 
         error: function (e) {
-            alert("in error function" + e);
+            alert("error ocured while send notification");
         }
     });
 }

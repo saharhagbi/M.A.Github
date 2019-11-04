@@ -65,9 +65,8 @@ public class SendPR extends HttpServlet
                     userRepository.getRemoteRepoRef().getName());
         } catch (Exception e)
         {
-            //todo-
-            // message in UI
-            e.printStackTrace();
+            response.setStatus(400);
+
         }
 
     }

@@ -39,9 +39,8 @@ public class Checkout extends HttpServlet
             ServletUtils.getEngineAdapter(getServletContext()).checkout(branchName, loggedInUser);
         } catch (Exception e)
         {
-            //todo -
-            // handle proper message in UI
-            e.printStackTrace();
+            response.setStatus(400);
+
         }
     }
 }

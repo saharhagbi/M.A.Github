@@ -59,9 +59,8 @@ public class RepositoryUpload extends HttpServlet
             loggedInUser.getUserEngine().getNameToRepository().put(currentRepository.getName(), currentRepository);
         } catch (Exception e)
         {
-            //todo -
-            //  xmlFile is not valid, show proper message
-            e.printStackTrace();
+            response.setStatus(400);
+
         }
 
         response.sendRedirect(REPOSITORY_HUB_URL);

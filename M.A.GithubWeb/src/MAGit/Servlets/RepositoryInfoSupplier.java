@@ -80,9 +80,8 @@ public class RepositoryInfoSupplier extends HttpServlet
             }
         } catch (Exception e)
         {
-            //todo:
-            // handle proper message in UI
-            e.printStackTrace();
+            response.setStatus(400);
+
         }
 
         try (PrintWriter out = response.getWriter())

@@ -3,7 +3,6 @@ package MAGit.Servlets;
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
 import System.Users.User;
-import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet(name = "NewBranch", urlPatterns = {"/pages/repositoryPage/newBranch"})
 public class NewBranch extends HttpServlet
@@ -61,12 +59,8 @@ public class NewBranch extends HttpServlet
 
         } catch (Exception e)
         {
-            //todo -
-            // handle proper message in UI
-            e.printStackTrace();
-        } finally
-        {
-            response.sendRedirect(REPOSITORY_PAGE_URL);
+            response.setStatus(400);
+
         }
     }
 

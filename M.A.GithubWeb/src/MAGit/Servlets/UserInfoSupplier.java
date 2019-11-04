@@ -50,10 +50,8 @@ public class UserInfoSupplier extends HttpServlet
             out.flush();
         } catch (Exception e)
         {
-            e.printStackTrace();
+            response.setStatus(400);
 
-            //todo-
-            // handLe proper message in UI
         }
     }
 
