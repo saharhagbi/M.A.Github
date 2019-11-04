@@ -4,6 +4,7 @@ import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
 import System.Repository;
 import System.Users.User;
+import common.constants.ResourceUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -53,10 +54,9 @@ public class RepositoryUpload extends HttpServlet
 
         try
         {
-            ServletUtils.getEngineAdapter(getServletContext()).readRepositoryFromXMLFile(fileContent, currentUserName);
+            Repository currentRepository = ServletUtils.getEngineAdapter(getServletContext()).readRepositoryFromXMLFile(fileContent, currentUserName);
 
-            Repository currentRepository = loggedInUser.getUserEngine().getCurrentRepository();
-            loggedInUser.getUserEngine().getNameToRepository().put(loggedInUser.getUserEngine().getCurrentRepository().getName(), currentRepository);
+            loggedInUser.getUserEngine().getNameToRepository().put(currentRepository.getName(), currentRepository);
         } catch (Exception e)
         {
             //todo -
