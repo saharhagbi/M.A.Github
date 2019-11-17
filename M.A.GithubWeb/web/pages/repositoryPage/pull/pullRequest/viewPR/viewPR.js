@@ -41,8 +41,8 @@ $(function() { //onload function
             var files = data.split("\n"), i; // ASSUMPTION: instead of object, we print each path in the servlet with out.println
             var fileButtonClick = function(event){
                 $.ajax({
-                    url: "/magitHub/fileContent",
-                    data: {"filePath": event.data.filePath},
+                    url: "../watchPR",
+                    data: {"filePath": event.data.filePath,"requestType":"getContent"},
                     error: function () {
                         console.log("no");
                     },

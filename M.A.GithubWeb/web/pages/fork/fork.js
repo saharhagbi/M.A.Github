@@ -39,11 +39,11 @@ function refreshUsersList(users) {
                 url: All_REPOSITORIES_DETAILS_URL,
                 data: {"username": user.userName},
                 success: function (repositories) {
-                    console.log("in success");
+
                     uploadRepositoryData(repositories)
                 },
                 error: function () {
-                    console.log("in error");
+                    console.log("error occured while trying bringing repositories");
                 }
             });
         });
@@ -77,7 +77,6 @@ function uploadRepositoryData(repositories) {
 
             $.ajax({
                 url: CLONE_SERVLET_URL,
-                /*todo:sendredirect to correct page*/
                 data: {
                     "repositoryName": element.repositoryName,
                     "username": element.userName,
@@ -85,10 +84,10 @@ function uploadRepositoryData(repositories) {
                 },
                 success: function () {
                     location.replace("../repositoryHub/repositoryHub.html");
-                    console.log("in success");
+                    console.log("Clone succeeded!!");
                 },
                 error: function () {
-                    console.log("in error");
+                    console.log("Error while trying clone action!");
                 },
 
                 return: true

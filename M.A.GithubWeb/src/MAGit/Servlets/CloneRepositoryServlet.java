@@ -54,9 +54,8 @@ public class CloneRepositoryServlet extends HttpServlet
             currentUser.getUserEngine().getNameToRepository().put(currentUser.getUserEngine().getCurrentRepository().getName(), currentRepository);
         } catch (Exception e)
         {
-            //todo -
-            // handle proper message in UI
-            e.printStackTrace();
+            response.setStatus(400);
+
         }
     }
 

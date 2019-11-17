@@ -29,9 +29,8 @@ public class LoadRepository extends HttpServlet
                     .initRepositoryInSystemByName(repositoryNameClicked, loggedInUser);
         } catch (Exception e)
         {
-            //todo
-            // handle proper message in page - there is problem in repository name clicked loading to system
-            e.printStackTrace();
+            response.setStatus(400);
+
         }
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

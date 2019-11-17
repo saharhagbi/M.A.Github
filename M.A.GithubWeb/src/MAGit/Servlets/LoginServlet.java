@@ -105,9 +105,8 @@ public class LoginServlet extends HttpServlet
                             ServletUtils.getEngineAdapter(getServletContext()).createUserFolder(currentUser);
                         } catch (Exception e)
                         {
-                            //todo-
-                            // print proper ui message if crating first directory for repositories not working
-                            e.printStackTrace();
+                            response.setStatus(400);
+
                         }
 
                         //redirect the request to the chat room - in order to actually change the URL

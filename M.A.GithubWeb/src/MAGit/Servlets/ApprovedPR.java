@@ -4,7 +4,6 @@ import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
 import System.Users.User;
 import github.PullRequestLogic;
-import github.notifications.PullRequestNotification;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -47,9 +46,7 @@ public class ApprovedPR extends HttpServlet
             ServletUtils.getEngineAdapter(getServletContext()).fastForwardBaseToTarget(pullRequest, loggedInUser);
         } catch (Exception e)
         {
-            //todo-
-            // message in UI
-            e.printStackTrace();
+            response.setStatus(400);
         }
     }
 }

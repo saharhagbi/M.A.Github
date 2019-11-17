@@ -43,7 +43,7 @@ public class ChangeFileServlet extends HttpServlet {
             try {
                 ServletUtils.getEngineAdapter(getServletContext()).RemoveFileFromWorkingCopy(Paths.get(filePathToDelete), loggedInUser);
             } catch (Exception e) {
-                e.printStackTrace();
+                response.setStatus(400);
             }
         }
         else if(request.getParameter(Constants.CHANGE_OR_DELETE).equals("change")){
@@ -52,7 +52,7 @@ public class ChangeFileServlet extends HttpServlet {
             try {
                 ServletUtils.getEngineAdapter(getServletContext()).ChangeFileInWorkingCopy(Paths.get(filePathToChange),newContentOfFile);
             } catch (Exception e) {
-                e.printStackTrace();
+                response.setStatus(400);
             }
 
         }
@@ -63,7 +63,7 @@ public class ChangeFileServlet extends HttpServlet {
             try {
                 ServletUtils.getEngineAdapter(getServletContext()).CreateNewFileInPath(Paths.get(filePathToPutTheNewFile),newContentOfFile,newFileName);
             } catch (Exception e) {
-                e.printStackTrace();
+                response.setStatus(400);
             }
         }
     }

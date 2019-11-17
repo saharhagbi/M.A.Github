@@ -31,9 +31,8 @@ public class Commit extends HttpServlet
             ServletUtils.getEngineAdapter(getServletContext()).commitChanges(commitMessage, loggedInUser);
         } catch (Exception e)
         {
-            //todo -
-            // handle proper message in UI
-            e.printStackTrace();
+            response.setStatus(400);
+
         }
     }
 

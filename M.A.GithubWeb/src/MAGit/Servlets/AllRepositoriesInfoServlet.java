@@ -50,7 +50,7 @@ public class AllRepositoriesInfoServlet extends HttpServlet {
         try {
             currUserRepositories = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(requestedUserName, true);
         } catch (Exception e) {
-            e.printStackTrace();
+            response.setStatus(400);
         }
 
         PrintWriter out = response.getWriter();

@@ -61,9 +61,8 @@ public class SendNotification extends HttpServlet
             response.sendRedirect("pullRequest.html");
         } catch (Exception e)
         {
-            //todo-
-            // message in UI
-            e.printStackTrace();
+            response.setStatus(400);
+
         }
     }
 }

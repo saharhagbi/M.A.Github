@@ -32,6 +32,10 @@ $(function () {
             } else {
                 $("#wcButtonDirty").hide();
             }
+        },
+
+        error: function () {
+            alert("error in checking if wc dirty");
         }
     });
 });
@@ -59,11 +63,14 @@ $(function () {
             function handleUseCaseOfLocalRepository(isLocalRepository) {
                 if (isLocalRepositoryInString[0].localeCompare(YES) !== 0) {
                     addCollaborationButtons();
-                }
-                else {
+                } else {
                     $("#pullRequestBtn").empty();
                 }
             }
+        },
+
+        error: function () {
+            alert("error occured !!");
         }
     });
 });
@@ -115,7 +122,7 @@ function showFileContent_ShowOnly(file, commit) {
             data: {"commitSha1": commit, "path": file.m_ParentFolderPath, "isRootFolder": "false"},
 
             success: function (folder) {
-                showFolderItems_ShowOnly(folder,commit);
+                showFolderItems_ShowOnly(folder, commit);
             },
             error: function () {
                 console.log("couldnt get the requested folder");
@@ -142,7 +149,7 @@ function showFolderItems_ShowOnly(folderInfo, commitSha1) {
                 showFolderItems_ShowOnly(folderInfo, commitSha1);
             },
             error: function () {
-                console.log("couldnt get the requested folder");
+                alert("couldnt get the requested folder");
             }
         })
     });
@@ -163,7 +170,7 @@ function showFolderItems_ShowOnly(folderInfo, commitSha1) {
                         showFolderItems_ShowOnly(folder, commitSha1);
                     },
                     error: function () {
-                        console.log("couldnt get the requested folder");
+                        alert("couldnt get the requested folder");
                     }
                 })
             });
@@ -179,7 +186,7 @@ function showFolderItems_ShowOnly(folderInfo, commitSha1) {
                         showFileContent_ShowOnly(file, commitSha1);
                     },
                     error: function () {
-                        console.log("couldnt get the requested file");
+                        alert("couldnt get the requested file");
                     }
                 })
             });
@@ -229,7 +236,7 @@ $(function () {
 
                             },
                             error: function () {
-                                console.log("couldnt get commit root folder info");
+                                alert("couldnt get commit root folder info");
                             }
 
                         })
@@ -259,6 +266,10 @@ $(function () {
                 $("#repositoryName").text(names[repositoryName]);
                 $("#userName").text(names[userName]);
             }
+        },
+
+        error: function () {
+            alert("error occured!");
         }
     });
 });
@@ -276,7 +287,7 @@ $(function () {
             showFolderItems(rootFolderInfo);
         },
         error: function () {
-            console.log("couldnt get root folder");
+            alert("couldnt get root folder");
         }
     });
 });
@@ -298,12 +309,12 @@ function showFolderItems(folderInfo) {
                 showFolderItems(folder);
             },
             error: function () {
-                console.log("couldnt get the requested folder");
+                alert("couldnt get the requested folder");
             }
         })
     });
 
-    $("#NewFileButton").click(function (){
+    $("#NewFileButton").click(function () {
         $("<textarea class=\"form-control\" id=\"newFileTextArea\">type here the contenet of the new file</textarea>").appendTo("#FileSystemShow");
         $("#SaveButton").click(function () {
             var newContent = $("#newFileTextArea").val();
@@ -318,12 +329,12 @@ function showFolderItems(folderInfo) {
                     "newName": nameOfNewFile
                 },
                 error: function () {
-                    console.log("couldnt create new file");
+                    alert("couldnt create new file");
                 }
             })
 
 
-            })
+        })
     });
 
 
@@ -342,7 +353,7 @@ function showFolderItems(folderInfo) {
                         showFolderItems(folder);
                     },
                     error: function () {
-                        console.log("couldnt get the requested folder");
+                        alert("couldnt get the requested folder");
                     }
                 })
             });
@@ -358,14 +369,13 @@ function showFolderItems(folderInfo) {
                         showFileContent(file);
                     },
                     error: function () {
-                        console.log("couldnt get the requested file");
+                        alert("couldnt get the requested file");
                     }
                 })
             });
         } else {
             console.log("the item is no good - it's type is neither FOLDER nor FILE")
         }
-
     });
 }
 
@@ -389,7 +399,7 @@ function showFileContent(fileInfo) {
 
             },
             error: function () {
-                console.log("couldnt get the requested folder");
+                alert("couldnt get the requested folder");
             }
         })
     });
@@ -408,7 +418,7 @@ function showFileContent(fileInfo) {
 
             },
             error: function () {
-                console.log("couldnt get the requested folder");
+                alert("couldnt get the requested folder");
             }
         })
     });
@@ -424,7 +434,7 @@ function showFileContent(fileInfo) {
                 showFolderItems(folder);
             },
             error: function () {
-                console.log("couldnt get the requested folder");
+                alert("couldnt get the requested folder");
             }
         })
     });
@@ -453,11 +463,12 @@ $("#check").on('click', function () {
         },
 
         success: function () {
-            alert("in success function");
+
+            // do nothing
         },
 
         error: function (e) {
-            alert("in error function");
+            alert("problem occured");
         }
     });
 });

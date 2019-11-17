@@ -3,6 +3,7 @@ package MAGit.Servlets;
 import MAGit.Utils.ServletUtils;
 import MAGit.Utils.SessionUtils;
 import System.Users.User;
+import github.users.UserManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,15 +25,14 @@ public class PushBranch extends HttpServlet
     {
         String branchToPushName = request.getParameter(BRANCH_NAME);
 
-        User loggedInUser = ServletUtils.getUserManager(getServletContext()).getUserByName(SessionUtils.getUsername(request));
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        User loggedInUser = userManager.getUserByName(SessionUtils.getUsername(request));
 
         try
         {
-            ServletUtils.getEngineAdapter(getServletContext()).pushBranch(branchToPushName, loggedInUser);
+            ServletUtils.getEngineAdapter(getServletContext()).pushBranch(branchToPushName, loggedInUser, userManager);
         } catch (Exception e)
         {
-            //todo -
-            // handle proper message in UI
             e.printStackTrace();
         }
 

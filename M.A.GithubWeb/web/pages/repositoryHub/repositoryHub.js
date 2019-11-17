@@ -14,7 +14,12 @@ function ajaxUsersList() {
         url: USER_LIST_URL,
         success: function (users) {
             refreshUsersList(users);
+        },
+
+        error: function () {
+            alert("Error while trying bringing all users");
         }
+
     });
 }
 
@@ -34,7 +39,7 @@ function refreshUsersList(users) {
         $(`<li> <a href="#"> ${user} </a> </li>`).appendTo($("#usersList"));
 
     });
-}
+};
 
 $(function () {
     //The users list is refreshed automatically every second
@@ -64,10 +69,12 @@ function uploadRepositoryData(repositories) {
                 url: LOAD_REPOSITORY_URL,
                 data: {"repoName": repoName},
                 success: function () {
-
-                    console.log("in success");
                     location.replace("../repositoryPage/repositoryPage.html");
                 },
+
+                error: function(){
+                    alert("error occured in loading repository");
+                }
             });
         });
     });
@@ -96,7 +103,6 @@ $("#logoutButton").on('click', function () {
 
             location.replace("../login/signup.html");
             alert("logout Done!");
-
         },
 
         error: function (e) {

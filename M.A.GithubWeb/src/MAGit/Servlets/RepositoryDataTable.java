@@ -33,9 +33,8 @@ public class RepositoryDataTable extends HttpServlet
             allRepositoriesData = ServletUtils.getEngineAdapter(getServletContext()).buildAllUsersRepositoriesData(loggedInUser, false);
         } catch (Exception e)
         {
-            //todo -
-            // handle proper message in UI
-            e.printStackTrace();
+            response.setStatus(400);
+
         }
 
         Gson gson = new Gson();

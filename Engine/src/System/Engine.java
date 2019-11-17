@@ -17,6 +17,7 @@ import common.MagitFileUtils;
 import common.constants.NumConstants;
 import common.constants.ResourceUtils;
 import common.constants.StringConstants;
+import github.users.UserManager;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -735,20 +736,29 @@ public class Engine
         MagitFileUtils.CreateDirectory(MainRepositoriesPath + ResourceUtils.Slash + usernameFromParameter);
     }
 
-    public void pushBranch(String branchToPushName) throws Exception
+    public void pushBranch(String branchToPushName, UserManager userManager) throws Exception
     {
         Fetch fetcher = new Fetch(this, m_CurrentLocalRepository);
-        Repository remoteRepository = fetcher.getRemoteRepositoryToFetchFrom();
-        RepositoryWriter repositoryWriter = new RepositoryWriter(remoteRepository);
+//        Repository remoteRepository = fetcher.getRemoteRepositoryToFetchFrom();
         LocalRepositoryWriter localRepositoryWriter = new LocalRepositoryWriter(m_CurrentLocalRepository);
 
+        /*-----------------find user of remote repo------------------*/
+
+        String[] pathToNotifiy = m_CurrentLocalRepository.getRemoteRepoRef().getRepoPath().toString().split("\\\\");
+        String userToNotifyInString = pathToNotifiy[pathToNotifiy.length - 2];
+
+        User userOfRemoteRepo = userManager.getUserByName(userToNotifyInString);
+        Repository remoteRepository = userOfRemoteRepo.getUserEngine().nameToRepository.get(m_CurrentLocalRepository.getRemoteRepoRef().getName());
+
+        RepositoryWriter repositoryWriter = new RepositoryWriter(remoteRepository);
         /*-----------------push branch to RR------------------*/
 
         Branch branchToPush = getCurrentRepository().findBranchByPredicate(branch ->
                 branch.getBranchName().equals(branchToPushName));
 
-
         repositoryWriter.WriteBranch(branchToPush);
+
+        remoteRepository.getAllBranches().add(branchToPush);
 
         /*-----make local branch to rtb and create remote branch----*/
 
